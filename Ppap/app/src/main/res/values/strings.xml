@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Ppap</string>
+    <string name="app_name">PPAP</string>
+    <string name="app_description">부산대학교 \n공지사항 알림 서비스</string>
+    <string name="characters">pineapple and apple</string>
+    <string name="team_name">potatoes</string>
+    <string name="login">kakao login</string>
 </resources>
