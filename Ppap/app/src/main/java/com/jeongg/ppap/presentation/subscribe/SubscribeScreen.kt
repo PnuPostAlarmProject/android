@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,9 +32,11 @@ import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PTitle
+import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.main_green
 import com.jeongg.ppap.ui.theme.main_pink
+import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
 fun SubscribeScreen(
@@ -46,7 +46,6 @@ fun SubscribeScreen(
         title = stringResource(R.string.subscribe_title),
         description = stringResource(R.string.subscribe_description)
     ) {
-        Spacer(modifier = Modifier.padding(top = Dimens.PaddingNormal))
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -57,8 +56,6 @@ fun SubscribeScreen(
             ) {
                 item { DefaultSubscribe() }
                 item { CustomSubscribeItem() }
-                item { CustomSubscribeItem() }
-                item { CustomSubscribeItem() }
             }
             Column(
                 modifier = Modifier
@@ -68,7 +65,8 @@ fun SubscribeScreen(
                 PButton(
                     text = stringResource(R.string.add_subscribe),
                     color = Color.White,
-                    modifier = Modifier.padding(vertical = Dimens.PaddingSmall)
+                    modifier = Modifier.padding(vertical = Dimens.PaddingSmall),
+                    onClick = {navController.navigate(Screen.SubscribeAddScreen.route)}
                 )
                 PButton(text = stringResource(R.string.goto_home))
             }
@@ -155,14 +153,14 @@ fun CustomSubscribeItem(
                 text = stringResource(R.string.edit),
                 color = main_pink,
                 modifier = Modifier.width(120.dp).height(36.dp),
-                shape = RoundedCornerShape(15.dp)
+                shape = shapes.medium
             )
             PButton(
                 painter = R.drawable.remove,
                 text = stringResource(R.string.remove),
                 color = main_green,
                 modifier = Modifier.width(120.dp).height(36.dp),
-                shape = RoundedCornerShape(15.dp)
+                shape = shapes.medium
             )
             Image(
                 painter = painterResource(R.drawable.unchecked),
