@@ -4,4 +4,12 @@
     <string name="characters">pineapple and apple</string>
     <string name="team_name">potatoes</string>
     <string name="login">kakao login</string>
+    <string name="subscribe_title">구독하기</string>
+    <string name="subscribe_description">알림 받고 싶은 공지사항을 선택하거나 새로운 구독을 추가해주세요.</string>
+    <string name="pnu_onestop">부산대\n학생지원 시스템</string>
+    <string name="pnu">부산대학교</string>
+    <string name="add_subscribe">공지사항 추가 등록</string>
+    <string name="goto_home">홈화면 바로 가기</string>
+    <string name="edit">수정하기</string>
+    <string name="remove">삭제하기</string>
 </resources>
