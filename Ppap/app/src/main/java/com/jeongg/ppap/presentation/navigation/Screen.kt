@@ -4,4 +4,5 @@ sealed class Screen (val route: String){
     object LoginScreen: Screen("login_screen")
     object SplashScreen: Screen("splash_screen")
     object SubscribeScreen: Screen("subscribe_screen")
+    object SubscribeAddScreen: Screen("subscribe_add_screen")
 }

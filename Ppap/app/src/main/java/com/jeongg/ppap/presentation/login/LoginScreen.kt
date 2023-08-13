@@ -53,7 +53,7 @@ fun LoginScreen(
                     painter = painterResource(id = R.drawable.kakao_login),
                     contentDescription = stringResource(R.string.login),
                     modifier = Modifier.width(100.dp).height(50.dp).align(Alignment.CenterEnd)
-                        .clickable{}
+                        .clickable{navController.navigate(Screen.SubscribeScreen.route)}
                 )
             }
         }
