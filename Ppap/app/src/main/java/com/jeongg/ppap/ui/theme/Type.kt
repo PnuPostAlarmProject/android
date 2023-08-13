@@ -4,21 +4,22 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.jeongg.ppap.R
 
 // Set of Material typography styles to start with
 val RobotoFamily = FontFamily(
-    Font(R.font.bold),
-    Font(R.font.extra_bold),
-    Font(R.font.extra_light),
-    Font(R.font.light),
-    Font(R.font.medium),
-    Font(R.font.pretendard_black),
-    Font(R.font.regular),
-    Font(R.font.semi_bold),
-    Font(R.font.thin),
+    Font(R.font.bold, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.extra_bold, FontWeight.ExtraBold, FontStyle.Normal),
+    Font(R.font.extra_light, FontWeight.ExtraLight, FontStyle.Normal),
+    Font(R.font.light, FontWeight.Light, FontStyle.Normal),
+    Font(R.font.medium, FontWeight.Medium, FontStyle.Normal),
+    Font(R.font.pretendard_black, FontWeight.Black, FontStyle.Normal),
+    Font(R.font.regular, FontWeight.Normal, FontStyle.Normal),
+    Font(R.font.semi_bold, FontWeight.SemiBold, FontStyle.Normal),
+    Font(R.font.thin, FontWeight.Thin, FontStyle.Normal),
 )
 
 val typography = Typography(
@@ -51,6 +52,7 @@ val typography = Typography(
         fontFamily = RobotoFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 15.sp,
+        lineHeight = 20.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = RobotoFamily,
