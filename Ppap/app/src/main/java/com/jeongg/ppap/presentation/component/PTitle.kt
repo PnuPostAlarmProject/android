@@ -16,7 +16,7 @@ import com.jeongg.ppap.ui.theme.Dimens
 fun PTitle(
     modifier: Modifier = Modifier,
     title: String = "제목",
-    description: String = "설명입니다.",
+    description: String = "",
     content: @Composable (ColumnScope.() -> Unit),
 ){
     Column(
@@ -26,12 +26,15 @@ fun PTitle(
             text = title,
             style = MaterialTheme.typography.titleLarge
         )
-        PDivider(modifier = Modifier.padding(top = 7.dp, bottom = 23.dp))
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.padding(top = Dimens.PaddingNormal))
+        PDivider(modifier = Modifier.padding(top = 7.dp))
+        if (description.isNotBlank()) {
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(top = 23.dp)
+            )
+            Spacer(modifier = Modifier.padding(top = Dimens.PaddingNormal))
+        }
         Column(content=content)
     }
 }
