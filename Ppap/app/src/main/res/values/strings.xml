@@ -23,4 +23,12 @@
     <string name="subscribe_field_rss_hint">https://cse.pusan.ac.kr/bbs/cse/2605/rssList.do?row=50</string>
     <string name="subscribe_field_link_hint">https://cse.pusan.ac.kr/cse/14651/subview.do</string>
     <string name="subscribe_field_title_hint">정보컴퓨터공학부</string>
+    <string name="empty_scrap">스크랩한\n 공지사항이 없습니다.</string>
+    <string name="banner_title1">스크랩 화면 바로가기</string>
+    <string name="banner_title2">공지 추가 등록하기</string>
+    <string name="banner_title3">구독한 공지사항 수정하기</string>
+    <string name="banner_description1">하트를 눌러서 공지사항을 저장하세요</string>
+    <string name="banner_description2">학과 공지사항 등 필요한 공지를 등록해주세요.</string>
+    <string name="banner_description3">알림 여부, 공지 이름 등을 수정해보세요.</string>
+    <string name="notice_scrap_title">스크랩한 공지</string>
 </resources>

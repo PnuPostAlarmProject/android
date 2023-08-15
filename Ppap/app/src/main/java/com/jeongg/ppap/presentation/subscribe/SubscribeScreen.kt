@@ -68,7 +68,8 @@ fun SubscribeScreen(
                     modifier = Modifier.padding(vertical = Dimens.PaddingSmall),
                     onClick = {navController.navigate(Screen.SubscribeAddScreen.route)}
                 )
-                PButton(text = stringResource(R.string.goto_home))
+                PButton(text = stringResource(R.string.goto_home),
+                    onClick = {navController.navigate(Screen.NoticeListScreen.route)})
             }
         }
 
