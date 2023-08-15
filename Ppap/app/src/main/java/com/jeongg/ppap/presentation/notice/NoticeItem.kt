@@ -36,10 +36,10 @@ import com.jeongg.ppap.ui.theme.shapes
 fun NoticeItem(
     category: String = "학지시 공지",
     isBookmarked: Boolean = true,
-    title: String = "2023학년도 2학기 신·편입생(학부, 대학원) 학생증 발급신청 및 배부 안내",
+    title: String = "2023학년도 2학기 신·편입생(학부, 대학원) 학생증 발급 신청 및 배부 안내",
     date: String = "2023.08.08"
 ){
-    var isFilled by remember { mutableStateOf(true) }
+    var isFilled by remember { mutableStateOf(isBookmarked) }
     val favorite = if (isFilled) R.drawable.favorite_filled else R.drawable.favorite_empty
     val color = when (category){
         "학지시 공지" -> bright_yellow
