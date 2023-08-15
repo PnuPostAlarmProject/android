@@ -2,6 +2,7 @@ package com.jeongg.ppap.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val very_bright_yellow = Color(0xFFFDE27F)
 val bright_yellow = Color(0xFFFED84D)
 val main_yellow = Color(0xFFFDC700)
 

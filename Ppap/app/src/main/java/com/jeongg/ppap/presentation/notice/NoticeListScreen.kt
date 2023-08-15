@@ -38,6 +38,7 @@ import com.jeongg.ppap.ui.theme.bright_pink
 import com.jeongg.ppap.ui.theme.bright_yellow
 import com.jeongg.ppap.ui.theme.main_green
 import com.jeongg.ppap.ui.theme.shapes
+import com.jeongg.ppap.ui.theme.very_bright_yellow
 
 @Composable
 fun NoticeListScreen(
@@ -68,7 +69,7 @@ fun NoticeListBanner(
     navController: NavController
 ) {
     val state = rememberPagerState(initialPage = 0) { 3 }
-    val colors = listOf(bright_yellow, bright_pink, main_green)
+    val colors = listOf(very_bright_yellow, bright_pink, main_green)
     val images = listOf(R.drawable.pineapple, R.drawable.apple_no_background, R.drawable.pineapple)
     val titles = listOf(R.string.banner_title1, R.string.banner_title2, R.string.banner_title3)
     val descriptions = listOf(R.string.banner_description1,R.string.banner_description2, R.string.banner_description3)
