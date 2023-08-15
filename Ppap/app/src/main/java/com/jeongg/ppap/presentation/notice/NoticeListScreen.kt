@@ -48,7 +48,10 @@ fun NoticeListScreen(
             .padding(Dimens.PaddingNormal)
             .fillMaxSize()
     ){
-        NoticeListTitle(bookmarkNavigate = {navController.navigate(Screen.NoticeScrapScreen.route)})
+        NoticeListTitle(
+            bookmarkNavigate = {navController.navigate(Screen.NoticeScrapScreen.route)},
+            settingNavigate = {navController.navigate(Screen.SettingScreen.route)}
+        )
         PDivider(modifier = Modifier.padding(top = 7.dp, bottom = 15.dp))
         LazyColumn {
             item { NoticeListBanner(navController) }
