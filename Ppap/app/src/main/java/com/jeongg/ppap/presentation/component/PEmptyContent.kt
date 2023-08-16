@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -25,9 +26,9 @@ fun PEmptyContent(
     content: String = stringResource(R.string.empty_scrap)
 ){
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(15.dp)
+        verticalArrangement = Arrangement.Center
     ){
         Image(
             painter = painterResource(id),
