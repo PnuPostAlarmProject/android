@@ -33,7 +33,7 @@ fun PTitle(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(top = 23.dp)
             )
-            Spacer(modifier = Modifier.padding(top = Dimens.PaddingNormal))
+            Spacer(modifier = Modifier.padding(top = Dimens.PaddingSmall))
         }
         Column(content=content)
     }

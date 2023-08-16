@@ -32,7 +32,7 @@ fun PEmptyContent(
         Image(
             painter = painterResource(id),
             contentDescription = content,
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier.width(if (id == R.drawable.pineapple) 100.dp else 60.dp)
         )
         Text(
             text = content,

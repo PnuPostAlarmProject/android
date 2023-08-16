@@ -1,12 +1,15 @@
 package com.jeongg.ppap.presentation.subscribe
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,11 +34,14 @@ import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDivider
+import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
+import com.jeongg.ppap.ui.theme.gray3
 import com.jeongg.ppap.ui.theme.main_green
 import com.jeongg.ppap.ui.theme.main_pink
+import com.jeongg.ppap.ui.theme.main_yellow
 import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
@@ -55,13 +61,14 @@ fun SubscribeScreen(
                     .padding(bottom = 130.dp)
             ) {
                 item { DefaultSubscribe() }
-                item { CustomSubscribeItem() }
+                item { CustomSubscribe() }
             }
             Column(
                 modifier = Modifier
                     .height(130.dp)
                     .align(Alignment.BottomCenter)
             ) {
+                PDivider()
                 PButton(
                     text = stringResource(R.string.add_subscribe),
                     color = Color.White,
@@ -86,7 +93,7 @@ fun DefaultSubscribe(
             image = R.drawable.pnu1,
             text = stringResource(R.string.pnu_onestop)
         )
-        PDivider(modifier = Modifier.padding(vertical = Dimens.PaddingSmall))
+        Spacer(modifier = Modifier.height(10.dp))
         DefaultSubscribeItem(
             image = R.drawable.pnu2,
             text = stringResource(R.string.pnu)
@@ -97,12 +104,16 @@ fun DefaultSubscribe(
 @Composable
 fun DefaultSubscribeItem(
     @DrawableRes image: Int,
-    text: String
+    text: String = "",
+    isSelected: Boolean = true
 ){
+    val borderModifier = if (isSelected) Modifier.border(3.dp, main_yellow, MaterialTheme.shapes.large) else Modifier
+    val checked = if (isSelected) R.drawable.checked else R.drawable.unchecked
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(90.dp)
     ) {
         Image(
             painter = painterResource(image),
@@ -110,66 +121,72 @@ fun DefaultSubscribeItem(
             contentScale = ContentScale.Crop,
             colorFilter = ColorFilter.tint(Color.Blue.copy(alpha = 0.1f), blendMode = BlendMode.Darken),
             alpha = 0.2f,
-            modifier = Modifier
+            modifier = borderModifier
                 .clip(MaterialTheme.shapes.large)
-                .border(1.5.dp, Color.Black, MaterialTheme.shapes.large),
         )
-        Box(
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
-                .fillMaxSize()
                 .padding(horizontal = Dimens.PaddingNormal)
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.CenterStart)
-            )
-            Image(
-                painter = painterResource(R.drawable.checked),
-                contentDescription = "checked",
-                modifier = Modifier
-                    .size(31.dp)
-                    .align(Alignment.CenterEnd)
-            )
-        }
+                .align(Alignment.CenterStart)
+        )
+        Image(
+            painter = painterResource(checked),
+            contentDescription = "checked",
+            modifier = Modifier
+                .padding(horizontal = Dimens.PaddingNormal)
+                .size(31.dp)
+                .align(Alignment.CenterEnd)
+        )
+    }
+}
+
+@Composable
+fun CustomSubscribe(){
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            text = "내가 추가한 구독",
+            style = MaterialTheme.typography.titleSmall
+        )
+        //PEmptyContent(id = R.drawable.apple_gray, content = "새로 추가한\n공지사항이 없습니다")
+        CustomSubscribeItem()
+        CustomSubscribeItem(false)
     }
 }
 
 @Composable
 fun CustomSubscribeItem(
-    text: String = "정보컴퓨터공학부",
-){
-    Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
+    isSelected: Boolean = true,
+    text: String = "정보컴퓨터공학부"
+) {
+    val color = if (isSelected) main_yellow else gray3
+    val checked = if (isSelected) R.drawable.checked else R.drawable.unchecked
+    val textColor = if (isSelected) Color.Black else gray3
+    Box(
+        modifier = Modifier
+            .background(Color.White)
+            .border(4.dp, color, MaterialTheme.shapes.large)
+            .height(70.dp)
+            .fillMaxWidth()
+    ){
         Text(
             text = text,
-            style = MaterialTheme.typography.displayLarge
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .padding(horizontal = Dimens.PaddingNormal)
+                .align(Alignment.CenterStart),
+            color = textColor
         )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            PButton(
-                painter = R.drawable.edit,
-                text = stringResource(R.string.edit),
-                color = main_pink,
-                modifier = Modifier.width(120.dp).height(36.dp),
-                shape = shapes.medium
-            )
-            PButton(
-                painter = R.drawable.remove,
-                text = stringResource(R.string.remove),
-                color = main_green,
-                modifier = Modifier.width(120.dp).height(36.dp),
-                shape = shapes.medium
-            )
-            Image(
-                painter = painterResource(R.drawable.unchecked),
-                contentDescription = "checked",
-                modifier = Modifier.size(31.dp)
-            )
-        }
-        PDivider(modifier = Modifier.padding(bottom = 12.dp))
+        Image(
+            painter = painterResource(checked),
+            contentDescription = isSelected.toString(),
+            modifier = Modifier
+                .padding(horizontal = Dimens.PaddingNormal)
+                .size(31.dp)
+                .align(Alignment.CenterEnd)
+        )
     }
-
 }
