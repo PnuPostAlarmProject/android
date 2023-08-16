@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import com.jeongg.ppap.presentation.login.LoginScreen
 import com.jeongg.ppap.presentation.notice.NoticeListScreen
 import com.jeongg.ppap.presentation.notice.NoticeScrapScreen
+import com.jeongg.ppap.presentation.setting.SettingScreen
 import com.jeongg.ppap.presentation.splash.SplashScreen
 import com.jeongg.ppap.presentation.subscribe.SubscribeAddScreen
 import com.jeongg.ppap.presentation.subscribe.SubscribeScreen
@@ -20,4 +21,5 @@ fun NavGraphBuilder.ppapGraph(
     composable(route = Screen.SubscribeAddScreen.route){ SubscribeAddScreen(navController) }
     composable(route = Screen.NoticeListScreen.route){ NoticeListScreen(navController)}
     composable(route = Screen.NoticeScrapScreen.route){ NoticeScrapScreen(navController)}
+    composable(route = Screen.SettingScreen.route){ SettingScreen(navController)}
 }
