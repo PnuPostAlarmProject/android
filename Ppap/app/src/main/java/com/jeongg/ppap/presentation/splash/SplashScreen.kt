@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.navigation.Screen
+import com.jeongg.ppap.ui.theme.rainbowColorsBrush
 import kotlinx.coroutines.delay
 
 @Composable
@@ -119,7 +121,9 @@ fun SplashScreen(
 
        Text(
            text = "@" + stringResource(R.string.team_name),
-           style = MaterialTheme.typography.titleSmall,
+           style = MaterialTheme.typography.titleSmall.copy(
+               brush = Brush.linearGradient(rainbowColorsBrush)
+           ),
            modifier = Modifier
                .padding(15.dp)
                .align(Alignment.BottomCenter),
@@ -134,16 +138,7 @@ fun ScaleAnimation(
 ){
     AnimatedVisibility(
         visible = isVisible,
-        enter = slideInVertically(
-            // Start the slide from 40 (pixels) above where the content is supposed to go, to
-            // produce a parallax effect
-            initialOffsetY = { 0 }
-        ) + expandVertically(
-            expandFrom = Alignment.Top
-        ) + scaleIn(
-            // Animate scale from 0f to 1f using the top center as the pivot point.
-            transformOrigin = TransformOrigin(0.5f, 0f)
-        ) + fadeIn(initialAlpha = 0.3f),
+        enter = scaleIn() + expandVertically(expandFrom = Alignment.CenterVertically),
         exit = fadeOut(animationSpec = tween(200)) + scaleOut(),
         modifier = Modifier.fillMaxSize(),
     ){
