@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -21,13 +22,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
@@ -35,7 +39,6 @@ import com.jeongg.ppap.presentation.component.PTextField
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.addFocusCleaner
 import com.jeongg.ppap.ui.theme.bright_yellow
-import com.jeongg.ppap.ui.theme.main_yellow
 import com.jeongg.ppap.ui.theme.shapes
 import com.jeongg.ppap.ui.theme.typography
 
@@ -91,9 +94,11 @@ fun PTextFields() {
 @Composable
 fun TextDescription(){
 
-    Box(modifier = Modifier
-        .padding(10.dp)
-        .fillMaxWidth()) {
+    Box(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+    ) {
         Column {
             Text(
                 text = stringResource(R.string.explain1),
@@ -131,17 +136,25 @@ fun ImageDescription() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PHorizontalPager() {
-    //val pages = listOf(TextDescription(), ImageDescription())
     val state = rememberPagerState(initialPage = 0) { 2 }
 
     HorizontalPager(
         state = state,
-        pageSpacing = 15.dp
+        pageSpacing = 5.dp,
+        modifier = Modifier.layout { measurable, constraints ->
+                val placeable =  measurable.measure(constraints.offset((30 * 2).dp.roundToPx()))
+                layout(
+                    placeable.width,
+                    placeable.height
+                ) { placeable.place(0, 0) }
+            },
+        contentPadding = PaddingValues(horizontal = 30.dp),
     ) { index ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 160.dp)
+                .alpha(if(state.currentPage == index) 1f else 0.5f)
                 .clip(shapes.medium)
                 .background(bright_yellow),
             verticalArrangement = Arrangement.Center
@@ -157,7 +170,7 @@ fun PHorizontalPager() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(2) { iteration ->
-                    val color = if (state.currentPage == iteration) main_yellow else Color.White.copy(alpha = 0.5f)
+                    val color = if (state.currentPage == iteration) Color.White else Color.White.copy(alpha = 0.5f)
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 2.dp, vertical = 5.dp)

@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,19 +24,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.bright_pink
-import com.jeongg.ppap.ui.theme.bright_yellow
 import com.jeongg.ppap.ui.theme.main_green
 import com.jeongg.ppap.ui.theme.shapes
 import com.jeongg.ppap.ui.theme.very_bright_yellow
@@ -44,9 +48,10 @@ import com.jeongg.ppap.ui.theme.very_bright_yellow
 fun NoticeListScreen(
     navController: NavController
 ){
+    val padding = Dimens.PaddingNormal
     Column(
         modifier = Modifier
-            .padding(Dimens.PaddingNormal)
+            .padding(padding,padding,padding,0.dp)
             .fillMaxSize()
     ){
         NoticeListTitle(
@@ -77,10 +82,18 @@ fun NoticeListBanner(
 
     HorizontalPager(
         state = state,
-        pageSpacing = 15.dp
+        pageSpacing = 5.dp,
+        modifier = Modifier.layout { measurable, constraints ->
+            val placeable =  measurable.measure(constraints.offset((30 * 2).dp.roundToPx()))
+            layout(
+                placeable.width,
+                placeable.height
+            ) { placeable.place(0, 0) } },
+        contentPadding = PaddingValues(horizontal = 30.dp),
     ) { index ->
         Column(
             modifier = Modifier
+                .scale(scaleX = 1f, scaleY = if(state.currentPage == index) 1f else 0.9f)
                 .clip(shapes.small)
                 .clickable { navController.navigate(screens[index]) }
                 .fillMaxWidth()
@@ -89,13 +102,13 @@ fun NoticeListBanner(
                 .padding(10.dp, 10.dp, 10.dp, 0.dp),
             verticalArrangement = Arrangement.Center
         ){
-            Row{
+            Row(
+                verticalAlignment = CenterVertically
+            ){
                 Image(
                     painter = painterResource(images[index]),
                     contentDescription = "character",
-                    modifier = Modifier
-                        .padding(end = 15.dp)
-                        .height(44.dp)
+                    modifier = Modifier.padding(end = 15.dp).height(44.dp)
                 )
                 Column {
                     Text(
