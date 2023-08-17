@@ -21,7 +21,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.ui.theme.gray3
 import com.jeongg.ppap.ui.theme.shapes
@@ -43,26 +42,23 @@ fun PTextField(
             .fillMaxWidth()
             .defaultMinSize(minHeight = 40.dp)
             .focusRequester(focusRequester),
-        singleLine = true,
         textStyle = typography.bodyMedium,
     ){
         TextFieldDefaults.OutlinedTextFieldDecorationBox(
             value = text,
             innerTextField = it,
             enabled = true,
-            singleLine = true,
+            singleLine = false,
             interactionSource = interactionSource,
             visualTransformation = VisualTransformation.None,
             placeholder = {
                 Text(
                     text = placeholder,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     style = typography.bodyMedium,
-                    color = gray3
+                    color = gray3,
                 )
             },
-            contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
+            contentPadding = PaddingValues(10.dp),
             container = {
                 TextFieldDefaults.OutlinedBorderContainerBox(
                     enabled = true,
