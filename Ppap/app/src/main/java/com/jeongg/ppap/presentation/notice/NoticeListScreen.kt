@@ -29,14 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.offset
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PDivider
+import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.bright_pink
@@ -82,12 +81,7 @@ fun NoticeListBanner(
     HorizontalPager(
         state = state,
         pageSpacing = 5.dp,
-        modifier = Modifier.layout { measurable, constraints ->
-            val placeable =  measurable.measure(constraints.offset((30 * 2).dp.roundToPx()))
-            layout(
-                placeable.width,
-                placeable.height
-            ) { placeable.place(0, 0) } },
+        modifier = Modifier.negativePadding(),
         contentPadding = PaddingValues(horizontal = 30.dp),
     ) { index ->
         Column(

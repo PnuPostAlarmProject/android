@@ -37,12 +37,14 @@ import com.jeongg.ppap.ui.theme.shapes
 fun SettingScreen(
     navController: NavController
 ){
-    Column(
-        modifier = Modifier.fillMaxSize()
+    PTitle(
+        title = stringResource(R.string.setting_title),
     ){
-        SettingTitle(modifier = Modifier.padding(30.dp))
+        DescriptionScreen()
         LazyColumn(
             modifier = Modifier
+                .negativePadding()
+                .padding(top = 30.dp)
                 .clip(
                     RoundedCornerShape(
                         topStart = Dimens.PaddingLarge,
@@ -52,28 +54,14 @@ fun SettingScreen(
                 .background(bright_pink)
                 .fillMaxSize()
         ){
-            item { ServiceScreen(
-                onSubscribe = {navController.navigate(Screen.SubscribeScreen.route)},
-                onScrap = {navController.navigate(Screen.NoticeScrapScreen.route)}
-            ) }
+            item {
+                ServiceScreen(
+                    onSubscribe = {navController.navigate(Screen.SubscribeScreen.route)},
+                    onScrap = {navController.navigate(Screen.NoticeScrapScreen.route)}
+                )
+            }
             item { MyPageScreen() }
         }
-    }
-}
-
-@Composable
-fun SettingTitle(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.setting_title),
-            style = MaterialTheme.typography.titleLarge
-        )
-        PDivider(modifier = Modifier.padding(top = 7.dp))
-        DescriptionScreen()
     }
 }
 @Composable

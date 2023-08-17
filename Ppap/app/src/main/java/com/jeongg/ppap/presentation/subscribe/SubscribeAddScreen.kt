@@ -141,13 +141,7 @@ fun PHorizontalPager() {
     HorizontalPager(
         state = state,
         pageSpacing = 5.dp,
-        modifier = Modifier.layout { measurable, constraints ->
-                val placeable =  measurable.measure(constraints.offset((30 * 2).dp.roundToPx()))
-                layout(
-                    placeable.width,
-                    placeable.height
-                ) { placeable.place(0, 0) }
-            },
+        modifier = Modifier.negativePadding(),
         contentPadding = PaddingValues(horizontal = 30.dp),
     ) { index ->
         Column(
