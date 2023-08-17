@@ -20,7 +20,7 @@ fun PTitle(
     content: @Composable (ColumnScope.() -> Unit),
 ){
     Column(
-        modifier = modifier.padding(Dimens.PaddingNormal).fillMaxSize()
+        modifier = modifier.padding(Dimens.ScreenPadding).fillMaxSize()
     ){
         Text(
             text = title,

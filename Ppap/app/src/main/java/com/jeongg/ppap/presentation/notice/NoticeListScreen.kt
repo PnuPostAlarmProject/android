@@ -48,10 +48,9 @@ import com.jeongg.ppap.ui.theme.very_bright_yellow
 fun NoticeListScreen(
     navController: NavController
 ){
-    val padding = Dimens.PaddingNormal
     Column(
         modifier = Modifier
-            .padding(padding,padding,padding,0.dp)
+            .padding(Dimens.ScreenPadding)
             .fillMaxSize()
     ){
         NoticeListTitle(
