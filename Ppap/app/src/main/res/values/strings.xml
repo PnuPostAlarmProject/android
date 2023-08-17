@@ -40,4 +40,7 @@
     <string name="scrap">스크랩</string>
     <string name="version_open_source">버전 및 오픈 소스</string>
     <string name="app_description2">부산대 공지사항 알림 서비스,\nPPAP입니다.</string>
+    <string name="delete_button">삭제하기</string>
+    <string name="edit_button">수정하기</string>
+    <string name="subscribe_button">구독하기</string>
 </resources>

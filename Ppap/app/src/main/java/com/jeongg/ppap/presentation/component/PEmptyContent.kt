@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,7 +32,7 @@ fun PEmptyContent(
         Image(
             painter = painterResource(id),
             contentDescription = content,
-            modifier = Modifier.width(if (id == R.drawable.pineapple) 100.dp else 60.dp)
+            modifier = Modifier.width(if (id == R.drawable.pineapple_gray) 100.dp else 60.dp)
         )
         Text(
             text = content,

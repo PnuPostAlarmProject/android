@@ -1,15 +1,14 @@
 package com.jeongg.ppap.presentation.subscribe
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,11 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -153,8 +152,8 @@ fun CustomSubscribe(){
             style = MaterialTheme.typography.titleSmall,
         )
         PDivider(modifier = Modifier.padding(top = 5.dp))
-//        PEmptyContent(id = R.drawable.apple_gray, content = "새로 추가한\n공지사항이 없습니다",
-//            modifier = Modifier.padding(30.dp))
+        //PEmptyContent(id = R.drawable.apple_gray, content = "새로 추가한\n공지사항이 없습니다",
+        //    modifier = Modifier.padding(40.dp))
         CustomSubscribeItem()
         CustomSubscribeItem(false)
         CustomSubscribeItem()
@@ -164,14 +163,13 @@ fun CustomSubscribe(){
 @Composable
 fun CustomSubscribeItem(
     isSelected: Boolean = true,
-    text: String = "새콤달콤"
+    text: String = "최강 정컴 공지"
 ) {
     var isChecked by remember {mutableStateOf(isSelected) }
     val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
-    val textColor = if (isChecked) Color.Black else gray3
+    val textColor = if (isChecked) MaterialTheme.colorScheme.onBackground else gray3
     var isDialogOpen by remember { mutableStateOf(false) }
     if (isDialogOpen){
-        Log.d("tagtag", "dialg")
         Dialog(
             onDismissRequest = {isDialogOpen = isDialogOpen.not()}
         ){
@@ -184,12 +182,22 @@ fun CustomSubscribeItem(
             .padding(15.dp)
             .fillMaxWidth()
     ){
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(end = 31.dp),
-            color = textColor
-        )
+        Row(
+            modifier = Modifier.padding(end = 31.dp).fillMaxHeight(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium,
+                color = textColor
+            )
+            Image(
+                painter = painterResource(R.drawable.arrow),
+                contentDescription = "edit or delete",
+                colorFilter = ColorFilter.tint(textColor),
+                modifier = Modifier.rotate(0f).padding(start = 5.dp)
+            )
+        }
         Image(
             painter = painterResource(img),
             contentDescription = isSelected.toString(),

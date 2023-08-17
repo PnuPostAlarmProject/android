@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jeongg.ppap.R
+import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.gray1
 import com.jeongg.ppap.ui.theme.shapes
 
@@ -35,7 +38,7 @@ fun PDialog(
                 .padding(bottom = 10.dp)
                 .clip(shapes.small)
                 .background(Color.White)
-                .padding(30.dp)
+                .padding(Dimens.PaddingNormal)
         ) {
             Text(
                 text = text,
@@ -43,30 +46,36 @@ fun PDialog(
                 color = Color.Black
             )
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
-                horizontalArrangement = Arrangement.SpaceAround
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                MiniButton("삭제하기", onDeleteClick)
-                MiniButton("수정하기", onEditClick)
+                MiniButton(Modifier.weight(1f),
+                    stringResource(R.string.delete_button), onDeleteClick)
+                MiniButton(Modifier.weight(1f), stringResource(R.string.edit_button), onEditClick)
             }
         }
-        PButton(text = "구독하기", onClick = onSubscribeClick)
+        PButton(text = stringResource(R.string.subscribe_button), onClick = onSubscribeClick)
     }
 }
 
 @Composable
 fun MiniButton(
+    modifier: Modifier = Modifier,
     text: String = "",
     onClick: () -> Unit = {}
 ){
     Text(
         text = text,
         style = MaterialTheme.typography.titleSmall,
-        modifier = Modifier
+        modifier = modifier
             .clip(shapes.small)
             .border(1.dp, gray1, shapes.small)
             .clickable(onClick = onClick)
-            .padding(30.dp, 10.dp),
-        color = Color.Black
+            .fillMaxWidth()
+            .padding(vertical = 10.dp),
+        color = Color.Black,
+        textAlign = TextAlign.Center
     )
 }
