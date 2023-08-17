@@ -26,31 +26,32 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.offset
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PTextField
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.addFocusCleaner
+import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.ui.theme.bright_yellow
 import com.jeongg.ppap.ui.theme.shapes
 import com.jeongg.ppap.ui.theme.typography
 
 @Composable
 fun SubscribeAddScreen(
-    navController: NavController
+    navController: NavController,
+    onUpPress: () -> Unit = {}
 ){
     val focusManager = LocalFocusManager.current
     PTitle(
         modifier = Modifier.addFocusCleaner(focusManager),
         title = stringResource(R.string.add_subscribe_title),
-        description = stringResource(R.string.add_subscribe_description)
+        description = stringResource(R.string.add_subscribe_description),
+        onUpPress = onUpPress
     ){
         LazyColumn {
             item { PHorizontalPager() }

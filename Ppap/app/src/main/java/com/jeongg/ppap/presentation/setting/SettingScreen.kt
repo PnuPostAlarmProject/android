@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PDivider
+import com.jeongg.ppap.presentation.component.PTitle
+import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.bright_pink
@@ -35,10 +37,12 @@ import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
 fun SettingScreen(
-    navController: NavController
+    navController: NavController,
+    onUpPress: () -> Unit = {}
 ){
     PTitle(
         title = stringResource(R.string.setting_title),
+        onUpPress = onUpPress
     ){
         DescriptionScreen()
         LazyColumn(

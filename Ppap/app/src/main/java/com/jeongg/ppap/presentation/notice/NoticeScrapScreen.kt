@@ -13,10 +13,12 @@ import com.jeongg.ppap.presentation.component.PTitle
 
 @Composable
 fun NoticeScrapScreen(
-    navController: NavController
+    navController: NavController,
+    onUpPress: () -> Unit = {}
 ){
     PTitle(
-        title = stringResource(R.string.notice_scrap_title)
+        title = stringResource(R.string.notice_scrap_title),
+        onUpPress = onUpPress
     ){
         LazyColumn {
             repeat(10){

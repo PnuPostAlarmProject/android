@@ -47,11 +47,13 @@ import com.jeongg.ppap.ui.theme.main_yellow
 
 @Composable
 fun SubscribeScreen(
-    navController: NavController
+    navController: NavController,
+    onUpPress: () -> Unit = {}
 ){
     PTitle(
         title = stringResource(R.string.subscribe_title),
-        description = stringResource(R.string.subscribe_description)
+        description = stringResource(R.string.subscribe_description),
+        onUpPress = onUpPress
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
