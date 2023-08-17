@@ -33,9 +33,7 @@ fun PTitle(
     Column(
         modifier = modifier.padding(Dimens.ScreenPadding).fillMaxSize()
     ){
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-        ){
+        Box{
             Image(
                 painter = painterResource(R.drawable.arrow),
                 contentDescription = "navigate to back",

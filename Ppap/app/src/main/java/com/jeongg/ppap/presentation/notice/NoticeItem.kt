@@ -47,7 +47,10 @@ fun NoticeItem(
         else -> main_green
     }
     Column(
-        modifier = Modifier.clickable{  }.fillMaxWidth().padding(top = 15.dp),
+        modifier = Modifier
+            .clickable{  }
+            .fillMaxWidth()
+            .padding(top = 15.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ){
         Box(
@@ -68,7 +71,10 @@ fun NoticeItem(
             Image(
                 painter = painterResource(favorite),
                 contentDescription = "favorite",
-                modifier = Modifier.padding(start = 12.dp).size(25.dp).align(Alignment.CenterEnd).clickable{isFilled = !isFilled},
+                modifier = Modifier.padding(start = 12.dp)
+                    .size(25.dp)
+                    .align(Alignment.CenterEnd)
+                    .clickable{isFilled = !isFilled},
             )
         }
         Text(

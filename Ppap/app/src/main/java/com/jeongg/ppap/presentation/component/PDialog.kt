@@ -30,7 +30,6 @@ fun PDialog(
     onSubscribeClick:() -> Unit = {}
 ){
     Column(
-        modifier = Modifier,
         verticalArrangement = Arrangement.Center
     ){
         Column(
@@ -51,9 +50,16 @@ fun PDialog(
                     .padding(top = 30.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                MiniButton(Modifier.weight(1f),
-                    stringResource(R.string.delete_button), onDeleteClick)
-                MiniButton(Modifier.weight(1f), stringResource(R.string.edit_button), onEditClick)
+                MiniButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.delete_button),
+                    onClick = onDeleteClick
+                )
+                MiniButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.edit_button),
+                    onClick = onEditClick
+                )
             }
         }
         PButton(text = stringResource(R.string.subscribe_button), onClick = onSubscribeClick)

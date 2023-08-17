@@ -22,7 +22,7 @@ import com.jeongg.ppap.ui.theme.gray3
 fun PEmptyContent(
     modifier: Modifier = Modifier,
     @DrawableRes id: Int = R.drawable.pineapple_gray,
-    content: String = stringResource(R.string.empty_scrap)
+    message: String = stringResource(R.string.empty_scrap)
 ){
     Column(
         modifier = modifier.fillMaxSize(),
@@ -31,11 +31,11 @@ fun PEmptyContent(
     ){
         Image(
             painter = painterResource(id),
-            contentDescription = content,
+            contentDescription = message,
             modifier = Modifier.width(if (id == R.drawable.pineapple_gray) 100.dp else 60.dp)
         )
         Text(
-            text = content,
+            text = message,
             style = MaterialTheme.typography.bodyLarge,
             color = gray3,
             textAlign = TextAlign.Center

@@ -40,12 +40,10 @@ import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.gray2
-import com.jeongg.ppap.ui.theme.gray3
 import com.jeongg.ppap.ui.theme.main_yellow
 
 @Composable
@@ -87,10 +85,7 @@ fun SubscribeScreen(
     }
 }
 @Composable
-fun DefaultSubscribe(
-    onOneStopClick: () -> Unit = {},
-    onPnuClick: ()  -> Unit = {}
-) {
+fun DefaultSubscribe() {
     Column {
         DefaultSubscribeItem(
             image = R.drawable.pnu1,
@@ -121,9 +116,7 @@ fun DefaultSubscribeItem(
             .height(90.dp)
             .clip(MaterialTheme.shapes.large)
             .background(Color.Black.copy(0f))
-            .clickable {
-                isChecked = isChecked.not()
-            }
+            .clickable { isChecked = isChecked.not() }
     ) {
         Image(
             painter = painterResource(image),
@@ -160,11 +153,11 @@ fun CustomSubscribe(){
             style = MaterialTheme.typography.titleSmall,
         )
         PDivider(modifier = Modifier.padding(top = 5.dp))
-        PEmptyContent(id = R.drawable.apple_gray, content = "새로 추가한\n공지사항이 없습니다",
-            modifier = Modifier.padding(40.dp))
-//        CustomSubscribeItem()
-//        CustomSubscribeItem(false)
-//        CustomSubscribeItem()
+//        PEmptyContent(id = R.drawable.apple_gray, message = "새로 추가한\n공지사항이 없습니다",
+//            modifier = Modifier.padding(40.dp))
+        CustomSubscribeItem()
+        CustomSubscribeItem(false)
+        CustomSubscribeItem()
     }
 }
 
@@ -175,8 +168,7 @@ fun CustomSubscribeItem(
 ) {
     var isChecked by remember {mutableStateOf(isSelected) }
     val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
-    val textColor = if (isChecked) MaterialTheme.colorScheme.surface
-        else MaterialTheme.colorScheme.outlineVariant
+    val textColor = if (isChecked) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.outlineVariant
     var isDialogOpen by remember { mutableStateOf(false) }
     if (isDialogOpen){
         Dialog(

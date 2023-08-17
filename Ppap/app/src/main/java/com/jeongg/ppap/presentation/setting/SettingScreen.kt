@@ -27,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
-import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen

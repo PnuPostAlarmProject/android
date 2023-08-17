@@ -21,13 +21,8 @@ fun NoticeScrapScreen(
         onUpPress = onUpPress
     ){
         LazyColumn {
-            repeat(10){
-                item { NoticeItem() }
-            }
-            item {
-                PEmptyContent(modifier = Modifier.padding(vertical = 70.dp))
-            }
+            repeat(10){ item { NoticeItem() } }
+            item { PEmptyContent(modifier = Modifier.padding(vertical = 70.dp)) }
         }
-
     }
 }
