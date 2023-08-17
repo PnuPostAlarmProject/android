@@ -47,7 +47,7 @@ fun NoticeItem(
         else -> main_green
     }
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
+        modifier = Modifier.clickable{  }.fillMaxWidth().padding(top = 15.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ){
         Box(

@@ -39,6 +39,7 @@ import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.bright_pink
+import com.jeongg.ppap.ui.theme.gray3
 import com.jeongg.ppap.ui.theme.main_green
 import com.jeongg.ppap.ui.theme.shapes
 import com.jeongg.ppap.ui.theme.very_bright_yellow
@@ -162,7 +163,7 @@ fun NoticeListTitle(
                 painter = painterResource(R.drawable.setting),
                 contentDescription = "setting",
                 modifier = Modifier.clickable(onClick = settingNavigate),
-                tint = MaterialTheme.colorScheme.outline
+                tint = gray3
             )
         }
     }

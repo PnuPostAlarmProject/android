@@ -26,7 +26,7 @@ fun PButton(
     modifier: Modifier = Modifier,
     @DrawableRes painter: Int = -1,
     color: Color = main_yellow,
-    textColor: Color = MaterialTheme.colorScheme.scrim,
+    textColor: Color = Color.Black,
     text: String = "버튼",
     onClick: () -> Unit = {},
     shape: Shape = shapes.small

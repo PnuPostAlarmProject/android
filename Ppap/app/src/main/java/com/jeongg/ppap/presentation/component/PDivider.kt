@@ -2,6 +2,7 @@ package com.jeongg.ppap.presentation.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,6 +15,6 @@ fun PDivider(
     Divider(
         modifier = modifier.fillMaxWidth(),
         thickness = 1.dp,
-        color = gray1
+        color = MaterialTheme.colorScheme.outline
     )
 }

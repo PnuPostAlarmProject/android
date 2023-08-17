@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
-import com.jeongg.ppap.ui.theme.gray2
+import com.jeongg.ppap.ui.theme.gray3
 
 @Composable
 fun PEmptyContent(
@@ -37,7 +37,7 @@ fun PEmptyContent(
         Text(
             text = content,
             style = MaterialTheme.typography.bodyLarge,
-            color = gray2,
+            color = gray3,
             textAlign = TextAlign.Center
         )
     }
