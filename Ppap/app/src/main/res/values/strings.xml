@@ -5,14 +5,14 @@
     <string name="team_name">potatoes</string>
     <string name="login">kakao login</string>
     <string name="subscribe_title">구독하기</string>
-    <string name="subscribe_description">알림 받고 싶은 공지사항을 선택하거나 새로운 구독을 추가해주세요.</string>
+    <string name="subscribe_description">알림 받고 싶은 공지사항을 선택하거나 새로운 구독을 추가해주세요.\n사용자가 추가한 구독은 수정, 삭제가 가능해요.</string>
     <string name="pnu_onestop">부산대\n학생지원 시스템</string>
     <string name="pnu">부산대학교</string>
     <string name="add_subscribe">공지사항 추가 등록</string>
     <string name="goto_home">홈화면 바로 가기</string>
     <string name="edit">수정하기</string>
     <string name="remove">삭제하기</string>
-    <string name="add_subscribe_description">다음 정보를 입력하여 학과 게시판, 채용 게시판 등 필요한 정보를 빠르게 알림으로로 받아보세요!</string>
+    <string name="add_subscribe_description">다음 정보를 입력하여 학과 게시판, 채용 게시판 등 필요한 정보를 빠르게 알림으로 받아보세요!</string>
     <string name="add_subscribe_title">구독 추가하기</string>
     <string name="add_subscribe_button_text">공지사항 등록하기</string>
     <string name="explain1">1. 원하는 홈페이지 접속 (예: 정컴 공지사항) \n2. 공지 링크 및 RSS 링크 확인\n\t(다음 탭 확인)</string>
@@ -23,7 +23,7 @@
     <string name="subscribe_field_rss_hint">https://cse.pusan.ac.kr/bbs/cse/2605/rssList.do?row=50</string>
     <string name="subscribe_field_link_hint">https://cse.pusan.ac.kr/cse/14651/subview.do</string>
     <string name="subscribe_field_title_hint">정보컴퓨터공학부</string>
-    <string name="empty_scrap">스크랩한\n 공지사항이 없습니다.</string>
+    <string name="empty_scrap">스크랩한\n 공지사항이 없어요.</string>
     <string name="banner_title1">스크랩 화면 바로가기</string>
     <string name="banner_title2">공지 추가 등록하기</string>
     <string name="banner_title3">구독한 공지사항 수정하기</string>
@@ -40,4 +40,7 @@
     <string name="scrap">스크랩</string>
     <string name="version_open_source">버전 및 오픈 소스</string>
     <string name="app_description2">부산대 공지사항 알림 서비스,\nPPAP입니다.</string>
+    <string name="delete_button">삭제하기</string>
+    <string name="edit_button">수정하기</string>
+    <string name="subscribe_button">구독하기</string>
 </resources>

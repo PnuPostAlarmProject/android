@@ -3,23 +3,29 @@ package com.jeongg.ppap.presentation.subscribe
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -27,16 +33,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
+import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
-import com.jeongg.ppap.ui.theme.main_green
-import com.jeongg.ppap.ui.theme.main_pink
-import com.jeongg.ppap.ui.theme.shapes
+import com.jeongg.ppap.ui.theme.gray3
+import com.jeongg.ppap.ui.theme.main_yellow
 
 @Composable
 fun SubscribeScreen(
@@ -50,12 +57,10 @@ fun SubscribeScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(bottom = 130.dp)
+                modifier = Modifier.padding(bottom = 120.dp),
             ) {
-                item { DefaultSubscribe() }
-                item { CustomSubscribeItem() }
+                item {DefaultSubscribe()}
+                item {CustomSubscribe()}
             }
             Column(
                 modifier = Modifier
@@ -68,12 +73,12 @@ fun SubscribeScreen(
                     modifier = Modifier.padding(vertical = Dimens.PaddingSmall),
                     onClick = {navController.navigate(Screen.SubscribeAddScreen.route)}
                 )
-                PButton(text = stringResource(R.string.goto_home),
-                    onClick = {navController.navigate(Screen.NoticeListScreen.route)})
+                PButton(
+                    text = stringResource(R.string.goto_home),
+                    onClick = {navController.navigate(Screen.NoticeListScreen.route)}
+                )
             }
         }
-
-
     }
 }
 @Composable
@@ -84,25 +89,34 @@ fun DefaultSubscribe(
     Column {
         DefaultSubscribeItem(
             image = R.drawable.pnu1,
-            text = stringResource(R.string.pnu_onestop)
+            text = stringResource(R.string.pnu_onestop),
         )
-        PDivider(modifier = Modifier.padding(vertical = Dimens.PaddingSmall))
+        Spacer(modifier = Modifier.height(10.dp))
         DefaultSubscribeItem(
             image = R.drawable.pnu2,
             text = stringResource(R.string.pnu)
         )
-        PDivider(modifier = Modifier.padding(vertical = Dimens.PaddingSmall))
+        Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
     }
 }
 @Composable
 fun DefaultSubscribeItem(
     @DrawableRes image: Int,
-    text: String
+    text: String = "",
+    isSelected: Boolean = true
 ){
+    var isChecked by remember { mutableStateOf(isSelected) }
+    val borderModifier = if (isChecked) Modifier.border(3.dp, main_yellow, MaterialTheme.shapes.large) else Modifier
+    val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(90.dp)
+            .clip(MaterialTheme.shapes.large)
+            .clickable {
+                isChecked = isChecked.not()
+            }
     ) {
         Image(
             painter = painterResource(image),
@@ -110,66 +124,88 @@ fun DefaultSubscribeItem(
             contentScale = ContentScale.Crop,
             colorFilter = ColorFilter.tint(Color.Blue.copy(alpha = 0.1f), blendMode = BlendMode.Darken),
             alpha = 0.2f,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.large)
-                .border(1.5.dp, Color.Black, MaterialTheme.shapes.large),
+            modifier = borderModifier
         )
-        Box(
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
-                .fillMaxSize()
                 .padding(horizontal = Dimens.PaddingNormal)
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.CenterStart)
-            )
-            Image(
-                painter = painterResource(R.drawable.checked),
-                contentDescription = "checked",
-                modifier = Modifier
-                    .size(31.dp)
-                    .align(Alignment.CenterEnd)
-            )
-        }
+                .align(Alignment.CenterStart)
+        )
+        Image(
+            painter = painterResource(img),
+            contentDescription = "checked: $isChecked",
+            modifier = Modifier
+                .padding(horizontal = Dimens.PaddingNormal)
+                .size(31.dp)
+                .align(Alignment.CenterEnd)
+        )
+    }
+}
+
+@Composable
+fun CustomSubscribe(){
+    Column {
+        Text(
+            text = "내가 추가한 구독",
+            style = MaterialTheme.typography.titleSmall,
+        )
+        PDivider(modifier = Modifier.padding(top = 5.dp))
+        //PEmptyContent(id = R.drawable.apple_gray, content = "새로 추가한\n공지사항이 없습니다",
+        //    modifier = Modifier.padding(40.dp))
+        CustomSubscribeItem()
+        CustomSubscribeItem(false)
+        CustomSubscribeItem()
     }
 }
 
 @Composable
 fun CustomSubscribeItem(
-    text: String = "정보컴퓨터공학부",
-){
-    Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.displayLarge
-        )
+    isSelected: Boolean = true,
+    text: String = "최강 정컴 공지"
+) {
+    var isChecked by remember {mutableStateOf(isSelected) }
+    val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
+    val textColor = if (isChecked) MaterialTheme.colorScheme.onBackground else gray3
+    var isDialogOpen by remember { mutableStateOf(false) }
+    if (isDialogOpen){
+        Dialog(
+            onDismissRequest = {isDialogOpen = isDialogOpen.not()}
+        ){
+            PDialog()
+        }
+    }
+    Box(
+        modifier = Modifier
+            .clickable { isDialogOpen = isDialogOpen.not() }
+            .padding(15.dp)
+            .fillMaxWidth()
+    ){
         Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            modifier = Modifier.padding(end = 31.dp).fillMaxHeight(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            PButton(
-                painter = R.drawable.edit,
-                text = stringResource(R.string.edit),
-                color = main_pink,
-                modifier = Modifier.width(120.dp).height(36.dp),
-                shape = shapes.medium
-            )
-            PButton(
-                painter = R.drawable.remove,
-                text = stringResource(R.string.remove),
-                color = main_green,
-                modifier = Modifier.width(120.dp).height(36.dp),
-                shape = shapes.medium
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium,
+                color = textColor
             )
             Image(
-                painter = painterResource(R.drawable.unchecked),
-                contentDescription = "checked",
-                modifier = Modifier.size(31.dp)
+                painter = painterResource(R.drawable.arrow),
+                contentDescription = "edit or delete",
+                colorFilter = ColorFilter.tint(textColor),
+                modifier = Modifier.rotate(0f).padding(start = 5.dp)
             )
         }
-        PDivider(modifier = Modifier.padding(bottom = 12.dp))
+        Image(
+            painter = painterResource(img),
+            contentDescription = isSelected.toString(),
+            modifier = Modifier
+                .size(31.dp)
+                .align(Alignment.CenterEnd)
+                .clickable { isChecked = isChecked.not() }
+        )
     }
-
+    PDivider()
 }

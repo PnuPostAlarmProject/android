@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -51,12 +52,18 @@ fun LoginScreen(
                 )
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.characters),
-            contentDescription = stringResource(R.string.characters),
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.BottomEnd)
-        )
+        Row(
+            modifier = Modifier.size(200.dp).align(Alignment.BottomEnd),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.pineapple),
+                contentDescription = stringResource(R.string.characters),
+            )
+            Image(
+                painter = painterResource(id = R.drawable.apple_no_background),
+                contentDescription = stringResource(R.string.characters),
+            )
+        }
     }
 }
