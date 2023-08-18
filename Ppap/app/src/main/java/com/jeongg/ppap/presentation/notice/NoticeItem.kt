@@ -30,7 +30,6 @@ import com.jeongg.ppap.ui.theme.bright_yellow
 import com.jeongg.ppap.ui.theme.gray3
 import com.jeongg.ppap.ui.theme.main_green
 import com.jeongg.ppap.ui.theme.main_pink
-import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
 fun NoticeItem(
@@ -62,7 +61,7 @@ fun NoticeItem(
                 color = Color.Black,
                 modifier = Modifier
                     .padding(end = 30.dp)
-                    .clip(shapes.large)
+                    .clip(MaterialTheme.shapes.large)
                     .background(color)
                     .padding(horizontal = 15.dp, vertical = 5.dp),
                 maxLines = 1,

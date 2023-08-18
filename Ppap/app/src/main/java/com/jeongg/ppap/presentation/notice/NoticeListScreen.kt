@@ -41,7 +41,6 @@ import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.bright_pink
 import com.jeongg.ppap.ui.theme.gray3
 import com.jeongg.ppap.ui.theme.main_green
-import com.jeongg.ppap.ui.theme.shapes
 import com.jeongg.ppap.ui.theme.very_bright_yellow
 
 @Composable
@@ -88,7 +87,7 @@ fun NoticeListBanner(
         Column(
             modifier = Modifier
                 .scale(scaleX = 1f, scaleY = if(state.currentPage == index) 1f else 0.9f)
-                .clip(shapes.small)
+                .clip(MaterialTheme.shapes.small)
                 .clickable { navController.navigate(screens[index]) }
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 62.dp)

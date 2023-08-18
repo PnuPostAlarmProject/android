@@ -32,7 +32,6 @@ import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.bright_pink
-import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
 fun SettingScreen(
@@ -74,7 +73,7 @@ fun SettingItem(
 ){
     Box(
         modifier = Modifier
-            .clip(shapes.medium)
+            .clip(MaterialTheme.shapes.medium)
             .clickable(onClick = onClick)
             .background(Color.White)
             .padding(horizontal = 16.dp)

@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.ui.theme.main_yellow
-import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
 fun PButton(
@@ -26,7 +25,7 @@ fun PButton(
     Button(
         modifier = modifier.fillMaxWidth().height(44.dp),
         onClick = onClick,
-        shape = shapes.small,
+        shape = MaterialTheme.shapes.small,
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
             contentColor = textColor,

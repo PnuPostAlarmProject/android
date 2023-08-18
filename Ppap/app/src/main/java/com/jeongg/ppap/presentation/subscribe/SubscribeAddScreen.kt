@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +39,6 @@ import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.addFocusCleaner
 import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.ui.theme.bright_yellow
-import com.jeongg.ppap.ui.theme.shapes
 import com.jeongg.ppap.ui.theme.typography
 
 @Composable
@@ -150,7 +150,7 @@ fun PHorizontalPager() {
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 160.dp)
                 .alpha(if(state.currentPage == index) 1f else 0.5f)
-                .clip(shapes.medium)
+                .clip(MaterialTheme.shapes.medium)
                 .background(bright_yellow),
             verticalArrangement = Arrangement.Center
         ){
