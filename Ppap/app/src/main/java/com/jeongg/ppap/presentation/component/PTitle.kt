@@ -15,11 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
 import com.jeongg.ppap.ui.theme.Dimens
+import com.jeongg.ppap.ui.theme.gray3
 
 @Composable
 fun PTitle(
@@ -42,6 +44,7 @@ fun PTitle(
                     .size(30.dp)
                     .rotate(180f)
                     .clickable(onClick = onUpPress),
+                colorFilter = ColorFilter.tint(gray3)
             )
             Text(
                 text = title,
