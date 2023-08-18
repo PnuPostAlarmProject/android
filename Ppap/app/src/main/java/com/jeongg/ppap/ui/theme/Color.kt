@@ -16,6 +16,7 @@ val main_pink = Color(0xFFF7D0D1)
 val gray1 = Color(0xFFEBEBEB)
 val gray2 = Color(0xFF808080)
 val gray3 = Color(0xFF979797)
+val gray4 = Color(0xFF656565)
 
 val rainbowColorsBrush =
     listOf(

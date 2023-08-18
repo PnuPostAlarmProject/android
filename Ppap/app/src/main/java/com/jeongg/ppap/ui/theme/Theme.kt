@@ -13,14 +13,14 @@ private val DarkColorScheme = darkColorScheme(
     background = Color.Black,
     surface = Color.White,
     outline = gray3,
-    outlineVariant = gray2
+    outlineVariant = gray3
 )
 
 private val LightColorScheme = lightColorScheme(
     background = Color.White,
     surface = Color.Black,
     outline = gray1,
-    outlineVariant = gray3
+    outlineVariant = gray4
 )
 
 @Composable

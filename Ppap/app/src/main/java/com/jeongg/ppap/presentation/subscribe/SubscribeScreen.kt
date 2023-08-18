@@ -40,10 +40,11 @@ import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
+import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
-import com.jeongg.ppap.ui.theme.gray2
+import com.jeongg.ppap.ui.theme.gray3
 import com.jeongg.ppap.ui.theme.main_yellow
 
 @Composable
@@ -108,7 +109,7 @@ fun DefaultSubscribeItem(
     var isChecked by remember { mutableStateOf(isSelected) }
     val borderModifier = if (isChecked) Modifier.border(3.dp, main_yellow, MaterialTheme.shapes.large) else Modifier
     val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
-    val textColor = if (isChecked) MaterialTheme.colorScheme.surface else gray2
+    val textColor = if (isChecked) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.outlineVariant
 
     Box(
         modifier = Modifier
@@ -168,7 +169,7 @@ fun CustomSubscribeItem(
 ) {
     var isChecked by remember {mutableStateOf(isSelected) }
     val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
-    val textColor = if (isChecked) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.outlineVariant
+    val textColor = if (isChecked) MaterialTheme.colorScheme.surface else gray3
     var isDialogOpen by remember { mutableStateOf(false) }
     if (isDialogOpen){
         Dialog(
