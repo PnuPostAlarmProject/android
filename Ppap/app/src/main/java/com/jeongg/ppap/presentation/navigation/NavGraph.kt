@@ -17,9 +17,9 @@ fun NavGraphBuilder.ppapGraph(
 ){
     composable(route = Screen.LoginScreen.route){ LoginScreen(navController)}
     composable(route = Screen.SplashScreen.route){ SplashScreen(navController) }
-    composable(route = Screen.SubscribeScreen.route){ SubscribeScreen(navController) }
-    composable(route = Screen.SubscribeAddScreen.route){ SubscribeAddScreen(navController) }
+    composable(route = Screen.SubscribeScreen.route){ SubscribeScreen(navController, upPress) }
+    composable(route = Screen.SubscribeAddScreen.route){ SubscribeAddScreen(navController, upPress) }
     composable(route = Screen.NoticeListScreen.route){ NoticeListScreen(navController)}
-    composable(route = Screen.NoticeScrapScreen.route){ NoticeScrapScreen(navController)}
-    composable(route = Screen.SettingScreen.route){ SettingScreen(navController)}
+    composable(route = Screen.NoticeScrapScreen.route){ NoticeScrapScreen(navController, upPress)}
+    composable(route = Screen.SettingScreen.route){ SettingScreen(navController, upPress)}
 }

@@ -114,7 +114,6 @@ fun SplashScreen(
                 textAlign = TextAlign.Center
             )
         }
-
        Text(
            text = "@" + stringResource(R.string.team_name),
            style = MaterialTheme.typography.titleSmall.copy(

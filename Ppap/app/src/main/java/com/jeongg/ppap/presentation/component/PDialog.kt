@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.gray1
-import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
 fun PDialog(
@@ -30,13 +29,12 @@ fun PDialog(
     onSubscribeClick:() -> Unit = {}
 ){
     Column(
-        modifier = Modifier,
         verticalArrangement = Arrangement.Center
     ){
         Column(
             modifier = Modifier
                 .padding(bottom = 10.dp)
-                .clip(shapes.small)
+                .clip(MaterialTheme.shapes.small)
                 .background(Color.White)
                 .padding(Dimens.PaddingNormal)
         ) {
@@ -51,9 +49,16 @@ fun PDialog(
                     .padding(top = 30.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                MiniButton(Modifier.weight(1f),
-                    stringResource(R.string.delete_button), onDeleteClick)
-                MiniButton(Modifier.weight(1f), stringResource(R.string.edit_button), onEditClick)
+                MiniButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.delete_button),
+                    onClick = onDeleteClick
+                )
+                MiniButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.edit_button),
+                    onClick = onEditClick
+                )
             }
         }
         PButton(text = stringResource(R.string.subscribe_button), onClick = onSubscribeClick)
@@ -70,8 +75,8 @@ fun MiniButton(
         text = text,
         style = MaterialTheme.typography.titleSmall,
         modifier = modifier
-            .clip(shapes.small)
-            .border(1.dp, gray1, shapes.small)
+            .clip(MaterialTheme.shapes.small)
+            .border(1.dp, gray1, MaterialTheme.shapes.small)
             .clickable(onClick = onClick)
             .fillMaxWidth()
             .padding(vertical = 10.dp),

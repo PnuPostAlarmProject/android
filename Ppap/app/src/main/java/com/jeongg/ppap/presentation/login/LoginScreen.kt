@@ -31,14 +31,16 @@ fun LoginScreen(
     Box(
         modifier = Modifier.padding(Dimens.PaddingNormal)
     ){
-        Column{
+        Column {
             Text(
                 text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.padding(top = Dimens.PaddingExtraLarge)
             )
             PDivider(modifier = Modifier.padding(vertical = Dimens.PaddingSmall))
-            Box(modifier = Modifier.fillMaxWidth()){
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ){
                 Text(
                     text = stringResource(R.string.app_description),
                     style = MaterialTheme.typography.titleMedium,
@@ -47,7 +49,9 @@ fun LoginScreen(
                 Image(
                     painter = painterResource(id = R.drawable.kakao_login),
                     contentDescription = stringResource(R.string.login),
-                    modifier = Modifier.width(100.dp).height(50.dp).align(Alignment.CenterEnd)
+                    modifier = Modifier.width(100.dp)
+                        .height(50.dp)
+                        .align(Alignment.CenterEnd)
                         .clickable{navController.navigate(Screen.SubscribeScreen.route)}
                 )
             }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,31 +27,31 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.offset
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PTextField
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.addFocusCleaner
+import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.ui.theme.bright_yellow
-import com.jeongg.ppap.ui.theme.shapes
 import com.jeongg.ppap.ui.theme.typography
 
 @Composable
 fun SubscribeAddScreen(
-    navController: NavController
+    navController: NavController,
+    onUpPress: () -> Unit = {}
 ){
     val focusManager = LocalFocusManager.current
     PTitle(
         modifier = Modifier.addFocusCleaner(focusManager),
         title = stringResource(R.string.add_subscribe_title),
-        description = stringResource(R.string.add_subscribe_description)
+        description = stringResource(R.string.add_subscribe_description),
+        onUpPress = onUpPress
     ){
         LazyColumn {
             item { PHorizontalPager() }
@@ -141,13 +142,7 @@ fun PHorizontalPager() {
     HorizontalPager(
         state = state,
         pageSpacing = 5.dp,
-        modifier = Modifier.layout { measurable, constraints ->
-                val placeable =  measurable.measure(constraints.offset((30 * 2).dp.roundToPx()))
-                layout(
-                    placeable.width,
-                    placeable.height
-                ) { placeable.place(0, 0) }
-            },
+        modifier = Modifier.negativePadding(),
         contentPadding = PaddingValues(horizontal = 30.dp),
     ) { index ->
         Column(
@@ -155,7 +150,7 @@ fun PHorizontalPager() {
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 160.dp)
                 .alpha(if(state.currentPage == index) 1f else 0.5f)
-                .clip(shapes.medium)
+                .clip(MaterialTheme.shapes.medium)
                 .background(bright_yellow),
             verticalArrangement = Arrangement.Center
         ){

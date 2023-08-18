@@ -27,22 +27,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
-import com.jeongg.ppap.presentation.component.PDivider
+import com.jeongg.ppap.presentation.component.PTitle
+import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.ui.theme.Dimens
 import com.jeongg.ppap.ui.theme.bright_pink
-import com.jeongg.ppap.ui.theme.shapes
 
 @Composable
 fun SettingScreen(
-    navController: NavController
+    navController: NavController,
+    onUpPress: () -> Unit = {}
 ){
-    Column(
-        modifier = Modifier.fillMaxSize()
+    PTitle(
+        title = stringResource(R.string.setting_title),
+        onUpPress = onUpPress
     ){
-        SettingTitle(modifier = Modifier.padding(30.dp))
+        DescriptionScreen()
         LazyColumn(
             modifier = Modifier
+                .negativePadding()
+                .padding(top = 30.dp)
                 .clip(
                     RoundedCornerShape(
                         topStart = Dimens.PaddingLarge,
@@ -52,28 +56,14 @@ fun SettingScreen(
                 .background(bright_pink)
                 .fillMaxSize()
         ){
-            item { ServiceScreen(
-                onSubscribe = {navController.navigate(Screen.SubscribeScreen.route)},
-                onScrap = {navController.navigate(Screen.NoticeScrapScreen.route)}
-            ) }
+            item {
+                ServiceScreen(
+                    onSubscribe = {navController.navigate(Screen.SubscribeScreen.route)},
+                    onScrap = {navController.navigate(Screen.NoticeScrapScreen.route)}
+                )
+            }
             item { MyPageScreen() }
         }
-    }
-}
-
-@Composable
-fun SettingTitle(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.setting_title),
-            style = MaterialTheme.typography.titleLarge
-        )
-        PDivider(modifier = Modifier.padding(top = 7.dp))
-        DescriptionScreen()
     }
 }
 @Composable
@@ -83,7 +73,7 @@ fun SettingItem(
 ){
     Box(
         modifier = Modifier
-            .clip(shapes.medium)
+            .clip(MaterialTheme.shapes.medium)
             .clickable(onClick = onClick)
             .background(Color.White)
             .padding(horizontal = 16.dp)
