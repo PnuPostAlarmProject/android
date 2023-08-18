@@ -69,7 +69,7 @@ fun NoticeItem(
             )
             Image(
                 painter = painterResource(favorite),
-                contentDescription = "favorite",
+                contentDescription = "checked: $isFilled",
                 modifier = Modifier.padding(start = 12.dp)
                     .size(25.dp)
                     .align(Alignment.CenterEnd)

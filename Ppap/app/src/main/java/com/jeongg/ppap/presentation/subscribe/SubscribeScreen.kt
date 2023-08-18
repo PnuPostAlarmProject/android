@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -102,8 +101,8 @@ fun DefaultSubscribe() {
 }
 @Composable
 fun DefaultSubscribeItem(
-    @DrawableRes image: Int,
-    text: String = "",
+    @DrawableRes image: Int = R.drawable.pnu1,
+    text: String = stringResource(R.string.pnu_onestop),
     isSelected: Boolean = false
 ){
     var isChecked by remember { mutableStateOf(isSelected) }
@@ -147,18 +146,26 @@ fun DefaultSubscribeItem(
 }
 
 @Composable
-fun CustomSubscribe(){
+fun CustomSubscribe(
+    subscribes: List<String> = listOf("💻 정보컴퓨터공학부", "⚡ 전기과 공지사항!!!", "👩‍🎓 정보컴퓨터공학부 졸업게시판")
+){
     Column {
         Text(
             text = "내가 추가한 구독",
             style = MaterialTheme.typography.titleSmall,
         )
         PDivider(modifier = Modifier.padding(top = 5.dp))
-//        PEmptyContent(id = R.drawable.apple_gray, message = "새로 추가한\n공지사항이 없습니다",
-//            modifier = Modifier.padding(40.dp))
-        CustomSubscribeItem()
-        CustomSubscribeItem(false)
-        CustomSubscribeItem()
+        if (subscribes.isEmpty()){
+            PEmptyContent(
+                id = R.drawable.apple_gray, message = "새로 추가한\n공지사항이 없습니다",
+                modifier = Modifier.padding(40.dp)
+            )
+        }
+        else {
+            subscribes.forEach {
+                CustomSubscribeItem(text = it)
+            }
+        }
     }
 }
 
@@ -184,25 +191,25 @@ fun CustomSubscribeItem(
             .padding(15.dp)
             .fillMaxWidth()
     ){
-        Row(
-            modifier = Modifier.padding(end = 31.dp).fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
+        Box(
+            modifier = Modifier.padding(end = 31.dp).fillMaxHeight().align(Alignment.CenterStart),
         ) {
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleMedium,
-                color = textColor
+                modifier = Modifier.align(Alignment.CenterStart).padding(end = 24.dp),
+                color = textColor,
             )
             Image(
                 painter = painterResource(R.drawable.arrow),
                 contentDescription = "edit or delete",
                 colorFilter = ColorFilter.tint(textColor),
-                modifier = Modifier.rotate(0f).padding(start = 5.dp)
+                modifier = Modifier.rotate(0f).align(Alignment.CenterEnd)
             )
         }
         Image(
             painter = painterResource(img),
-            contentDescription = isSelected.toString(),
+            contentDescription = "checked: $isChecked",
             modifier = Modifier
                 .size(31.dp)
                 .align(Alignment.CenterEnd)

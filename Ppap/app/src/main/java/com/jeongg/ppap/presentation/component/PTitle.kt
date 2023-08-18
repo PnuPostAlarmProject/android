@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -56,9 +55,8 @@ fun PTitle(
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 23.dp)
+                modifier = Modifier.padding(top = 23.dp, bottom = Dimens.PaddingSmall)
             )
-            Spacer(modifier = Modifier.padding(top = Dimens.PaddingSmall))
         }
         Column(content=content)
     }
