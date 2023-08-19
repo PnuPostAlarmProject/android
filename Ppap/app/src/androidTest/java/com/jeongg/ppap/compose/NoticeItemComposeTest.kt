@@ -5,7 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.jeongg.ppap.presentation.notice.NoticeItem
+import com.jeongg.ppap.compose.notice.NoticeItem
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
