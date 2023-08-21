@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -64,6 +65,14 @@ dependencies {
     implementation("androidx.navigation:navigation-common-ktx:2.7.0")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.0")
     implementation("androidx.navigation:navigation-compose:2.7.0")
+
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+
+    // data store
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
