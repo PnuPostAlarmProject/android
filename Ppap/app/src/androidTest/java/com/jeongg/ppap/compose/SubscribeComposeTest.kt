@@ -7,9 +7,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.jeongg.ppap.presentation.subscribe.CustomSubscribe
-import com.jeongg.ppap.presentation.subscribe.CustomSubscribeItem
-import com.jeongg.ppap.presentation.subscribe.DefaultSubscribeItem
+import com.jeongg.ppap.compose.subscribe.CustomSubscribe
+import com.jeongg.ppap.compose.subscribe.CustomSubscribeItem
+import com.jeongg.ppap.compose.subscribe.DefaultSubscribeItem
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
