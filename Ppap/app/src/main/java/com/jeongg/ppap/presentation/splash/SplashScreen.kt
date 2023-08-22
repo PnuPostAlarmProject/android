@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.navigation.Screen
@@ -43,7 +44,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: SplashViewModel = hiltViewModel()
 ){
     var pineapple by remember { mutableStateOf(false) }
     var apple by remember { mutableStateOf(false) }
@@ -72,8 +74,13 @@ fun SplashScreen(
         delay(800)
         fadeIn = true
         delay(1000)
+
+        val nextScreen = when (viewModel.isUserLoggedIn()) {
+            true -> Screen.NoticeListScreen
+            false -> Screen.LoginScreen
+        }
         navController.popBackStack()
-        navController.navigate(Screen.LoginScreen.route)
+        navController.navigate(nextScreen.route)
     }
     Box(
         modifier = Modifier.fillMaxSize()

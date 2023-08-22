@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -6,10 +8,12 @@ plugins {
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
-
 android {
     namespace = "com.jeongg.ppap"
     compileSdk = 34
+
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").inputStream())
 
     defaultConfig {
         applicationId = "com.jeongg.ppap"
@@ -22,6 +26,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        manifestPlaceholders["NATIVE_APP_KEY"] = properties.getProperty("KAKAO_NATIVE_APP")
+        buildConfigField(
+            "String",
+            "KAKAO_NATIVE_APP_KEY",
+            properties.getProperty("KAKAO_NATIVE_APP_KEY")
+        )
     }
 
     buildTypes {
@@ -42,6 +52,8 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+        dataBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -93,6 +105,10 @@ dependencies {
 
     // data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // kakao login
+    implementation("com.kakao.sdk:v2-all:2.15.0") // 전체 모듈 설치, 2.11.0 버전부터 지원
+    implementation("com.kakao.sdk:v2-user:2.15.0") // 카카오 로그인
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

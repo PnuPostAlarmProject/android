@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,7 +39,10 @@ fun LoginScreen(
     LaunchedEffect(key1 = true){
         viewModel.eventFlow.collectLatest{ event ->
             when(event){
-                is LoginUiEvent.LoginSuccess -> navController.navigate(Screen.SubscribeScreen.route)
+                is LoginUiEvent.LoginSuccess -> {
+                    navController.popBackStack()
+                    navController.navigate(Screen.SubscribeScreen.route)
+                }
                 is LoginUiEvent.LoginFail -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 else -> { "로그인 로딩중".log() }
             }
@@ -73,10 +73,7 @@ fun LoginScreen(
                         .width(100.dp)
                         .height(50.dp)
                         .align(Alignment.CenterEnd)
-                        .clickable {
-                            viewModel.tokenToServer("strean")
-
-                        }
+                        .clickable { viewModel.kakaoLogin(context) }
                 )
             }
         }
