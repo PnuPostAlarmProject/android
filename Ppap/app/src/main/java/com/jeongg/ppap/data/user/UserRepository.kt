@@ -2,10 +2,9 @@ package com.jeongg.ppap.data.user
 
 import com.jeongg.ppap.data.user.dto.KakaoLoginDTO
 import com.jeongg.ppap.data.util.ApiUtils
-import io.ktor.client.statement.HttpResponse
 
-interface UserService {
+interface UserRepository {
     suspend fun kakaoLogin(accessToken: String): ApiUtils.ApiResult<KakaoLoginDTO>
-    suspend fun reissue(refreshToken: String): ApiUtils.ApiResult<KakaoLoginDTO>
+    suspend fun kakaoReissue(refreshToken: String): ApiUtils.ApiResult<KakaoLoginDTO>
     suspend fun logout(): ApiUtils.ApiResult<KakaoLoginDTO>
 }
