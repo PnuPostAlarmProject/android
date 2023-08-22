@@ -9,16 +9,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
-import com.jeongg.ppap.compose.PpapApp
+import com.jeongg.ppap.presentation.PpapAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 
 val Context.dataStore by preferencesDataStore("ppap_data")
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         askNotificationPermission()
-        setContent { PpapApp() }
+        setContent { PpapAppTheme() }
     }
     // Declare the launcher at the top of your Activity/Fragment:
     private val requestPermissionLauncher = registerForActivityResult(
