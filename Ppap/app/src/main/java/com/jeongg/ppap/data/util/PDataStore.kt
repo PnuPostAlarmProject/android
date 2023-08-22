@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.jeongg.ppap.dataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 class PDataStore @Inject constructor(@ApplicationContext val context: Context) {
     private val store = context.dataStore
-    suspend fun setData(key: String, value: String){
+    fun setData(key: String, value: String){
         runBlocking(Dispatchers.IO) {
             store.edit{ it[stringPreferencesKey(key)] = value }
         }

@@ -4,7 +4,6 @@ import com.jeongg.ppap.data.user.dto.KakaoLoginDTO
 import com.jeongg.ppap.data.user.dto.RefreshTokenDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.data.util.HttpRoutes
-import com.jeongg.ppap.util.log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header

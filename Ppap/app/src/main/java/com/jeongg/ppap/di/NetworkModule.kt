@@ -4,10 +4,8 @@ import android.content.Context
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.jeongg.ppap.data.user.UserDataSource
 import com.jeongg.ppap.data.user.UserRepository
-import com.jeongg.ppap.data.user.UserRepositoryImpl
 import com.jeongg.ppap.data.user.UserService
 import com.jeongg.ppap.data.util.KAKAO_TOKEN_KEY
-import com.jeongg.ppap.data.util.PDataStore
 import com.jeongg.ppap.dataStore
 import dagger.Module
 import dagger.Provides
@@ -23,7 +21,6 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -55,15 +52,13 @@ class NetworkModule {
                 })
             }
             install(HttpTimeout) {
-                connectTimeoutMillis = 6000
-                requestTimeoutMillis = 6000
-                socketTimeoutMillis = 6000
+                connectTimeoutMillis = 10000
+                requestTimeoutMillis = 10000
+                socketTimeoutMillis = 10000
             }
             defaultRequest{
                 contentType(ContentType.Application.Json)
-                headers{
-                    append("Authorization", token)
-                }
+                // authorization - token
             }
         }
     }
@@ -75,7 +70,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideUserRepository(service: UserService): UserRepository {
-        return UserRepositoryImpl(service)
+        return UserRepository(service)
     }
 
 }
