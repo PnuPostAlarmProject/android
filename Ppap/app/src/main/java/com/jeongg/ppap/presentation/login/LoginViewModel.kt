@@ -29,7 +29,7 @@ class LoginViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<LoginUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private fun kakaoToServer(accessToken: String){
+    public fun kakaoToServer(accessToken: String){
         viewModelScope.launch {
             _eventFlow.emit(LoginUiEvent.LoginLoading)
             val response = userRepository.kakaoLoginToServer(accessToken)
