@@ -26,5 +26,6 @@ class PDataStore @Inject constructor(@ApplicationContext val context: Context) {
 }
 
 const val FCM_TOKEN_KEY = "fcm-token"
+const val ACCESS_TOKEN_KEY = "access-token"
+const val REFRESH_TOKEN_KEY = "refresh-token"
 const val KAKAO_TOKEN_KEY = "kakao-token"
-const val KAKAO_REFRESH_KEY = "kakao-refresh-token"
