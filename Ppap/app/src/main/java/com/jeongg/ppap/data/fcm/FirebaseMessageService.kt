@@ -11,9 +11,7 @@ import com.jeongg.ppap.MainActivity
 import com.jeongg.ppap.data.util.FCM_TOKEN_KEY
 import com.jeongg.ppap.dataStore
 import com.jeongg.ppap.util.log
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class FirebaseMessageService(): FirebaseMessagingService() {
 
@@ -37,11 +35,10 @@ class FirebaseMessageService(): FirebaseMessagingService() {
         })
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onNewToken(token: String) {
         val key = stringPreferencesKey(FCM_TOKEN_KEY)
-        GlobalScope.launch {
-            baseContext.dataStore.edit{ pref ->
+        runBlocking {
+            dataStore.edit{ pref ->
                 pref[key] = token
             }
         }

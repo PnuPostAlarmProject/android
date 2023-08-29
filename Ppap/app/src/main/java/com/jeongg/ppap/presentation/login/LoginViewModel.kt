@@ -4,11 +4,14 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jeongg.ppap.data.user.UserRepository
-import com.jeongg.ppap.data.util.KAKAO_REFRESH_KEY
+import com.jeongg.ppap.data.util.ACCESS_TOKEN_KEY
+import com.jeongg.ppap.data.util.FCM_TOKEN_KEY
 import com.jeongg.ppap.data.util.KAKAO_TOKEN_KEY
 import com.jeongg.ppap.data.util.PDataStore
+import com.jeongg.ppap.data.util.REFRESH_TOKEN_KEY
 import com.jeongg.ppap.util.log
 import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.sdk.auth.Constants.REFRESH_TOKEN
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -29,43 +32,30 @@ class LoginViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<LoginUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    public fun kakaoToServer(accessToken: String){
+    private fun kakaoToServer(accessToken: String, fcmToken: String){
         viewModelScope.launch {
             _eventFlow.emit(LoginUiEvent.LoginLoading)
-            val response = userRepository.kakaoLoginToServer(accessToken)
+            val response = userRepository.kakaoLoginToServer(accessToken, fcmToken)
             if (response.success) {
                 "로그인 전송 서버 성공".log()
+                dataStore.setData(ACCESS_TOKEN_KEY, response.response?.accessToken ?: "")
+                dataStore.setData(REFRESH_TOKEN_KEY, response.response?.refreshToken ?: "")
                 _eventFlow.emit(LoginUiEvent.LoginSuccess)
-                dataStore.setData(KAKAO_TOKEN_KEY, response.response?.accessToken ?: "")
-                dataStore.setData(KAKAO_REFRESH_KEY, response.response?.refreshToken ?: "")
             } else {
-                "로그인 서버 전송 실패".log()
+                "로그인 서버 전송 실패 ${response.error?.status}".log()
                 _eventFlow.emit(LoginUiEvent.LoginFail(("로그인에 실패하였습니다.\n" + response.error?.message)))
-            }
-        }
-    }
-    private fun kakaoRefreshServer(refreshToken: String){
-        viewModelScope.launch{
-            _eventFlow.emit(LoginUiEvent.LoginLoading)
-            val response = userRepository.kakaoReissue(refreshToken)
-            if (response.success){
-                dataStore.setData(KAKAO_TOKEN_KEY, response.response?.accessToken ?: "")
-                dataStore.setData(KAKAO_REFRESH_KEY, response.response?.refreshToken ?: "")
-            } else {
-                "카카오 토큰 재발급 실패".log()
             }
         }
     }
     fun kakaoLogin(context: Context) {
         if (AuthApiClient.instance.hasToken()) {
-            UserApiClient.instance.accessTokenInfo { _, error ->
+            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
                 if (error != null) {
                     if (error is KakaoSdkError && error.isInvalidTokenError()) {
                         "로그인 필요1".log()
-                        kakaoRefreshServer(dataStore.getData(KAKAO_REFRESH_KEY))
                         realKakaoLogin(context)
                     }
-                    else "로그인 실패1".log()
+                    else "로그인 실패1-1".log()
                 }
                 else {
                     "로그인 필요2".log()
@@ -80,12 +70,13 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun realKakaoLogin(context: Context) {
+        val fcmtoken = dataStore.getData(FCM_TOKEN_KEY)
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 "카카오계정으로 로그인 실패".log()
             } else if (token != null) {
                 "카카오계정으로 로그인 성공 ${token.accessToken}".log()
-                kakaoToServer(token.accessToken)
+                kakaoToServer(token.accessToken, fcmtoken)
             }
         }
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
@@ -98,7 +89,7 @@ class LoginViewModel @Inject constructor(
                     UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                 } else if (token != null) {
                     "카카오톡으로 로그인 성공 ${token.accessToken}".log()
-                    kakaoToServer(token.accessToken)
+                    kakaoToServer(token.accessToken, fcmtoken)
                 }
             }
         } else {

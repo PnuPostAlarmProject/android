@@ -91,7 +91,7 @@ dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     testImplementation("io.ktor:ktor-client-mock:2.3.3")
     implementation("org.slf4j:slf4j-simple:1.7.32")
-
+    implementation("io.ktor:ktor-client-auth:2.3.3")
     // hilt
     implementation("com.google.dagger:hilt-android:2.47")
     kapt("com.google.dagger:hilt-compiler:2.47")

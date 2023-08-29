@@ -29,7 +29,7 @@ class UserUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = UserDataSource(mock).kakaoLogin("test-token")
+            val data = UserDataSource(mock).kakaoLogin("test-token", "test-token")
 
             // then
             Assert.assertEquals(true, data.success)
@@ -46,7 +46,7 @@ class UserUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = UserDataSource(mock).kakaoLogin("test-token")
+            val data = UserDataSource(mock).kakaoLogin("test-token", "test-token")
 
             // then
             Assert.assertEquals(false, data.success)
@@ -79,7 +79,7 @@ class UserUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = UserDataSource(mock).kakaoLogin("test-token")
+            val data = UserDataSource(mock).kakaoLogin("test-token", "test-token")
 
             // then
             Assert.assertEquals(false, data.success)

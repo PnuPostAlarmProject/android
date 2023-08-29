@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 
 class ApiUtils {
-    @Serializable data class ApiResult<T>(val success: Boolean, val response: T?, val error: ApiError<T>?)
-    @Serializable data class ApiError<T>(val message: String, val status: Int)
+    @Serializable data class ApiResult<T>(val success: Boolean, val response: T?, val error: ApiError?)
+    @Serializable data class ApiError(val message: String, val status: Int)
 }
