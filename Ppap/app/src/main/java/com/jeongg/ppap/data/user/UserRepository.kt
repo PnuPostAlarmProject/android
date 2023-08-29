@@ -11,11 +11,11 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
     private val userService: UserService,
 ) {
-    suspend fun kakaoLoginToServer(accessToken: String): ApiUtils.ApiResult<KakaoLoginDTO> {
+    suspend fun kakaoLoginToServer(kakaoToken: String, fcmTokenDTO: String): ApiUtils.ApiResult<KakaoLoginDTO> {
         return try {
-            userService.kakaoLogin(accessToken)
-        } catch(e: Exception){
-            "kakaologin: ${e.message}".log()
+            userService.kakaoLogin(kakaoToken, fcmTokenDTO)
+        } catch(e: Exception) {
+            "kakao-login-fail: ${e.message}".log()
             val error = getErrorMessage(e)
             ApiUtils.ApiResult(false, null, ApiUtils.ApiError(error.first, error.second))
         }
@@ -24,7 +24,7 @@ class UserRepository @Inject constructor(
         return try {
             userService.reissue(refreshToken)
         } catch(e: Exception){
-            "kakao-refresh: ${e.message}".log()
+            "kakao-refresh-fail: ${e.message}".log()
             val error = getErrorMessage(e)
             ApiUtils.ApiResult(false, null, ApiUtils.ApiError(error.first, error.second))
         }
@@ -33,7 +33,16 @@ class UserRepository @Inject constructor(
         return try {
             userService.logout()
         } catch(e: Exception){
-            "kakao-logout: ${e.message}".log()
+            "kakao-logout-fail: ${e.message}".log()
+            val error = getErrorMessage(e)
+            ApiUtils.ApiResult(false, null, ApiUtils.ApiError(error.first, error.second))
+        }
+    }
+    suspend fun withdraw(): ApiUtils.ApiResult<String>{
+        return try {
+            userService.withdraw()
+        } catch(e: Exception){
+            "kakao-withdraw-fail: ${e.message}".log()
             val error = getErrorMessage(e)
             ApiUtils.ApiResult(false, null, ApiUtils.ApiError(error.first, error.second))
         }

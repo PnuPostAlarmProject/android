@@ -1,5 +1,6 @@
 package com.jeongg.ppap.data.user
 
+import com.jeongg.ppap.data.user.dto.FcmTokenDTO
 import com.jeongg.ppap.data.user.dto.KakaoLoginDTO
 import com.jeongg.ppap.data.user.dto.RefreshTokenDTO
 import com.jeongg.ppap.data.util.ApiUtils
@@ -14,9 +15,10 @@ class UserDataSource(
     private val client: HttpClient
 ): UserService {
 
-    override suspend fun kakaoLogin(accessToken: String): ApiUtils.ApiResult<KakaoLoginDTO> {
+    override suspend fun kakaoLogin(kakaoToken: String, fcmToken: String): ApiUtils.ApiResult<KakaoLoginDTO> {
         return client.post(HttpRoutes.KAKAO_LOGIN){
-            header("Kakao", accessToken)
+            header("Kakao", kakaoToken)
+            setBody(FcmTokenDTO(fcmToken))
         }.body()
     }
 
@@ -28,5 +30,9 @@ class UserDataSource(
 
     override suspend fun logout(): ApiUtils.ApiResult<KakaoLoginDTO> {
         return client.post(HttpRoutes.LOGOUT){}.body()
+    }
+
+    override suspend fun withdraw(): ApiUtils.ApiResult<String> {
+        return client.post(HttpRoutes.WITHDRAWL){}.body()
     }
 }
