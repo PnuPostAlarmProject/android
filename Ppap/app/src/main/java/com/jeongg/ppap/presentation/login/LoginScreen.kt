@@ -27,6 +27,7 @@ import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.theme.Dimens
+import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.collectLatest
 
@@ -39,11 +40,11 @@ fun LoginScreen(
     LaunchedEffect(key1 = true){
         viewModel.eventFlow.collectLatest{ event ->
             when(event){
-                is LoginUiEvent.LoginSuccess -> {
+                is PEvent.SUCCESS -> {
                     navController.popBackStack()
                     navController.navigate(Screen.SubscribeScreen.route)
                 }
-                is LoginUiEvent.LoginFail -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 else -> { "로그인 로딩중".log() }
             }
         }

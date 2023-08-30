@@ -6,12 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.jeongg.ppap.data.user.UserRepository
 import com.jeongg.ppap.data.util.ACCESS_TOKEN_KEY
 import com.jeongg.ppap.data.util.FCM_TOKEN_KEY
-import com.jeongg.ppap.data.util.KAKAO_TOKEN_KEY
 import com.jeongg.ppap.data.util.PDataStore
 import com.jeongg.ppap.data.util.REFRESH_TOKEN_KEY
+import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.log
 import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.Constants.REFRESH_TOKEN
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -29,27 +28,27 @@ class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository
 ): ViewModel() {
 
-    private val _eventFlow = MutableSharedFlow<LoginUiEvent>()
+    private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     private fun kakaoToServer(accessToken: String, fcmToken: String){
         viewModelScope.launch {
-            _eventFlow.emit(LoginUiEvent.LoginLoading)
+            _eventFlow.emit(PEvent.LOADING)
             val response = userRepository.kakaoLoginToServer(accessToken, fcmToken)
             if (response.success) {
                 "로그인 전송 서버 성공".log()
                 dataStore.setData(ACCESS_TOKEN_KEY, response.response?.accessToken ?: "")
                 dataStore.setData(REFRESH_TOKEN_KEY, response.response?.refreshToken ?: "")
-                _eventFlow.emit(LoginUiEvent.LoginSuccess)
+                _eventFlow.emit(PEvent.SUCCESS)
             } else {
                 "로그인 서버 전송 실패 ${response.error?.status}".log()
-                _eventFlow.emit(LoginUiEvent.LoginFail(("로그인에 실패하였습니다.\n" + response.error?.message)))
+                _eventFlow.emit(PEvent.ERROR((response.error?.message ?: "로그인에 실패하였습니다.")))
             }
         }
     }
     fun kakaoLogin(context: Context) {
         if (AuthApiClient.instance.hasToken()) {
-            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            UserApiClient.instance.accessTokenInfo { _, error ->
                 if (error != null) {
                     if (error is KakaoSdkError && error.isInvalidTokenError()) {
                         "로그인 필요1".log()
