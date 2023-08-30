@@ -14,9 +14,10 @@
     <string name="remove">삭제하기</string>
     <string name="add_subscribe_description">다음 정보를 입력하여 학과 게시판, 채용 게시판 등 필요한 정보를 빠르게 알림으로 받아보세요!</string>
     <string name="add_subscribe_title">구독 추가하기</string>
+    <string name="update_subscribe_title">구독 수정하기</string>
     <string name="add_subscribe_button_text">공지사항 등록하기</string>
-    <string name="explain1">1. 원하는 홈페이지 접속 (예: 정컴 공지사항) \n2. 공지 링크 및 RSS 링크 확인\n\t(다음 탭 확인)</string>
-    <string name="explain2">주의) RSS 링크가 제공되지 않는 홈페이지는 서비스가 불가능합니다.</string>
+    <string name="explain1">1. 원하는 홈페이지 접속 (예: 정컴 공지사항) \n2. 공지 링크 및 RSS 링크 확인</string>
+    <string name="explain2">(주의) RSS 링크는 수정 불가능합니다.\n RSS 링크가 제공되지 않는 홈페이지는 서비스가 불가능합니다.</string>
     <string name="subscribe_field_title">구독 제목</string>
     <string name="subscribe_field_link">공지사항 링크</string>
     <string name="subscribe_field_rss">RSS 링크</string>
@@ -36,11 +37,16 @@
     <string name="logout">로그아웃</string>
     <string name="leave_app">회원탈퇴</string>
     <string name="service">서비스</string>
-    <string name="subscribe_edit_add">구독 수정 및 추가하기</string>
+    <string name="subscribe_get">구독한 목록 보기</string>
     <string name="scrap">스크랩</string>
     <string name="version_open_source">버전 및 오픈 소스</string>
     <string name="app_description2">부산대 공지사항 알림 서비스,\nPPAP입니다.</string>
     <string name="delete_button">삭제하기</string>
     <string name="edit_button">수정하기</string>
     <string name="subscribe_button">구독하기</string>
+    <string name="subscribe_delete_button">구독 취소하기</string>
+    <string name="custom_subscribes">내가 추가한 구독</string>
+    <string name="empty_subscribes">새로 추가한\n공지사항이 없습니다</string>
+    <string name="update_subscribe_button_text">공지사항 수정하기</string>
+    <string name="subscribe_add">새로운 구독 추가히기</string>
 </resources>

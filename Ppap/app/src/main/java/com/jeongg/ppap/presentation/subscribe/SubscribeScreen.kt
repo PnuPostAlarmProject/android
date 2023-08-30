@@ -1,5 +1,6 @@
 package com.jeongg.ppap.presentation.subscribe
 
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,12 +32,15 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
+import com.jeongg.ppap.data.subscribe.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
@@ -45,12 +50,27 @@ import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.theme.Dimens
 import com.jeongg.ppap.presentation.theme.gray3
 import com.jeongg.ppap.presentation.theme.main_yellow
+import com.jeongg.ppap.presentation.util.PEvent
+import com.jeongg.ppap.util.log
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SubscribeScreen(
     navController: NavController,
-    onUpPress: () -> Unit = {}
+    onUpPress: () -> Unit = {},
+    viewModel: SubscribeViewModel = hiltViewModel()
 ){
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true){
+        viewModel.eventFlow.collectLatest{ event ->
+            when(event){
+                is PEvent.GET -> { "구독 목록 조회 성공 in Screen".log() }
+                is PEvent.SUCCESS, PEvent.DELETE -> { viewModel.getSubscribes() }
+                is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                else -> { "구독 로딩중".log() }
+            }
+        }
+    }
     PTitle(
         title = stringResource(R.string.subscribe_title),
         description = stringResource(R.string.subscribe_description),
@@ -63,7 +83,14 @@ fun SubscribeScreen(
                 modifier = Modifier.padding(bottom = 120.dp),
             ) {
                 item {DefaultSubscribe()}
-                item {CustomSubscribe()}
+                item {
+                    CustomSubscribe(
+                        subscribes = viewModel.customSubscribes.value,
+                        onDeleteClick = { viewModel.deleteSubscribe(it) },
+                        onEditClick = { navController.navigate(it) },
+                        onSubscribeClick = { viewModel.updateActive(it) }
+                    )
+                }
             }
             Column(
                 modifier = Modifier
@@ -103,9 +130,9 @@ fun DefaultSubscribe() {
 fun DefaultSubscribeItem(
     @DrawableRes image: Int = R.drawable.pnu1,
     text: String = stringResource(R.string.pnu_onestop),
-    isSelected: Boolean = false
+    isActive: Boolean = false
 ){
-    var isChecked by remember { mutableStateOf(isSelected) }
+    var isChecked by remember { mutableStateOf(isActive) }
     val borderModifier = if (isChecked) Modifier.border(3.dp, main_yellow, MaterialTheme.shapes.large) else Modifier
     val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
     val textColor = if (isChecked) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.outlineVariant
@@ -147,23 +174,32 @@ fun DefaultSubscribeItem(
 
 @Composable
 fun CustomSubscribe(
-    subscribes: List<String> = listOf("💻 정보컴퓨터공학부", "⚡ 전기과 공지사항!!!", "👩‍🎓 정보컴퓨터공학부 졸업게시판")
+    subscribes: List<SubscribeGetResponseDTO> = emptyList(),
+    onDeleteClick: (Long) -> Unit = {},
+    onEditClick: (String) -> Unit = {},
+    onSubscribeClick: (Long) -> Unit = {}
 ){
     Column {
         Text(
-            text = "내가 추가한 구독",
+            text = stringResource(R.string.custom_subscribes),
             style = MaterialTheme.typography.titleSmall,
         )
         PDivider(modifier = Modifier.padding(top = 5.dp))
         if (subscribes.isEmpty()){
             PEmptyContent(
-                id = R.drawable.apple_gray, message = "새로 추가한\n공지사항이 없습니다",
+                id = R.drawable.apple_gray, message = stringResource(R.string.empty_subscribes),
                 modifier = Modifier.padding(40.dp)
             )
         }
         else {
             subscribes.forEach {
-                CustomSubscribeItem(text = it)
+                CustomSubscribeItem(
+                    text = it.title,
+                    isActive = it.isActive,
+                    onDeleteClick = { onDeleteClick(it.subscribeId) },
+                    onEditClick = { onEditClick(Screen.SubscribeAddScreen.route + "?subscribeId=${it.subscribeId}") },
+                    onSubscribeClick = { onSubscribeClick(it.subscribeId)}
+                )
             }
         }
     }
@@ -171,18 +207,35 @@ fun CustomSubscribe(
 
 @Composable
 fun CustomSubscribeItem(
-    isSelected: Boolean = true,
-    text: String = "최강 정컴 공지"
+    text: String = "최강 정컴 공지",
+    isActive: Boolean = true,
+    onDeleteClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onSubscribeClick: () -> Unit = {}
 ) {
-    var isChecked by remember {mutableStateOf(isSelected) }
-    val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
-    val textColor = if (isChecked) MaterialTheme.colorScheme.surface else gray3
+    val img = if (isActive) R.drawable.checked else R.drawable.unchecked
+    val textColor = if (isActive) MaterialTheme.colorScheme.surface else gray3
     var isDialogOpen by remember { mutableStateOf(false) }
     if (isDialogOpen){
         Dialog(
             onDismissRequest = {isDialogOpen = isDialogOpen.not()}
         ){
-            PDialog()
+            PDialog(
+                text = text,
+                onDeleteClick = {
+                    onDeleteClick()
+                    isDialogOpen = isDialogOpen.not()
+                },
+                onEditClick = {
+                    onEditClick()
+                    isDialogOpen = isDialogOpen.not()
+                },
+                onSubscribeClick = {
+                    onSubscribeClick()
+                    isDialogOpen = isDialogOpen.not()
+                },
+                isActive = isActive
+            )
         }
     }
     Box(
@@ -192,28 +245,35 @@ fun CustomSubscribeItem(
             .fillMaxWidth()
     ){
         Box(
-            modifier = Modifier.padding(end = 31.dp).fillMaxHeight().align(Alignment.CenterStart),
+            modifier = Modifier
+                .padding(end = 31.dp)
+                .fillMaxHeight()
+                .align(Alignment.CenterStart),
         ) {
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.CenterStart).padding(end = 24.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(end = 24.dp),
                 color = textColor,
             )
             Image(
                 painter = painterResource(R.drawable.arrow),
                 contentDescription = "edit or delete",
                 colorFilter = ColorFilter.tint(textColor),
-                modifier = Modifier.rotate(0f).align(Alignment.CenterEnd)
+                modifier = Modifier
+                    .rotate(0f)
+                    .align(Alignment.CenterEnd)
             )
         }
         Image(
             painter = painterResource(img),
-            contentDescription = "checked: $isChecked",
+            contentDescription = "checked: $isActive",
             modifier = Modifier
                 .size(31.dp)
                 .align(Alignment.CenterEnd)
-                .clickable { isChecked = isChecked.not() }
+                .clickable { onSubscribeClick() }
         )
     }
     PDivider()

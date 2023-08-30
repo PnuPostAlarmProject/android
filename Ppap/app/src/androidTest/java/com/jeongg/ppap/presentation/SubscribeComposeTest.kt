@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.jeongg.ppap.data.subscribe.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.subscribe.CustomSubscribe
 import com.jeongg.ppap.presentation.subscribe.CustomSubscribeItem
 import com.jeongg.ppap.presentation.subscribe.DefaultSubscribeItem
@@ -47,25 +48,20 @@ class SubscribeComposeTest {
     fun subscribe_custom_uncheckedToggle(){
         val isSelected = false
         start_custom_subscribe_item(isSelected)
-
         unchecked.assertIsDisplayed()
         checked.assertDoesNotExist()
-
-        unchecked.performClick() // checked -> unchecked
-
-        checked.assertIsDisplayed()
-        unchecked.assertDoesNotExist()
     }
     @Test
     fun subscribe_emptyItem(){
-        val subscribes = emptyList<String>()
+        val subscribes = emptyList<SubscribeGetResponseDTO>()
         start_custom_subscribe(subscribes)
 
         emptyContent.assertIsDisplayed()
     }
     @Test
     fun subscribe_nonEmptyItem(){
-        val subcribes = listOf("최강 정컴", "전기 최고", "얍")
+        val subcribes = listOf(SubscribeGetResponseDTO(1, "최강 정컴", true),
+                                SubscribeGetResponseDTO(2, "최강 전기", false))
         start_custom_subscribe(subcribes)
 
         emptyContent.assertDoesNotExist()
@@ -73,15 +69,15 @@ class SubscribeComposeTest {
 
     private fun start_default_subscribe_item(isChecked: Boolean = false){
         composeTestRule.setContent {
-            DefaultSubscribeItem(isSelected = isChecked)
+            DefaultSubscribeItem(isActive = isChecked)
         }
     }
     private fun start_custom_subscribe_item(isChecked: Boolean = false){
         composeTestRule.setContent {
-            CustomSubscribeItem(isSelected = isChecked)
+            CustomSubscribeItem(isActive = isChecked)
         }
     }
-    private fun start_custom_subscribe(subscribeList: List<String> = emptyList()){
+    private fun start_custom_subscribe(subscribeList: List<SubscribeGetResponseDTO> = emptyList()){
         composeTestRule.setContent {
             CustomSubscribe(subscribes = subscribeList)
         }

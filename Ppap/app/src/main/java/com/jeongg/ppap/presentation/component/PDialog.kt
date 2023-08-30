@@ -26,7 +26,8 @@ fun PDialog(
     text: String = "정보컴퓨터공학부",
     onDeleteClick:() -> Unit = {},
     onEditClick:() -> Unit = {},
-    onSubscribeClick:() -> Unit = {}
+    onSubscribeClick:() -> Unit = {},
+    isActive: Boolean = true
 ){
     Column(
         verticalArrangement = Arrangement.Center
@@ -61,7 +62,10 @@ fun PDialog(
                 )
             }
         }
-        PButton(text = stringResource(R.string.subscribe_button), onClick = onSubscribeClick)
+        PButton(
+            text = if (isActive) stringResource(R.string.subscribe_delete_button) else stringResource(R.string.subscribe_button),
+            onClick = onSubscribeClick
+        )
     }
 }
 

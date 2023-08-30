@@ -1,5 +1,6 @@
 package com.jeongg.ppap.presentation.subscribe
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,16 +22,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PButton
@@ -38,33 +42,71 @@ import com.jeongg.ppap.presentation.component.PTextField
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.addFocusCleaner
 import com.jeongg.ppap.presentation.component.negativePadding
+import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.theme.bright_yellow
 import com.jeongg.ppap.presentation.theme.typography
+import com.jeongg.ppap.presentation.util.PEvent
+import com.jeongg.ppap.util.log
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SubscribeAddScreen(
     navController: NavController,
-    onUpPress: () -> Unit = {}
+    onUpPress: () -> Unit = {},
+    viewModel: SubscribeAddViewModel = hiltViewModel()
 ){
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+    LaunchedEffect(key1 = true){
+        viewModel.eventFlow.collectLatest{ event ->
+            when(event){
+                is PEvent.GET -> { "구독 목록 조회 성공 in Screen".log() }
+                is PEvent.UPDATE, PEvent.ADD -> {
+                    navController.navigate(Screen.SubscribeScreen.route)
+                }
+                is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                else -> { "구독 로딩중".log() }
+            }
+        }
+    }
     PTitle(
         modifier = Modifier.addFocusCleaner(focusManager),
-        title = stringResource(R.string.add_subscribe_title),
+        title = stringResource(if (viewModel.isUpdate()) R.string.update_subscribe_title else R.string.add_subscribe_title),
         description = stringResource(R.string.add_subscribe_description),
         onUpPress = onUpPress
     ){
         LazyColumn {
             item { PHorizontalPager() }
-            item { PTextFields() }
+            item {
+                PTextFields(
+                    title = viewModel.title.value,
+                    onTitleChange = { viewModel.onEvent(SubscribeAddEvent.EnteredTitle(it)) },
+                    notice = viewModel.noticeLink.value,
+                    onNoticeChange = { viewModel.onEvent(SubscribeAddEvent.EnteredNoticeLink(it)) },
+                    rss = viewModel.rssLink.value,
+                    onRssChange = { viewModel.onEvent(SubscribeAddEvent.EnteredRssLink(it)) },
+                    enabled = !viewModel.isUpdate()
+                )
+            }
             item { Spacer(modifier = Modifier.height(44.dp))}
-            item { PButton(text = stringResource(R.string.add_subscribe_button_text),
-                onClick = {navController.navigateUp()}) }
+            item { PButton(
+                text = stringResource(if (viewModel.isUpdate()) R.string.update_subscribe_button_text else R.string.add_subscribe_button_text),
+                onClick = { viewModel.onEvent(SubscribeAddEvent.SaveSubscribe)})
+            }
         }
     }
 }
 
 @Composable
-fun PTextFields() {
+fun PTextFields(
+    title: String = "",
+    onTitleChange: (String) -> Unit = {},
+    notice: String? = "",
+    onNoticeChange: (String) -> Unit = {},
+    rss: String = "",
+    onRssChange: (String) -> Unit = {},
+    enabled: Boolean = false
+) {
     Column {
         Row(
             modifier = Modifier.padding(top = 25.dp, bottom = 5.dp)
@@ -72,24 +114,40 @@ fun PTextFields() {
             Text(text = stringResource(R.string.subscribe_field_title), style = typography.displayLarge)
             Text(text = "*", style = typography.displayLarge, color = Color.Red)
         }
-        PTextField(placeholder = stringResource(R.string.subscribe_field_title_hint))
+        PTextField(
+            text = title,
+            onValueChange = onTitleChange,
+            placeholder = stringResource(R.string.subscribe_field_title_hint)
+        )
 
         Text(
             text = stringResource(R.string.subscribe_field_link),
             style = typography.displayLarge,
             modifier = Modifier.padding(top = 20.dp, bottom = 5.dp)
         )
-        PTextField(placeholder = stringResource(R.string.subscribe_field_link_hint))
+        PTextField(
+            text = notice ?: "",
+            onValueChange = onNoticeChange,
+            placeholder = stringResource(R.string.subscribe_field_link_hint)
+        )
 
-        Row(
-            modifier = Modifier.padding(top = 20.dp, bottom = 5.dp)
-        ) {
-            Text(text = stringResource(R.string.subscribe_field_rss), style = typography.displayLarge)
-            Text(text = "*", style = typography.displayLarge, color = Color.Red)
+        if (enabled) {
+            Row(
+                modifier = Modifier.padding(top = 20.dp, bottom = 5.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.subscribe_field_rss),
+                    style = typography.displayLarge
+                )
+                Text(text = "*", style = typography.displayLarge, color = Color.Red)
+            }
+            PTextField(
+                text = rss,
+                onValueChange = onRssChange,
+                placeholder = stringResource(R.string.subscribe_field_rss_hint)
+            )
         }
-        PTextField(placeholder = stringResource(R.string.subscribe_field_rss_hint))
     }
-
 }
 
 @Composable
@@ -149,7 +207,7 @@ fun PHorizontalPager() {
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 160.dp)
-                .alpha(if(state.currentPage == index) 1f else 0.5f)
+                .alpha(if (state.currentPage == index) 1f else 0.5f)
                 .clip(MaterialTheme.shapes.medium)
                 .background(bright_yellow),
             verticalArrangement = Arrangement.Center

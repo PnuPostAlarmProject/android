@@ -1,7 +1,10 @@
 package com.jeongg.ppap.di
 
 import android.content.Context
-import androidx.datastore.preferences.core.stringPreferencesKey
+import android.util.Log
+import com.jeongg.ppap.data.subscribe.SubscribeDataSource
+import com.jeongg.ppap.data.subscribe.SubscribeRepository
+import com.jeongg.ppap.data.subscribe.SubscribeService
 import com.jeongg.ppap.data.user.UserDataSource
 import com.jeongg.ppap.data.user.UserRepository
 import com.jeongg.ppap.data.user.UserService
@@ -12,8 +15,6 @@ import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.data.util.HttpRoutes
 import com.jeongg.ppap.data.util.PDataStore
 import com.jeongg.ppap.data.util.REFRESH_TOKEN_KEY
-import com.jeongg.ppap.dataStore
-import com.jeongg.ppap.util.log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,21 +27,19 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.accept
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
+import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
@@ -52,11 +51,13 @@ class NetworkModule {
     fun provideHttpClient(
         @ApplicationContext context: Context
     ): HttpClient {
-        val accessToken = PDataStore(context).getData(ACCESS_TOKEN_KEY)
-        val refreshToken = PDataStore(context).getData(REFRESH_TOKEN_KEY)
-        "access token : $accessToken \n refresh token: $refreshToken".log()
         return HttpClient(CIO) {
             install(Logging){
+                logger = object: Logger {
+                    override fun log(message: String){
+                        Log.d("ppap_api", message)
+                    }
+                }
                 level = LogLevel.ALL
             }
             install(ContentNegotiation) {
@@ -74,9 +75,16 @@ class NetworkModule {
             install(Auth){
                 bearer {
                     refreshTokens {
+                        val refreshToken = PDataStore(context).getData(REFRESH_TOKEN_KEY)
                         val token = client.post(HttpRoutes.KAKAO_REISSUE){
                             setBody(RefreshTokenDTO(refreshToken))
+                            markAsRefreshTokenRequest()
                         }.body<ApiUtils.ApiResult<KakaoLoginDTO>>()
+
+                        if (token.success){
+                            PDataStore(context).setData(ACCESS_TOKEN_KEY, token.response?.accessToken ?: "")
+                            PDataStore(context).setData(REFRESH_TOKEN_KEY, token.response?.refreshToken ?: "")
+                        }
                         BearerTokens(
                             accessToken = token.response?.accessToken ?: "",
                             refreshToken = token.response?.refreshToken ?: ""
@@ -84,10 +92,16 @@ class NetworkModule {
                     }
                 }
             }
+            install(ContentEncoding) {
+                deflate(1.0F)
+                gzip(0.9F)
+            }
             defaultRequest{
+                val accessToken = PDataStore(context).getData(ACCESS_TOKEN_KEY)
                 contentType(ContentType.Application.Json)
-                accept(ContentType.Application.Json)
-                if (accessToken.isNotEmpty()) headers.append(HttpHeaders.Authorization, accessToken)
+                if (accessToken.isNotEmpty())
+                    headers.appendIfNameAbsent(HttpHeaders.Authorization, accessToken)
+                url(HttpRoutes.BASE_URL)
             }
         }
     }
@@ -100,6 +114,16 @@ class NetworkModule {
     @Singleton
     fun provideUserRepository(service: UserService): UserRepository {
         return UserRepository(service)
+    }
+    @Provides
+    @Singleton
+    fun provideSubscribeService(client: HttpClient): SubscribeService {
+        return SubscribeDataSource(client)
+    }
+    @Provides
+    @Singleton
+    fun provideSubscribeRepository(service: SubscribeService): SubscribeRepository {
+        return SubscribeRepository(service)
     }
 
 }
