@@ -59,6 +59,7 @@ fun SettingScreen(
             item {
                 ServiceScreen(
                     onSubscribe = {navController.navigate(Screen.SubscribeScreen.route)},
+                    onSubscribeAdd = {navController.navigate(Screen.SubscribeAddScreen.route)},
                     onScrap = {navController.navigate(Screen.NoticeScrapScreen.route)}
                 )
             }
@@ -112,6 +113,7 @@ fun MyPageScreen() {
 @Composable
 fun ServiceScreen(
     onSubscribe: () -> Unit = {},
+    onSubscribeAdd: () -> Unit = {},
     onScrap: () -> Unit = {}
 ) {
     Column(
@@ -123,7 +125,8 @@ fun ServiceScreen(
             style = MaterialTheme.typography.titleSmall,
             color = Color.Black,
         )
-        SettingItem(stringResource(R.string.subscribe_edit_add), onSubscribe)
+        SettingItem(stringResource(R.string.subscribe_get), onSubscribe)
+        SettingItem(stringResource(R.string.subscribe_add), onSubscribeAdd)
         SettingItem(stringResource(R.string.scrap), onScrap)
         SettingItem(stringResource(R.string.version_open_source))
     }
