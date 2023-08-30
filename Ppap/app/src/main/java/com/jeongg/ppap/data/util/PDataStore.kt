@@ -20,7 +20,7 @@ class PDataStore @Inject constructor(@ApplicationContext val context: Context) {
     }
     fun getData(key: String): String {
         return runBlocking(Dispatchers.IO){
-            store.data.map{ it[stringPreferencesKey(key)] ?: "null" }.first()
+            store.data.map{ it[stringPreferencesKey(key)] ?: "" }.first()
         }
     }
 }
@@ -28,4 +28,3 @@ class PDataStore @Inject constructor(@ApplicationContext val context: Context) {
 const val FCM_TOKEN_KEY = "fcm-token"
 const val ACCESS_TOKEN_KEY = "access-token"
 const val REFRESH_TOKEN_KEY = "refresh-token"
-const val KAKAO_TOKEN_KEY = "kakao-token"
