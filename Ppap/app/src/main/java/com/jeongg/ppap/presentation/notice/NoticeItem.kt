@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,53 +34,38 @@ import com.jeongg.ppap.presentation.theme.main_pink
 
 @Composable
 fun NoticeItem(
-    category: String = "학지시 공지",
     isBookmarked: Boolean = true,
     title: String = "2023학년도 2학기 신·편입생(학부, 대학원) 학생증 발급 신청 및 배부 안내",
     date: String = "2023.08.08"
 ){
     var isFilled by remember { mutableStateOf(isBookmarked) }
     val favorite = if (isFilled) R.drawable.favorite_filled else R.drawable.favorite_empty
-    val color = when (category){
-        "학지시 공지" -> bright_yellow
-        "학교 공지" -> main_pink
-        else -> main_green
-    }
     Column(
         modifier = Modifier
             .clickable{  }
             .fillMaxWidth()
-            .padding(top = 15.dp),
+            .padding(top = 15.dp, start = 20.dp, end = 20.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ){
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = category,
-                style = MaterialTheme.typography.labelLarge,
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(end = 30.dp)
-                    .clip(MaterialTheme.shapes.large)
-                    .background(color)
-                    .padding(horizontal = 15.dp, vertical = 5.dp),
-                maxLines = 1,
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 2,
+                modifier = Modifier.padding(end = 30.dp),
                 overflow = TextOverflow.Ellipsis
             )
             Image(
                 painter = painterResource(favorite),
                 contentDescription = "checked: $isFilled",
-                modifier = Modifier.padding(start = 12.dp)
+                modifier = Modifier
                     .size(25.dp)
                     .align(Alignment.CenterEnd)
                     .clickable{isFilled = !isFilled},
             )
         }
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyLarge
-        )
         Text(
             text = date,
             style = MaterialTheme.typography.labelMedium,
