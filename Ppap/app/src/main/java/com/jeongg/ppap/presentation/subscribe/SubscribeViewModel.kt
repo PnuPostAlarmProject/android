@@ -36,7 +36,7 @@ class SubscribeViewModel @Inject constructor(
                 _eventFlow.emit(PEvent.SUCCESS)
             } else {
                 "구독 활성화 실패 ${response.error?.status}".log()
-                _eventFlow.emit(PEvent.ERROR("구독 활성화 실패하였습니다."))
+                _eventFlow.emit(PEvent.ERROR(response.error?.message ?: "구독 활성화 실패하였습니다."))
             }
         }
     }
@@ -48,7 +48,7 @@ class SubscribeViewModel @Inject constructor(
                 _eventFlow.emit(PEvent.DELETE)
             } else {
                 "구독 삭제 실패 ${response.error?.status}".log()
-                _eventFlow.emit(PEvent.ERROR("구독 삭제 실패하였습니다."))
+                _eventFlow.emit(PEvent.ERROR(response.error?.message ?: "구독 삭제 실패하였습니다."))
             }
         }
     }
@@ -61,7 +61,7 @@ class SubscribeViewModel @Inject constructor(
                 _eventFlow.emit(PEvent.GET)
             } else {
                 "구독 목록 불러오기 실패 ${response.error?.status}".log()
-                _eventFlow.emit(PEvent.ERROR("구독 목록을 불러오는데 실패하였습니다."))
+                _eventFlow.emit(PEvent.ERROR(response.error?.message ?: "구독 목록 조회를 실패했습니다."))
             }
         }
     }

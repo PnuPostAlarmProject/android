@@ -39,6 +39,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
@@ -57,7 +58,7 @@ class NetworkModule {
                         Log.d("ppap_api", message)
                     }
                 }
-                level = LogLevel.HEADERS
+                level = LogLevel.ALL
             }
             install(ContentNegotiation) {
                 json(Json{
@@ -72,11 +73,12 @@ class NetworkModule {
                 socketTimeoutMillis = 5000
             }
             install(Auth){
-                val refreshToken = PDataStore(context).getData(ACCESS_TOKEN_KEY)
                 bearer {
                     refreshTokens {
+                        val refreshToken = PDataStore(context).getData(REFRESH_TOKEN_KEY)
                         val token = client.post(HttpRoutes.KAKAO_REISSUE){
                             setBody(RefreshTokenDTO(refreshToken))
+                            markAsRefreshTokenRequest()
                         }.body<ApiUtils.ApiResult<KakaoLoginDTO>>()
 
                         if (token.success){
@@ -97,7 +99,8 @@ class NetworkModule {
             defaultRequest{
                 val accessToken = PDataStore(context).getData(ACCESS_TOKEN_KEY)
                 contentType(ContentType.Application.Json)
-                if (accessToken.isNotEmpty()) headers.append(HttpHeaders.Authorization, accessToken)
+                if (accessToken.isNotEmpty())
+                    headers.appendIfNameAbsent(HttpHeaders.Authorization, accessToken)
                 url(HttpRoutes.BASE_URL)
             }
         }
