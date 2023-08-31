@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.notice
+package com.jeongg.ppap.presentation.scrap
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,9 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
+import com.jeongg.ppap.data.notice.dto.SubscribeDTO
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
+import com.jeongg.ppap.presentation.notice.NoticeItem
 import com.jeongg.ppap.presentation.theme.Dimens
 import com.jeongg.ppap.presentation.theme.gray3
 
@@ -64,11 +66,12 @@ fun NoticeScrapScreen(
             )
         }
         PTabLayer(
-            tabs = tabs,
+            tabs = listOf(SubscribeDTO(1, "하잉")),
             selectedTabIndex = selectedTabIndex
         ) { tabIndex ->
             selectedTabIndex = tabIndex
         }
+        PDivider()
         LazyColumn {
             repeat(10){ item { NoticeItem() } }
             item { PEmptyContent(modifier = Modifier.padding(vertical = 70.dp)) }
