@@ -1,5 +1,6 @@
 package com.jeongg.ppap.presentation.notice
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -23,47 +24,60 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PDivider
+import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.theme.Dimens
 import com.jeongg.ppap.presentation.theme.bright_pink
-import com.jeongg.ppap.presentation.theme.gray2
 import com.jeongg.ppap.presentation.theme.gray3
 import com.jeongg.ppap.presentation.theme.main_green
-import com.jeongg.ppap.presentation.theme.main_yellow
 import com.jeongg.ppap.presentation.theme.very_bright_yellow
+import com.jeongg.ppap.presentation.util.PEvent
+import com.jeongg.ppap.util.log
+import kotlinx.coroutines.flow.collectLatest
+
 
 @Composable
 fun NoticeListScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: NoticeViewModel = hiltViewModel()
 ){
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("학생지원시스템", "컴공 공지!", "전기 공지", "졸업게시판")
+    val contents = viewModel.contents.collectAsLazyPagingItems()
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true){
+        viewModel.eventFlow.collectLatest { event ->
+            when(event){
+                is PEvent.EMPTY -> {}
+                is PEvent.SUCCESS -> {}
+                is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                else -> { "공지 리스트 로딩중".log() }
+            }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -71,16 +85,36 @@ fun NoticeListScreen(
             bookmarkNavigate = {navController.navigate(Screen.NoticeScrapScreen.route)},
             settingNavigate = {navController.navigate(Screen.SettingScreen.route)}
         )
-        PTabLayer(
-            tabs = tabs,
-            selectedTabIndex = selectedTabIndex
-        ) { tabIndex ->
-            selectedTabIndex = tabIndex
+        if (viewModel.isEmptyList()) {
+            NoticeListBanner(navController)
+            PEmptyContent(message = "구독한 공지사항이 없어요.")
         }
-        LazyColumn {
-            item { NoticeListBanner(navController) }
-            repeat(15){
-                item { NoticeItem() }
+        else {
+            PTabLayer(
+                tabs = viewModel.subscribes.value,
+                selectedTabIndex = selectedTabIndex
+            ) { tabIndex ->
+                selectedTabIndex = tabIndex
+                // TODO: 가능하다면 쿼리를 한 번으로 고치고 싶은데...
+                viewModel.getNoticePage(viewModel.subscribes.value[selectedTabIndex].subscribeId)
+                viewModel.getNoticeList(viewModel.subscribes.value[selectedTabIndex].subscribeId)
+            }
+            PDivider()
+            LazyColumn {
+                item { NoticeListBanner(navController) }
+                items(
+                    count = contents.itemCount,
+                    key = contents.itemKey { it.contentId }
+                ){index ->
+                    val items = contents[index]
+                    NoticeItem(
+                        title = items?.title ?: "",
+                        date = items?.pubDate?.date.toString(),
+                        isBookmarked = items?.isScraped?: false,
+                        link = items?.link ?: "",
+                        onScrap = {viewModel.scrapEvent(it, items?.contentId ?: 0)}
+                    )
+                }
             }
         }
     }
@@ -93,8 +127,8 @@ fun NoticeListBanner(
     val state = rememberPagerState(initialPage = 0) { 3 }
     val colors = listOf(very_bright_yellow, bright_pink, main_green)
     val images = listOf(R.drawable.pineapple, R.drawable.apple_no_background, R.drawable.pineapple)
-    val titles = listOf(R.string.banner_title2, R.string.banner_title3, R.string.banner_title1)
-    val descriptions = listOf(R.string.banner_description2, R.string.banner_description3, R.string.banner_description1)
+    val titles = listOf(R.string.banner_title3, R.string.banner_title2, R.string.banner_title1)
+    val descriptions = listOf(R.string.banner_description3, R.string.banner_description2, R.string.banner_description1)
     val screens = listOf(Screen.SubscribeAddScreen.route, Screen.SubscribeScreen.route, Screen.NoticeScrapScreen.route)
 
     HorizontalPager(
