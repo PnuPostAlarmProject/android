@@ -24,10 +24,13 @@ import com.jeongg.ppap.presentation.theme.gray1
 @Composable
 fun PDialog(
     text: String = "정보컴퓨터공학부",
+    cancelText: String = stringResource(R.string.delete_button),
+    okText: String = stringResource(R.string.edit_button),
     onDeleteClick:() -> Unit = {},
     onEditClick:() -> Unit = {},
     onSubscribeClick:() -> Unit = {},
-    isActive: Boolean = true
+    isActive: Boolean = true,
+    isSubscribe: Boolean = true
 ){
     Column(
         verticalArrangement = Arrangement.Center
@@ -52,20 +55,24 @@ fun PDialog(
             ) {
                 MiniButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.delete_button),
+                    text = cancelText,
                     onClick = onDeleteClick
                 )
                 MiniButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.edit_button),
+                    text = okText,
                     onClick = onEditClick
                 )
             }
         }
-        PButton(
-            text = if (isActive) stringResource(R.string.subscribe_delete_button) else stringResource(R.string.subscribe_button),
-            onClick = onSubscribeClick
-        )
+        if (isSubscribe) {
+            PButton(
+                text = if (isActive) stringResource(R.string.subscribe_delete_button) else stringResource(
+                    R.string.subscribe_button
+                ),
+                onClick = onSubscribeClick
+            )
+        }
     }
 }
 
