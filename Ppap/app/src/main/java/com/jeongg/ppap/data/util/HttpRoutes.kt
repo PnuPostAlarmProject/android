@@ -6,7 +6,7 @@ object HttpRoutes {
     const val KAKAO_LOGIN = "/auth/kakao/login"
     const val KAKAO_REISSUE = "/auth/reissue"
     const val LOGOUT = "/auth/logout"
-    const val WITHDRAWL = "/auth/withdrawl"
+    const val WITHDRAWL = "/auth/withdrawal"
     // subscribe
     const val CREATE_SUBSCRIBE = "/subscribe"
     const val GET_SUBSCRIBES = "/subscribe"
