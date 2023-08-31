@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.jeongg.ppap"
-        minSdk = 25
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -77,9 +77,9 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     // navigation
-    implementation("androidx.navigation:navigation-common-ktx:2.7.0")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.7.0")
-    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("androidx.navigation:navigation-common-ktx:2.7.1")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.1")
+    implementation("androidx.navigation:navigation-compose:2.7.1")
 
     // ktor
     implementation("io.ktor:ktor-client-core:2.3.3")
@@ -87,8 +87,10 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:2.3.3")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     implementation("com.google.ar:core:1.39.0")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
+    implementation("androidx.paging:paging-compose:3.2.0")
     testImplementation("io.ktor:ktor-client-mock:2.3.3")
     implementation("org.slf4j:slf4j-simple:1.7.32")
     implementation("io.ktor:ktor-client-auth:2.3.3")
@@ -116,6 +118,9 @@ dependencies {
     implementation("com.kakao.sdk:v2-all:2.15.0") // 전체 모듈 설치, 2.11.0 버전부터 지원
     implementation("com.kakao.sdk:v2-user:2.15.0") // 카카오 로그인
 
+    // paging
+    implementation("androidx.paging:paging-runtime:3.2.0")
+
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
@@ -128,6 +133,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.0")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.1")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
 }

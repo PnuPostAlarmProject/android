@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.subscribe
+package com.jeongg.ppap.presentation.subscribe_add
 
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi

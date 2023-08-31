@@ -1,5 +1,6 @@
 package com.jeongg.ppap.presentation.component
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
@@ -11,11 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.jeongg.ppap.data.notice.dto.SubscribeDTO
 import com.jeongg.ppap.presentation.theme.main_yellow
 
 @Composable
 fun PTabLayer(
-    tabs: List<String>,
+    tabs: List<SubscribeDTO>,
     selectedTabIndex: Int,
     onTabClick: (Int) -> Unit
 ){
@@ -32,16 +34,16 @@ fun PTabLayer(
                 color = main_yellow,
             )
         },
-        divider = { PDivider() },
+        divider = {},
         modifier = Modifier.padding(top = 10.dp)
     ) {
-        tabs.forEachIndexed { index, text ->
+        tabs.forEachIndexed { index, value ->
             Tab(
                 selected = selectedTabIndex == index,
                 onClick = { onTabClick(index) },
                 text = {
                     Text(
-                        text = text,
+                        text = value.title,
                         style = MaterialTheme.typography.titleSmall,
                         color = if (selectedTabIndex == index) main_yellow else MaterialTheme.colorScheme.primary
                     )

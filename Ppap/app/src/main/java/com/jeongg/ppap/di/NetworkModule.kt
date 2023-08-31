@@ -2,6 +2,9 @@ package com.jeongg.ppap.di
 
 import android.content.Context
 import android.util.Log
+import com.jeongg.ppap.data.notice.NoticeDataSource
+import com.jeongg.ppap.data.notice.NoticeRepository
+import com.jeongg.ppap.data.notice.NoticeService
 import com.jeongg.ppap.data.subscribe.SubscribeDataSource
 import com.jeongg.ppap.data.subscribe.SubscribeRepository
 import com.jeongg.ppap.data.subscribe.SubscribeService
@@ -124,6 +127,16 @@ class NetworkModule {
     @Singleton
     fun provideSubscribeRepository(service: SubscribeService): SubscribeRepository {
         return SubscribeRepository(service)
+    }
+    @Provides
+    @Singleton
+    fun provideNoticeService(client: HttpClient): NoticeService {
+        return NoticeDataSource(client)
+    }
+    @Provides
+    @Singleton
+    fun provideNoticeRepository(service: NoticeService): NoticeRepository {
+        return NoticeRepository(service)
     }
 
 }

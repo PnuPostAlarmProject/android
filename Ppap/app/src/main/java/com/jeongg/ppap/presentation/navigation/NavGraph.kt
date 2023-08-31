@@ -7,11 +7,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.jeongg.ppap.presentation.login.LoginScreen
 import com.jeongg.ppap.presentation.notice.NoticeListScreen
-import com.jeongg.ppap.presentation.notice.NoticeScrapScreen
+import com.jeongg.ppap.presentation.scrap.NoticeScrapScreen
 import com.jeongg.ppap.presentation.setting.SettingScreen
 import com.jeongg.ppap.presentation.splash.SplashScreen
-import com.jeongg.ppap.presentation.subscribe.SubscribeAddScreen
 import com.jeongg.ppap.presentation.subscribe.SubscribeScreen
+import com.jeongg.ppap.presentation.subscribe_add.SubscribeAddScreen
 
 fun NavGraphBuilder.ppapGraph(
     navController: NavController,

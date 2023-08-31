@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.subscribe
+package com.jeongg.ppap.presentation.subscribe_add
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableLongStateOf
