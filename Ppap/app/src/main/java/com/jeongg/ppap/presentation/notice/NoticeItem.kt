@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,7 +36,7 @@ fun NoticeItem(
     onScrap: (Boolean) -> Unit = {}
 ){
     val urlHandler = LocalUriHandler.current
-    var isFilled by rememberSaveable { mutableStateOf(isBookmarked) }
+    var isFilled by remember { mutableStateOf(isBookmarked) }
     val favorite = if (isFilled) R.drawable.favorite_filled else R.drawable.favorite_empty
     Column(
         modifier = Modifier

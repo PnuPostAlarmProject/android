@@ -26,7 +26,7 @@ fun PpapAppTheme(){
             ){
                 ppapGraph(
                     navController = navController,
-                    upPress = { navController.navigateUp() }
+                    upPress = { navController.popBackStack() }
                 )
             }
         }

@@ -62,6 +62,7 @@ fun SubscribeScreen(
 ){
     val context = LocalContext.current
     LaunchedEffect(key1 = true){
+        viewModel.getSubscribes()
         viewModel.eventFlow.collectLatest{ event ->
             when(event){
                 is PEvent.GET -> { "구독 목록 조회 성공 in Screen".log() }
