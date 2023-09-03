@@ -4,7 +4,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ContentScrapDTO (
+data class NoticeDTO (
     val contentId: Long,
     val title: String,
     val pubDate: LocalDateTime,

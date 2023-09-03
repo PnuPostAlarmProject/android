@@ -23,10 +23,6 @@ class SubscribeViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
 
-    init {
-        getSubscribes()
-    }
-
     fun updateActive(subscribeId: Long){
         viewModelScope.launch {
             _eventFlow.emit(PEvent.LOADING)

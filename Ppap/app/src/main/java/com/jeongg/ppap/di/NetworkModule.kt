@@ -5,6 +5,9 @@ import android.util.Log
 import com.jeongg.ppap.data.notice.NoticeDataSource
 import com.jeongg.ppap.data.notice.NoticeRepository
 import com.jeongg.ppap.data.notice.NoticeService
+import com.jeongg.ppap.data.scrap.ScrapDataSource
+import com.jeongg.ppap.data.scrap.ScrapRepository
+import com.jeongg.ppap.data.scrap.ScrapService
 import com.jeongg.ppap.data.subscribe.SubscribeDataSource
 import com.jeongg.ppap.data.subscribe.SubscribeRepository
 import com.jeongg.ppap.data.subscribe.SubscribeService
@@ -138,5 +141,14 @@ class NetworkModule {
     fun provideNoticeRepository(service: NoticeService): NoticeRepository {
         return NoticeRepository(service)
     }
-
+    @Provides
+    @Singleton
+    fun provideScrapService(client: HttpClient): ScrapService {
+        return ScrapDataSource(client)
+    }
+    @Provides
+    @Singleton
+    fun provideScrapRepository(service: ScrapService): ScrapRepository {
+        return ScrapRepository(service)
+    }
 }

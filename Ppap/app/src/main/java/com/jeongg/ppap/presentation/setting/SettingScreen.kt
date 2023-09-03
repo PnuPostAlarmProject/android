@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -105,7 +104,7 @@ fun SettingScreen(
                 ServiceScreen(
                     onSubscribe = {navController.navigate(Screen.SubscribeScreen.route)},
                     onSubscribeAdd = {navController.navigate(Screen.SubscribeAddScreen.route)},
-                    onScrap = {navController.navigate(Screen.NoticeScrapScreen.route)}
+                    onScrap = {navController.navigate(Screen.ScrapScreen.route)}
                 )
             }
             item {

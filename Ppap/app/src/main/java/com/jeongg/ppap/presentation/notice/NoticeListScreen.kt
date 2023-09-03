@@ -68,11 +68,15 @@ fun NoticeListScreen(
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val contents = viewModel.contents.collectAsLazyPagingItems()
     val context = LocalContext.current
+
     LaunchedEffect(key1 = true){
+        viewModel.getNoticeList(null)
+        viewModel.getNoticePage(null)
         viewModel.eventFlow.collectLatest { event ->
             when(event){
+                is PEvent.SUCCESS -> { }
                 is PEvent.EMPTY -> {}
-                is PEvent.SUCCESS -> {}
+                is PEvent.ADD, PEvent.DELETE -> {}
                 is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 else -> { "공지 리스트 로딩중".log() }
             }
@@ -82,7 +86,7 @@ fun NoticeListScreen(
         modifier = Modifier.fillMaxSize()
     ){
         NoticeListTitle(
-            bookmarkNavigate = {navController.navigate(Screen.NoticeScrapScreen.route)},
+            bookmarkNavigate = {navController.navigate(Screen.ScrapScreen.route)},
             settingNavigate = {navController.navigate(Screen.SettingScreen.route)}
         )
         if (viewModel.isEmptyList()) {
@@ -95,9 +99,7 @@ fun NoticeListScreen(
                 selectedTabIndex = selectedTabIndex
             ) { tabIndex ->
                 selectedTabIndex = tabIndex
-                // TODO: 가능하다면 쿼리를 한 번으로 고치고 싶은데...
                 viewModel.getNoticePage(viewModel.subscribes.value[selectedTabIndex].subscribeId)
-                viewModel.getNoticeList(viewModel.subscribes.value[selectedTabIndex].subscribeId)
             }
             PDivider()
             LazyColumn {
@@ -129,7 +131,7 @@ fun NoticeListBanner(
     val images = listOf(R.drawable.pineapple, R.drawable.apple_no_background, R.drawable.pineapple)
     val titles = listOf(R.string.banner_title3, R.string.banner_title2, R.string.banner_title1)
     val descriptions = listOf(R.string.banner_description3, R.string.banner_description2, R.string.banner_description1)
-    val screens = listOf(Screen.SubscribeScreen.route, Screen.SubscribeAddScreen.route, Screen.NoticeScrapScreen.route)
+    val screens = listOf(Screen.SubscribeScreen.route, Screen.SubscribeAddScreen.route, Screen.ScrapScreen.route)
 
     HorizontalPager(
         state = state,
