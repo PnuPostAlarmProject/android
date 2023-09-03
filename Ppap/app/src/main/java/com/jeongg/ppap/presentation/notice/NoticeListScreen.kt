@@ -82,7 +82,7 @@ fun NoticeListScreen(
         modifier = Modifier.fillMaxSize()
     ){
         NoticeListTitle(
-            bookmarkNavigate = {navController.navigate(Screen.NoticeScrapScreen.route)},
+            bookmarkNavigate = {navController.navigate(Screen.ScrapScreen.route)},
             settingNavigate = {navController.navigate(Screen.SettingScreen.route)}
         )
         if (viewModel.isEmptyList()) {

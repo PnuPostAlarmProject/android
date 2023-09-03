@@ -2,25 +2,23 @@ package com.jeongg.ppap.data.notice
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.jeongg.ppap.data.notice.dto.ContentScrapDTO
+import com.jeongg.ppap.data.notice.dto.NoticeDTO
+import com.jeongg.ppap.data.util.HttpRoutes.STARTING_PAGE_INDEX
 
 
 class NoticePagingSource(
     private val service: NoticeService,
     private val subscribeId: Long?
-): PagingSource<Int, ContentScrapDTO>() {
+): PagingSource<Int, NoticeDTO>() {
 
-    companion object {
-        private const val STARTING_PAGE_INDEX = 1
-    }
-    override fun getRefreshKey(state: PagingState<Int, ContentScrapDTO>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, NoticeDTO>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ContentScrapDTO> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NoticeDTO> {
         val page = params.key ?: STARTING_PAGE_INDEX
         return try {
             val response = service.getNoticeList(subscribeId, page)
