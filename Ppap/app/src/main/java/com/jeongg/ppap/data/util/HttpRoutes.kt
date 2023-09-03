@@ -18,4 +18,9 @@ object HttpRoutes {
     const val GET_NOTICES = "/content"
     const val ADD_SCRAP = "/scrap/create"
     const val DELETE_SCRAP = "/scrap/delete/content"
+    // scrap
+    const val GET_SCRAPS = "/scrap"
+    // page
+    const val STARTING_PAGE_INDEX = 0
+    const val PER_PAGE_SIZE = 10
 }
