@@ -2,25 +2,25 @@ package com.jeongg.ppap.di
 
 import android.content.Context
 import android.util.Log
-import com.jeongg.ppap.data.notice.NoticeDataSource
-import com.jeongg.ppap.data.notice.NoticeRepository
-import com.jeongg.ppap.data.notice.NoticeService
-import com.jeongg.ppap.data.scrap.ScrapDataSource
-import com.jeongg.ppap.data.scrap.ScrapRepository
-import com.jeongg.ppap.data.scrap.ScrapService
-import com.jeongg.ppap.data.subscribe.SubscribeDataSource
-import com.jeongg.ppap.data.subscribe.SubscribeRepository
-import com.jeongg.ppap.data.subscribe.SubscribeService
-import com.jeongg.ppap.data.user.UserDataSource
-import com.jeongg.ppap.data.user.UserRepository
-import com.jeongg.ppap.data.user.UserService
-import com.jeongg.ppap.data.user.dto.KakaoLoginDTO
-import com.jeongg.ppap.data.user.dto.RefreshTokenDTO
+import com.jeongg.ppap.data.api.NoticeApi
+import com.jeongg.ppap.data.dto.KakaoLoginDTO
+import com.jeongg.ppap.data.dto.RefreshTokenDTO
+import com.jeongg.ppap.data.repository.NoticeRepositoryImpl
+import com.jeongg.ppap.data.api.ScrapApi
+import com.jeongg.ppap.domain.repository.ScrapRepository
+import com.jeongg.ppap.data.api.SubscribeApi
+import com.jeongg.ppap.domain.repository.SubscribeRepository
+import com.jeongg.ppap.data.api.UserApi
+import com.jeongg.ppap.data.repository.ScrapRepositoryImpl
+import com.jeongg.ppap.data.repository.SubscribeRepositoryImpl
+import com.jeongg.ppap.data.repository.UserRepositoryImpl
+import com.jeongg.ppap.domain.repository.UserRepository
 import com.jeongg.ppap.data.util.ACCESS_TOKEN_KEY
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.data.util.HttpRoutes
 import com.jeongg.ppap.data.util.PDataStore
 import com.jeongg.ppap.data.util.REFRESH_TOKEN_KEY
+import com.jeongg.ppap.domain.repository.NoticeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -113,42 +113,42 @@ class NetworkModule {
     }
     @Provides
     @Singleton
-    fun provideUserService(client: HttpClient): UserService {
-        return UserDataSource(client)
+    fun provideUserApi(client: HttpClient): UserRepository {
+        return UserApi(client)
     }
     @Provides
     @Singleton
-    fun provideUserRepository(service: UserService): UserRepository {
-        return UserRepository(service)
+    fun provideUserRepositoryImpl(userApi: UserApi): UserRepositoryImpl {
+        return UserRepositoryImpl(userApi)
     }
     @Provides
     @Singleton
-    fun provideSubscribeService(client: HttpClient): SubscribeService {
-        return SubscribeDataSource(client)
+    fun provideSubscribeApi(client: HttpClient): SubscribeRepository {
+        return SubscribeApi(client)
     }
     @Provides
     @Singleton
-    fun provideSubscribeRepository(service: SubscribeService): SubscribeRepository {
-        return SubscribeRepository(service)
+    fun provideSubscribeRepositoryImpl(subscribeApi: SubscribeApi): SubscribeRepositoryImpl {
+        return SubscribeRepositoryImpl(subscribeApi)
     }
     @Provides
     @Singleton
-    fun provideNoticeService(client: HttpClient): NoticeService {
-        return NoticeDataSource(client)
+    fun provideNoticeApi(client: HttpClient): NoticeRepository {
+        return NoticeApi(client)
     }
     @Provides
     @Singleton
-    fun provideNoticeRepository(service: NoticeService): NoticeRepository {
-        return NoticeRepository(service)
+    fun provideNoticeRepositoryImpl(noticeApi: NoticeApi): NoticeRepositoryImpl {
+        return NoticeRepositoryImpl(noticeApi)
     }
     @Provides
     @Singleton
-    fun provideScrapService(client: HttpClient): ScrapService {
-        return ScrapDataSource(client)
+    fun provideScrapApi(client: HttpClient): ScrapRepository {
+        return ScrapApi(client)
     }
     @Provides
     @Singleton
-    fun provideScrapRepository(service: ScrapService): ScrapRepository {
-        return ScrapRepository(service)
+    fun provideScrapRepositoryImpl(scrapApi: ScrapApi): ScrapRepositoryImpl {
+        return ScrapRepositoryImpl(scrapApi)
     }
 }
