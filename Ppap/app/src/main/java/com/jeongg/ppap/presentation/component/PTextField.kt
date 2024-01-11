@@ -17,8 +17,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.jeongg.ppap.presentation.theme.gray3
-import com.jeongg.ppap.presentation.theme.typography
+import com.jeongg.ppap.theme.gray3
+import com.jeongg.ppap.theme.typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

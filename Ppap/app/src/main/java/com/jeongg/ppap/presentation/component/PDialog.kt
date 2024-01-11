@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
-import com.jeongg.ppap.presentation.theme.Dimens
-import com.jeongg.ppap.presentation.theme.gray1
+import com.jeongg.ppap.theme.Dimens
+import com.jeongg.ppap.theme.gray1
 
 @Composable
 fun PDialog(
