@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.theme
+package com.jeongg.ppap.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.theme
+package com.jeongg.ppap.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
