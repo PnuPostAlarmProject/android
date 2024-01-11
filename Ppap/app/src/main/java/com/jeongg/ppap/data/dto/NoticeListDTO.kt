@@ -1,10 +1,9 @@
-package com.jeongg.ppap.data.notice.dto
+package com.jeongg.ppap.data.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NoticeWithSubscribeDTO(
-    val subscribes: List<SubscribeDTO>,
+data class NoticeListDTO(
     val curSubscribeId: Long,
     val contents: List<NoticeDTO>
 )

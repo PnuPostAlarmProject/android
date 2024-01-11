@@ -1,11 +1,10 @@
-package com.jeongg.ppap.data.subscribe.dto
+package com.jeongg.ppap.data.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SubscribeUpdateResponseDTO(
+data class SubscribeGetResponseDTO(
     val subscribeId: Long,
     val title: String,
-    val noticeLink: String?,
     val isActive: Boolean
 )

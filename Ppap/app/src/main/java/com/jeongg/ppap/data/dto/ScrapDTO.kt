@@ -1,13 +1,13 @@
-package com.jeongg.ppap.data.notice.dto
+package com.jeongg.ppap.data.dto
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NoticeDTO (
+data class ScrapDTO(
     val contentId: Long,
-    val title: String,
-    val pubDate: LocalDateTime,
+    val contentTitle: String,
     val link: String,
-    val isScraped: Boolean
+    val pubDate: LocalDateTime,
+    val isScrap: Boolean
 )
