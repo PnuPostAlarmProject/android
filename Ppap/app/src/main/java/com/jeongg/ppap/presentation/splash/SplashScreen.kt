@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.theme.rainbowColorsBrush
+import com.jeongg.ppap.theme.rainbowColorsBrush
 import kotlinx.coroutines.delay
 
 @Composable
@@ -56,24 +56,24 @@ fun SplashScreen(
     val animation = remember { Animatable(initialValue = 0f) }
     val distance = with(LocalDensity.current){ 180.dp.toPx() }
     LaunchedEffect(key1 = true){
-        delay(500)
+        delay(400)
         apple = true
-        delay(1000)
+        delay(400)
         pineapple = true
-        delay(1200)
+        delay(700)
         pencil = true
         animation.animateTo(
             targetValue = 1f,
             animationSpec = keyframes {
-                durationMillis = 800
+                durationMillis = 400
                 0.0f at 0 with LinearOutSlowInEasing
-                1.0f at 400 with LinearOutSlowInEasing
+                1.0f at 200 with LinearOutSlowInEasing
             }
         )
         fadeOut = false
-        delay(800)
+        delay(500)
         fadeIn = true
-        delay(1000)
+        delay(300)
 
         val nextScreen = when (viewModel.isUserLoggedIn()) {
             true -> Screen.NoticeListScreen
