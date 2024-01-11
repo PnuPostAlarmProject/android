@@ -50,11 +50,11 @@ import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.theme.Dimens
-import com.jeongg.ppap.presentation.theme.bright_pink
-import com.jeongg.ppap.presentation.theme.gray3
-import com.jeongg.ppap.presentation.theme.main_green
-import com.jeongg.ppap.presentation.theme.very_bright_yellow
+import com.jeongg.ppap.theme.Dimens
+import com.jeongg.ppap.theme.bright_pink
+import com.jeongg.ppap.theme.gray3
+import com.jeongg.ppap.theme.main_green
+import com.jeongg.ppap.theme.very_bright_yellow
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.collectLatest
@@ -70,15 +70,11 @@ fun NoticeListScreen(
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true){
-        viewModel.getNoticeList(null)
-        viewModel.getNoticePage(null)
         viewModel.eventFlow.collectLatest { event ->
             when(event){
-                is PEvent.SUCCESS -> { }
-                is PEvent.EMPTY -> {}
-                is PEvent.ADD, PEvent.DELETE -> {}
                 is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                else -> { "공지 리스트 로딩중".log() }
+                is PEvent.LOADING -> { "공지 리스트 로딩중".log() }
+                else -> {}
             }
         }
     }
@@ -96,11 +92,12 @@ fun NoticeListScreen(
         else {
             PTabLayer(
                 tabs = viewModel.subscribes.value,
-                selectedTabIndex = selectedTabIndex
-            ) { tabIndex ->
-                selectedTabIndex = tabIndex
-                viewModel.getNoticePage(viewModel.subscribes.value[selectedTabIndex].subscribeId)
-            }
+                selectedTabIndex = selectedTabIndex,
+                onTabClick = { tabIndex ->
+                    selectedTabIndex = tabIndex
+                    viewModel.getNoticePage(viewModel.subscribes.value[tabIndex].subscribeId)
+                }
+            )
             PDivider()
             LazyColumn {
                 item { NoticeListBanner(navController) }

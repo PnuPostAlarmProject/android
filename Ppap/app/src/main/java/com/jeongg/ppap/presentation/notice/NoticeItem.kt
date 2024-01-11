@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.theme.gray3
+import com.jeongg.ppap.theme.gray3
 
 @Composable
 fun NoticeItem(
@@ -64,7 +63,7 @@ fun NoticeItem(
                     .clickable{
                         onScrap(isFilled)
                         isFilled = !isFilled
-                    },
+                    }
             )
         }
         Text(
