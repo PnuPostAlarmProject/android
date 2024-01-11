@@ -40,8 +40,8 @@ import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.theme.Dimens
-import com.jeongg.ppap.presentation.theme.bright_pink
+import com.jeongg.ppap.theme.Dimens
+import com.jeongg.ppap.theme.bright_pink
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.collectLatest
@@ -76,7 +76,7 @@ fun SettingScreen(
                 onDeleteClick = { isDialogOpen = 0 },
                 onEditClick = {
                     if (isDialogOpen == 1) viewModel.logout()
-                    else viewModel.withdraw()
+                    else viewModel.withdrawl()
                 },
                 isSubscribe = false
             )
