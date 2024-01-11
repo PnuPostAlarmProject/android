@@ -40,16 +40,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
-import com.jeongg.ppap.data.subscribe.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.theme.Dimens
-import com.jeongg.ppap.presentation.theme.gray3
-import com.jeongg.ppap.presentation.theme.main_yellow
+import com.jeongg.ppap.theme.Dimens
+import com.jeongg.ppap.theme.gray3
+import com.jeongg.ppap.theme.main_yellow
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.collectLatest
@@ -62,13 +62,12 @@ fun SubscribeScreen(
 ){
     val context = LocalContext.current
     LaunchedEffect(key1 = true){
-        viewModel.getSubscribes()
         viewModel.eventFlow.collectLatest{ event ->
             when(event){
                 is PEvent.GET -> { "구독 목록 조회 성공 in Screen".log() }
-                is PEvent.SUCCESS, PEvent.DELETE -> { viewModel.getSubscribes() }
                 is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                else -> { "구독 로딩중".log() }
+                is PEvent.LOADING -> { "구독 로딩중".log() }
+                else -> { }
             }
         }
     }

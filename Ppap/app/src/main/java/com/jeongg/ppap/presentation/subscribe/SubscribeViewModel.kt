@@ -3,10 +3,12 @@ package com.jeongg.ppap.presentation.subscribe
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.subscribe.SubscribeRepository
-import com.jeongg.ppap.data.subscribe.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.domain.usecase.subscribe.DeleteSubscribe
+import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
+import com.jeongg.ppap.domain.usecase.subscribe.UpdateActive
 import com.jeongg.ppap.presentation.util.PEvent
-import com.jeongg.ppap.util.log
+import com.jeongg.ppap.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -14,7 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
-    private val subscribeRepository: SubscribeRepository,
+    private val updateActiveUseCase: UpdateActive,
+    private val deleteSubscribeUseCase: DeleteSubscribe,
+    private val getSubscribesUseCase: GetSubscribes,
 ): ViewModel()  {
 
     private var _customSubscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
@@ -23,41 +27,49 @@ class SubscribeViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
 
+    init {
+        getSubscribes()
+    }
+
     fun updateActive(subscribeId: Long){
-        viewModelScope.launch {
-            _eventFlow.emit(PEvent.LOADING)
-            val response = subscribeRepository.updateActive(subscribeId)
-            if (response.success){
-                "구독 활성화 성공".log()
-                _eventFlow.emit(PEvent.SUCCESS)
-            } else {
-                "구독 활성화 실패 ${response.error?.status}".log()
-                _eventFlow.emit(PEvent.ERROR(response.error?.message ?: "구독 활성화 실패하였습니다."))
+        viewModelScope.launch{
+            updateActiveUseCase(subscribeId).collect { response ->
+                when(response){
+                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Success -> {
+                        getSubscribes()
+                        _eventFlow.emit(PEvent.SUCCESS)
+                    }
+                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                }
             }
         }
     }
     fun deleteSubscribe(subscribeId: Long){
-        viewModelScope.launch {
-            _eventFlow.emit(PEvent.LOADING)
-            val response = subscribeRepository.deleteSubscribe(subscribeId)
-            if (response.success){
-                _eventFlow.emit(PEvent.DELETE)
-            } else {
-                "구독 삭제 실패 ${response.error?.status}".log()
-                _eventFlow.emit(PEvent.ERROR(response.error?.message ?: "구독 삭제 실패하였습니다."))
+        viewModelScope.launch{
+            deleteSubscribeUseCase(subscribeId).collect { response ->
+                when(response){
+                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Success -> {
+                        getSubscribes()
+                        _eventFlow.emit(PEvent.DELETE)
+                    }
+                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                }
             }
         }
     }
-    fun getSubscribes(){
+    private fun getSubscribes(){
         viewModelScope.launch {
-            _eventFlow.emit(PEvent.LOADING)
-            val response = subscribeRepository.getSubscribes()
-            if (response.success){
-                _customSubscribes.value = response.response ?: emptyList()
-                _eventFlow.emit(PEvent.GET)
-            } else {
-                "구독 목록 불러오기 실패 ${response.error?.status}".log()
-                _eventFlow.emit(PEvent.ERROR(response.error?.message ?: "구독 목록 조회를 실패했습니다."))
+            getSubscribesUseCase().collect { response ->
+                when(response){
+                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Success -> {
+                        _customSubscribes.value = response.data ?: emptyList()
+                        _eventFlow.emit(PEvent.GET)
+                    }
+                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                }
             }
         }
     }

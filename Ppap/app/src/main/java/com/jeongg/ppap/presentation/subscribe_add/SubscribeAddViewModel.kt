@@ -1,15 +1,17 @@
 package com.jeongg.ppap.presentation.subscribe_add
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.subscribe.SubscribeRepository
-import com.jeongg.ppap.data.subscribe.dto.SubscribeCreateRequestDTO
-import com.jeongg.ppap.data.subscribe.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.domain.usecase.subscribe.CreateSubscribe
+import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribeById
+import com.jeongg.ppap.domain.usecase.subscribe.UpdateSubscribe
 import com.jeongg.ppap.presentation.util.PEvent
+import com.jeongg.ppap.util.Resource
 import com.jeongg.ppap.util.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,20 +20,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SubscribeAddViewModel @Inject constructor(
-    private val subscribeRepository: SubscribeRepository,
+    private val createSubscribeUseCase: CreateSubscribe,
+    private val updateSubscribeUseCase: UpdateSubscribe,
+    private val getSubscribeByIdUseCase: GetSubscribeById,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private var subscribeId = mutableLongStateOf(-1L)
 
-    private val _title = mutableStateOf("")
-    val title = _title
-
-    private val _noticeLink: MutableState<String?> = mutableStateOf(null)
-    val noticeLink = _noticeLink
-
-    private val _rssLink = mutableStateOf("")
-    val rssLink = _rssLink
+    private val _subscribe = mutableStateOf(SubscribeCreateRequestDTO("", "", null))
+    val subscribe = _subscribe
 
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
@@ -51,13 +49,19 @@ class SubscribeAddViewModel @Inject constructor(
     fun onEvent(event: SubscribeAddEvent){
         when (event){
             is SubscribeAddEvent.EnteredTitle -> {
-                _title.value = event.title
+                _subscribe.value = _subscribe.value.copy(
+                    title = event.title
+                )
             }
             is SubscribeAddEvent.EnteredNoticeLink -> {
-                _noticeLink.value = event.notice
+                _subscribe.value = _subscribe.value.copy(
+                    noticeLink = event.notice?.ifBlank { null }
+                )
             }
             is SubscribeAddEvent.EnteredRssLink -> {
-                _rssLink.value = event.rss
+                _subscribe.value = _subscribe.value.copy(
+                    rssLink = event.rss
+                )
             }
             is SubscribeAddEvent.SaveSubscribe -> {
                 if (subscribeId.longValue < 0) saveSubscribe()
@@ -67,62 +71,57 @@ class SubscribeAddViewModel @Inject constructor(
     }
     private fun saveSubscribe(){
         viewModelScope.launch {
-            if (title.value.isEmpty() || rssLink.value.isEmpty()){
+            if (subscribe.value.title.isEmpty() || subscribe.value.rssLink.isEmpty()){
                 _eventFlow.emit(PEvent.ERROR("제목과 rss 링크는 비어있으면 안됩니다."))
                 return@launch
             }
-            _eventFlow.emit(PEvent.LOADING)
-            val response = subscribeRepository.createSubscribe(
-                SubscribeCreateRequestDTO(
-                    title = title.value,
-                    noticeLink = noticeLink.value?.ifBlank { null },
-                    rssLink = rssLink.value
-                )
-            )
-            if (response.success){
-                _eventFlow.emit(PEvent.ADD)
-            } else {
-                "구독 저장 실패 ${response.error?.status} ${noticeLink.value.isNullOrBlank()}".log()
-                _eventFlow.emit(PEvent.ERROR("${response.error?.message}"))
+            createSubscribeUseCase(subscribe.value).collect { response ->
+                when(response){
+                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Success -> _eventFlow.emit(PEvent.ADD)
+                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                }
             }
         }
     }
 
     private fun updateSubscribe(){
         viewModelScope.launch {
-            if (title.value.isEmpty()){
+            if (subscribe.value.title.isEmpty()){
                 _eventFlow.emit(PEvent.ERROR("제목은 비어있으면 안됩니다."))
                 return@launch
             }
-            _eventFlow.emit(PEvent.LOADING)
-            val response = subscribeRepository.updateSubscribe(
+            updateSubscribeUseCase(
                 subscribeId = subscribeId.longValue,
-                subscribeUpdateRequestDTO = SubscribeUpdateRequestDTO(
-                    title = title.value,
-                    noticeLink = noticeLink.value?.ifBlank { null }
+                requestDTO = SubscribeUpdateRequestDTO(
+                    title = subscribe.value.title,
+                    noticeLink = subscribe.value.noticeLink
                 )
-            )
-            if (response.success){
-                _eventFlow.emit(PEvent.UPDATE)
-            } else {
-                "구독 업데이트 실패 ${response.error?.status}".log()
-                _eventFlow.emit(PEvent.ERROR("${response.error?.message}"))
+            ).collect { response ->
+                when(response){
+                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Success -> _eventFlow.emit(PEvent.ADD)
+                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                }
             }
         }
     }
 
     private fun getSubscribe(){
         viewModelScope.launch{
-            _eventFlow.emit(PEvent.LOADING)
-            val response = subscribeRepository.getSubscribeById(subscribeId.longValue)
-            if (response.success){
-                _title.value = response.response?.title ?: ""
-                _noticeLink.value = response.response?.noticeLink
-                _rssLink.value = response.response?.rssLink ?: ""
-                _eventFlow.emit(PEvent.GET)
-            } else {
-                "불러오기 실패 ${response.error?.message}".log()
-                _eventFlow.emit(PEvent.ERROR("구독 정보를 불러오는데 실패하였습니다."))
+            getSubscribeByIdUseCase(subscribeId.longValue).collect { response ->
+                when(response){
+                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Success -> {
+                        _subscribe.value = _subscribe.value.copy(
+                            title = response.data?.title ?: "",
+                            noticeLink = response.data?.noticeLink ?: "",
+                            rssLink = response.data?.rssLink ?: ""
+                        )
+                        _eventFlow.emit(PEvent.GET)
+                    }
+                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                }
             }
         }
     }
