@@ -1,7 +1,7 @@
 package com.jeongg.ppap.data.util
 
 object HttpRoutes {
-    const val BASE_URL = "http://192.168.219.100:8080"
+    const val BASE_URL = "http://15.164.232.86"
     // user
     const val KAKAO_LOGIN = "/auth/kakao/login"
     const val KAKAO_REISSUE = "/auth/reissue"

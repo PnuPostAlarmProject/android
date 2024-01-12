@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jeongg.ppap.presentation.theme.main_yellow
+import com.jeongg.ppap.theme.main_yellow
 
 @Composable
 fun PButton(

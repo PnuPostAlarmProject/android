@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.navigation.ppapGraph
-import com.jeongg.ppap.presentation.theme.PpapTheme
+import com.jeongg.ppap.theme.PpapTheme
 
 @Composable
 fun PpapAppTheme(){

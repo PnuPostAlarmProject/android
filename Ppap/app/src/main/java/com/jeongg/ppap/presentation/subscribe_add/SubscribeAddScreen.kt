@@ -43,8 +43,8 @@ import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.addFocusCleaner
 import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.theme.bright_yellow
-import com.jeongg.ppap.presentation.theme.typography
+import com.jeongg.ppap.theme.bright_yellow
+import com.jeongg.ppap.theme.typography
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.collectLatest
@@ -79,11 +79,11 @@ fun SubscribeAddScreen(
             item { PHorizontalPager() }
             item {
                 PTextFields(
-                    title = viewModel.title.value,
+                    title = viewModel.subscribe.value.title,
                     onTitleChange = { viewModel.onEvent(SubscribeAddEvent.EnteredTitle(it)) },
-                    notice = viewModel.noticeLink.value,
+                    notice = viewModel.subscribe.value.noticeLink,
                     onNoticeChange = { viewModel.onEvent(SubscribeAddEvent.EnteredNoticeLink(it)) },
-                    rss = viewModel.rssLink.value,
+                    rss = viewModel.subscribe.value.rssLink,
                     onRssChange = { viewModel.onEvent(SubscribeAddEvent.EnteredRssLink(it)) },
                     enabled = !viewModel.isUpdate()
                 )

@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.jeongg.ppap.data.subscribe.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.subscribe.CustomSubscribe
 import com.jeongg.ppap.presentation.subscribe.CustomSubscribeItem
 import com.jeongg.ppap.presentation.subscribe.DefaultSubscribeItem

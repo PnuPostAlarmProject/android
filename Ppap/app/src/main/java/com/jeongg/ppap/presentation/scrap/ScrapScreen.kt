@@ -36,9 +36,9 @@ import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.notice.NoticeItem
-import com.jeongg.ppap.presentation.theme.Dimens
-import com.jeongg.ppap.presentation.theme.gray3
 import com.jeongg.ppap.presentation.util.PEvent
+import com.jeongg.ppap.theme.Dimens
+import com.jeongg.ppap.theme.gray3
 import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.collectLatest
 
@@ -52,14 +52,12 @@ fun ScrapScreen(
     val contents = viewModel.contents.collectAsLazyPagingItems()
     val context = LocalContext.current
     LaunchedEffect(key1=true){
-        viewModel.getScrapList(null)
-        viewModel.getScrapPage(null)
         viewModel.eventFlow.collectLatest { event ->
             when (event){
                 is PEvent.SUCCESS -> { "스크랩 리스트 조회 성공".log() }
-                is PEvent.ADD, PEvent.DELETE -> {}
+                is PEvent.LOADING -> { "로딩중".log() }
                 is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                else -> { "스크랩 리스트 로딩중".log() }
+                else -> { }
             }
         }
     }
@@ -94,10 +92,11 @@ fun ScrapScreen(
             PTabLayer(
                 tabs = viewModel.subscribes.value,
                 selectedTabIndex = selectedTabIndex,
-            ) { tabIndex ->
-                selectedTabIndex = tabIndex
-                viewModel.getScrapPage(viewModel.subscribes.value[selectedTabIndex].subscribeId)
-            }
+                onTabClick = { tabIndex ->
+                    selectedTabIndex = tabIndex
+                    viewModel.getScrapList(viewModel.subscribes.value[tabIndex].subscribeId)
+                }
+            )
             PDivider()
             LazyColumn {
                 items(

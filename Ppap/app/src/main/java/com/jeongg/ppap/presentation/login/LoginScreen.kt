@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.theme.Dimens
+import com.jeongg.ppap.theme.Dimens
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.collectLatest

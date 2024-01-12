@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
-import com.jeongg.ppap.presentation.theme.gray3
+import com.jeongg.ppap.theme.gray3
 
 @Composable
 fun PEmptyContent(
