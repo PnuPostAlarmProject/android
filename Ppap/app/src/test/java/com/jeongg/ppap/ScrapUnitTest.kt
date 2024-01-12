@@ -1,9 +1,11 @@
 package com.jeongg.ppap
 
-import com.jeongg.ppap.data.notice.NoticeDataSource
-import com.jeongg.ppap.data.scrap.ScrapDataSource
-import com.jeongg.ppap.data.subscribe.SubscribeDataSource
+import com.jeongg.ppap.data.api.ScrapApi
+import com.jeongg.ppap.data.dto.NoticeListDTO
+import com.jeongg.ppap.data.dto.ScrapListDTO
+import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.util.getExceptionHttpClient
+import io.ktor.client.call.body
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -18,12 +20,11 @@ class ScrapUnitTest {
 
             // when
             val mock = getExceptionHttpClient(SCRAP_LIST_CONTENT)
-            val data = ScrapDataSource(mock).getScrapList(subscribeId, page)
+            val data = ScrapApi(mock).getScrapList(subscribeId, page).body<ApiUtils.ApiResult<ScrapListDTO>>()
 
             // then
             Assert.assertEquals(true, data.success)
-            Assert.assertEquals("테스트1", data.response?.subscribes?.get(0)?.title ?: "")
-            Assert.assertEquals(3, data.response?.subscribes?.size ?: 0)
+            Assert.assertEquals("컴퓨터 및 프로그래밍 입문(001분반, 조환규 교수님) 수업을 신청한 수강생은 꼭 읽어주세요.", data.response?.scraps?.get(0)?.contentTitle ?: "")
             Assert.assertEquals(1L, data.response?.curSubscribeId)
             Assert.assertEquals(361L, data.response?.scraps?.get(0)?.contentId)
             Assert.assertEquals(null, data.error)
@@ -40,7 +41,7 @@ class ScrapUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = ScrapDataSource(mock).getScrapList(subscribeId, page)
+            val data = ScrapApi(mock).getScrapList(subscribeId, page).body<ApiUtils.ApiResult<ScrapListDTO>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -57,7 +58,7 @@ class ScrapUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = ScrapDataSource(mock).addScrap(contentId)
+            val data = ScrapApi(mock).addScrap(contentId).body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -74,7 +75,7 @@ class ScrapUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = ScrapDataSource(mock).addScrap(contentId)
+            val data = ScrapApi(mock).addScrap(contentId).body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -91,7 +92,7 @@ class ScrapUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = ScrapDataSource(mock).deleteScrap(contentId)
+            val data = ScrapApi(mock).deleteScrap(contentId).body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -108,7 +109,7 @@ class ScrapUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = ScrapDataSource(mock).deleteScrap(contentId)
+            val data = ScrapApi(mock).deleteScrap(contentId).body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -121,20 +122,6 @@ class ScrapUnitTest {
             {
             "success": true,
             "response": {
-                "subscribes": [
-                    {
-                        "subscribeId": 1,
-                        "title": "테스트1"
-                    },
-                    {
-                        "subscribeId": 2,
-                        "title": "테스트2"
-                    },
-                    {
-                        "subscribeId": 3,
-                        "title": "테스트3"
-                    }
-                ],
                 "curSubscribeId": 1,
                 "scraps": [
                     {

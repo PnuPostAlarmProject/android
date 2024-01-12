@@ -1,9 +1,14 @@
 package com.jeongg.ppap
 
-import com.jeongg.ppap.data.subscribe.SubscribeDataSource
-import com.jeongg.ppap.data.subscribe.dto.SubscribeCreateRequestDTO
-import com.jeongg.ppap.data.subscribe.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.api.SubscribeApi
+import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.dto.SubscribeUpdateResponseDTO
+import com.jeongg.ppap.data.dto.SubscribeWithContentDTO
+import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.util.getExceptionHttpClient
+import io.ktor.client.call.body
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -19,7 +24,7 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).createSubscribe(subscribe)
+            val data = SubscribeApi(mock).createSubscribe(subscribe).body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -36,7 +41,7 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).createSubscribe(subscribe)
+            val data = SubscribeApi(mock).createSubscribe(subscribe).body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -69,7 +74,7 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).getSubscribes()
+            val data = SubscribeApi(mock).getSubscribes().body<ApiUtils.ApiResult<List<SubscribeGetResponseDTO>>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -86,7 +91,7 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).getSubscribes()
+            val data = SubscribeApi(mock).getSubscribes().body<ApiUtils.ApiResult<List<SubscribeGetResponseDTO>>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -116,7 +121,7 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).getSubscribeById(subscribeId)
+            val data = SubscribeApi(mock).getSubscribeById(subscribeId).body<ApiUtils.ApiResult<SubscribeWithContentDTO>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -135,7 +140,7 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).getSubscribeById(subscribeId)
+            val data = SubscribeApi(mock).getSubscribeById(subscribeId).body<ApiUtils.ApiResult<SubscribeWithContentDTO>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -163,10 +168,12 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).updateSubscribe(
+            val data = SubscribeApi(mock)
+                .updateSubscribe(
                     subscribeId = subscribeId,
                     subscribeUpdateRequestDTO = SubscribeUpdateRequestDTO("정컴 공지",  null)
                 )
+                .body<ApiUtils.ApiResult<SubscribeUpdateResponseDTO>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -186,10 +193,12 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).updateSubscribe(
-                subscribeId = subscribeId,
-                subscribeUpdateRequestDTO = SubscribeUpdateRequestDTO("부산대 RSS 링크가 아닙니다.",  null)
-            )
+            val data = SubscribeApi(mock)
+                .updateSubscribe(
+                    subscribeId = subscribeId,
+                    subscribeUpdateRequestDTO = SubscribeUpdateRequestDTO("부산대 RSS 링크가 아닙니다.",  null)
+                )
+                .body<ApiUtils.ApiResult<SubscribeUpdateResponseDTO>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -206,7 +215,9 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).deleteSubscribe(subscribeId = subscribeId)
+            val data = SubscribeApi(mock)
+                .deleteSubscribe(subscribeId = subscribeId)
+                .body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -223,7 +234,9 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).deleteSubscribe(subscribeId = subscribeId)
+            val data = SubscribeApi(mock)
+                .deleteSubscribe(subscribeId = subscribeId)
+                .body<ApiUtils.ApiResult<String>>()
 
             // then
             Assert.assertEquals(false, data.success)
@@ -251,7 +264,9 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).updateActive(subscribeId = subscribeId)
+            val data = SubscribeApi(mock)
+                .updateActive(subscribeId = subscribeId)
+                .body<ApiUtils.ApiResult<SubscribeUpdateResponseDTO>>()
 
             // then
             Assert.assertEquals(true, data.success)
@@ -270,7 +285,9 @@ class SubscribeUnitTest {
 
             // when
             val mock = getExceptionHttpClient(content)
-            val data = SubscribeDataSource(mock).updateActive(subscribeId = subscribeId)
+            val data = SubscribeApi(mock)
+                .updateActive(subscribeId = subscribeId)
+                .body<ApiUtils.ApiResult<SubscribeUpdateResponseDTO>>()
 
             // then
             Assert.assertEquals(false, data.success)
