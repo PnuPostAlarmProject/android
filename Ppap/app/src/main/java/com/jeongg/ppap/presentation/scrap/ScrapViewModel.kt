@@ -7,9 +7,11 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.jeongg.ppap.data.dto.ScrapDTO
 import com.jeongg.ppap.data.dto.SubscribeDTO
+import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap
 import com.jeongg.ppap.domain.usecase.scrap.GetScrapList
+import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,10 +24,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ScrapViewModel @Inject constructor(
     private val getScrapListUseCase: GetScrapList,
+    private val getSubscribesUseCase: GetSubscribes,
     private val addScrapUseCase: AddScrap,
     private val deleteScrapUseCase: DeleteScrap,
 ): ViewModel(){
-    private val _subscribes = mutableStateOf<List<SubscribeDTO>>(emptyList())
+    private val _subscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
     val subscribes = _subscribes
 
     private val _contents: Flow<PagingData<ScrapDTO>> = flow{}
@@ -48,9 +51,19 @@ class ScrapViewModel @Inject constructor(
     }
 
     fun getScrapList(subscribeId: Long?) {
-        // todo: subscribes 내용 불러오기
-        _subscribes.value = listOf(SubscribeDTO(1, "더미"))
         contents = getScrapListUseCase(subscribeId).cachedIn(viewModelScope)
+        viewModelScope.launch {
+            getSubscribesUseCase().collect { response ->
+                when(response){
+                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Success -> {
+                        _subscribes.value = response.data ?: emptyList()
+                        _eventFlow.emit(PEvent.SUCCESS)
+                    }
+                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                }
+            }
+        }
     }
 
     private fun addScrap(contentId: Long){
