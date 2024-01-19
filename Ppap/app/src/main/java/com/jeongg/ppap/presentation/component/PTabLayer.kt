@@ -12,11 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.data.dto.SubscribeDTO
+import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.theme.main_yellow
 
 @Composable
 fun PTabLayer(
-    tabs: List<SubscribeDTO>,
+    tabs: List<SubscribeGetResponseDTO>,
     selectedTabIndex: Int,
     onTabClick: (Int) -> Unit
 ){

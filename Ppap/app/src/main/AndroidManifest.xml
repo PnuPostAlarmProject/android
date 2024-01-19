@@ -9,9 +9,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/apple"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/apple"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ppap"
         tools:targetApi="34">
@@ -34,9 +34,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data android:host="oauth"
-                    android:scheme="kakao${NATIVE_APP_KEY}" />
+                <data android:host="oauth" android:scheme="kakao${NATIVE_APP_KEY}" />
             </intent-filter>
         </activity>
         <service android:name=".data.fcm.FirebaseMessageService"

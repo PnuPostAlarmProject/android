@@ -10,7 +10,6 @@ import com.google.firebase.messaging.RemoteMessage
 import com.jeongg.ppap.MainActivity
 import com.jeongg.ppap.data.util.FCM_TOKEN_KEY
 import com.jeongg.ppap.dataStore
-import com.jeongg.ppap.util.log
 import kotlinx.coroutines.runBlocking
 
 class FirebaseMessageService: FirebaseMessagingService() {
@@ -18,10 +17,6 @@ class FirebaseMessageService: FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         if (message.notification != null){
-            val title = message.notification?.title ?: "empty-title"
-            val body = message.notification?.body ?: "empty-message"
-            "title: $title, body: $body".log()
-
             val intent = Intent(applicationContext, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
@@ -30,8 +25,6 @@ class FirebaseMessageService: FirebaseMessagingService() {
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
-            val token = task.result
-            "onMessageReceived $token".log()
         })
     }
 
@@ -40,7 +33,6 @@ class FirebaseMessageService: FirebaseMessagingService() {
         runBlocking {
             dataStore.edit{ it[key] = token }
         }
-        "new token is $token".log()
         super.onNewToken(token)
     }
 

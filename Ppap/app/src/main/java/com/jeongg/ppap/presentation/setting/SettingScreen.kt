@@ -200,7 +200,7 @@ fun DescriptionScreen() {
         verticalAlignment = Alignment.CenterVertically
     ){
         Image(
-            painter = painterResource(R.drawable.apple_no_background),
+            painter = painterResource(R.drawable.apple),
             contentDescription = "apple",
             modifier = Modifier
                 .clip(CircleShape)

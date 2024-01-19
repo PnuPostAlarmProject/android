@@ -82,7 +82,6 @@ fun SubscribeScreen(
             LazyColumn(
                 modifier = Modifier.padding(bottom = 120.dp),
             ) {
-                item {DefaultSubscribe()}
                 item {
                     CustomSubscribe(
                         subscribes = viewModel.customSubscribes.value,
@@ -109,66 +108,6 @@ fun SubscribeScreen(
                 )
             }
         }
-    }
-}
-@Composable
-fun DefaultSubscribe() {
-    Column {
-        DefaultSubscribeItem(
-            image = R.drawable.pnu1,
-            text = stringResource(R.string.pnu_onestop),
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        DefaultSubscribeItem(
-            image = R.drawable.pnu2,
-            text = stringResource(R.string.pnu)
-        )
-        Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
-    }
-}
-@Composable
-fun DefaultSubscribeItem(
-    @DrawableRes image: Int = R.drawable.pnu1,
-    text: String = stringResource(R.string.pnu_onestop),
-    isActive: Boolean = false
-){
-    var isChecked by remember { mutableStateOf(isActive) }
-    val borderModifier = if (isChecked) Modifier.border(3.dp, main_yellow, MaterialTheme.shapes.large) else Modifier
-    val img = if (isChecked) R.drawable.checked else R.drawable.unchecked
-    val textColor = if (isChecked) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.outlineVariant
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(90.dp)
-            .clip(MaterialTheme.shapes.large)
-            .background(Color.Black.copy(0f))
-            .clickable { isChecked = isChecked.not() }
-    ) {
-        Image(
-            painter = painterResource(image),
-            contentDescription = text,
-            contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(Color.Blue.copy(alpha = 0.1f), blendMode = BlendMode.Darken),
-            alpha = 0.2f,
-            modifier = borderModifier
-        )
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(horizontal = Dimens.PaddingNormal)
-                .align(Alignment.CenterStart),
-            color = textColor
-        )
-        Image(
-            painter = painterResource(img),
-            contentDescription = "checked: $isChecked",
-            modifier = Modifier
-                .padding(horizontal = Dimens.PaddingNormal)
-                .size(31.dp)
-                .align(Alignment.CenterEnd)
-        )
     }
 }
 

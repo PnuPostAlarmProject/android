@@ -184,7 +184,7 @@ fun TextDescription(){
 @Composable
 fun ImageDescription() {
     Image(
-        painter = painterResource(R.drawable.explain),
+        painter = painterResource(R.drawable.rss_description),
         contentDescription = "explain_subscribe",
         modifier = Modifier
             .padding(10.dp)
