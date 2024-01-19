@@ -13,7 +13,8 @@ private val DarkColorScheme = darkColorScheme(
     surface = Color.White,
     outline = gray4,
     outlineVariant = gray3,
-    primary = gray4
+    primary = gray4,
+    secondary = gray4
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -21,7 +22,8 @@ private val LightColorScheme = lightColorScheme(
     surface = Color.Black,
     outline = gray1,
     outlineVariant = gray4,
-    primary = gray2
+    primary = gray2,
+    secondary = gray2
 )
 
 @Composable
