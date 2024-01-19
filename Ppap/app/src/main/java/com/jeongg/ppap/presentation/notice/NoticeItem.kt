@@ -36,7 +36,7 @@ fun NoticeItem(
 ){
     val urlHandler = LocalUriHandler.current
     var isFilled by remember { mutableStateOf(isBookmarked) }
-    val favorite = if (isFilled) R.drawable.favorite_filled else R.drawable.favorite_empty
+    val favorite = if (isFilled) R.drawable.heart_filled else R.drawable.heart_empty
     Column(
         modifier = Modifier
             .clickable{ urlHandler.openUri(link) }

@@ -125,7 +125,7 @@ fun NoticeListBanner(
 ) {
     val state = rememberPagerState(initialPage = 0) { 3 }
     val colors = listOf(very_bright_yellow, bright_pink, main_green)
-    val images = listOf(R.drawable.pineapple, R.drawable.apple_no_background, R.drawable.pineapple)
+    val images = listOf(R.drawable.pineapple, R.drawable.apple, R.drawable.pineapple)
     val titles = listOf(R.string.banner_title3, R.string.banner_title2, R.string.banner_title1)
     val descriptions = listOf(R.string.banner_description3, R.string.banner_description2, R.string.banner_description1)
     val screens = listOf(Screen.SubscribeScreen.route, Screen.SubscribeAddScreen.route, Screen.ScrapScreen.route)
