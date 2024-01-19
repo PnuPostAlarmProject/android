@@ -6,7 +6,6 @@ import com.jeongg.ppap.domain.usecase.user.Logout
 import com.jeongg.ppap.domain.usecase.user.Withdrawal
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
-import com.jeongg.ppap.util.log
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -51,10 +50,7 @@ class SettingViewModel @Inject constructor(
             }
         }
     }
-    private fun kakaoLogout(){
-        UserApiClient.instance.logout { error ->
-            if (error != null) "로그아웃 실패. SDK에서 토큰 삭제됨".log()
-            else "로그아웃 성공. SDK에서 토큰 삭제됨".log()
-        }
+    private fun kakaoLogout() {
+        UserApiClient.instance.logout {}
     }
 }

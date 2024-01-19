@@ -12,7 +12,6 @@ import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribeById
 import com.jeongg.ppap.domain.usecase.subscribe.UpdateSubscribe
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
-import com.jeongg.ppap.util.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -39,7 +38,6 @@ class SubscribeAddViewModel @Inject constructor(
             subscribeId.longValue = it
         }
         if(subscribeId.longValue >= 0) getSubscribe()
-        "SubscribeId: ${subscribeId.longValue}".log()
     }
 
     fun isUpdate(): Boolean {

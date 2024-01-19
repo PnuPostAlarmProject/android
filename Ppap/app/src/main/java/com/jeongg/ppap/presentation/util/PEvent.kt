@@ -7,7 +7,6 @@ sealed class PEvent{
     object ADD: PEvent()
     object DELETE: PEvent()
     object LOADING: PEvent()
-    object EMPTY: PEvent()
 
     data class ERROR(val message: String): PEvent()
 }

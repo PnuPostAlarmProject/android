@@ -3,24 +3,24 @@ package com.jeongg.ppap.di
 import android.content.Context
 import android.util.Log
 import com.jeongg.ppap.data.api.NoticeApi
+import com.jeongg.ppap.data.api.ScrapApi
+import com.jeongg.ppap.data.api.SubscribeApi
+import com.jeongg.ppap.data.api.UserApi
 import com.jeongg.ppap.data.dto.KakaoLoginDTO
 import com.jeongg.ppap.data.dto.RefreshTokenDTO
 import com.jeongg.ppap.data.repository.NoticeRepositoryImpl
-import com.jeongg.ppap.data.api.ScrapApi
-import com.jeongg.ppap.domain.repository.ScrapRepository
-import com.jeongg.ppap.data.api.SubscribeApi
-import com.jeongg.ppap.domain.repository.SubscribeRepository
-import com.jeongg.ppap.data.api.UserApi
 import com.jeongg.ppap.data.repository.ScrapRepositoryImpl
 import com.jeongg.ppap.data.repository.SubscribeRepositoryImpl
 import com.jeongg.ppap.data.repository.UserRepositoryImpl
-import com.jeongg.ppap.domain.repository.UserRepository
 import com.jeongg.ppap.data.util.ACCESS_TOKEN_KEY
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.data.util.HttpRoutes
 import com.jeongg.ppap.data.util.PDataStore
 import com.jeongg.ppap.data.util.REFRESH_TOKEN_KEY
 import com.jeongg.ppap.domain.repository.NoticeRepository
+import com.jeongg.ppap.domain.repository.ScrapRepository
+import com.jeongg.ppap.domain.repository.SubscribeRepository
+import com.jeongg.ppap.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -103,11 +103,12 @@ class NetworkModule {
                 gzip(0.9F)
             }
             defaultRequest{
-                val accessToken = PDataStore(context).getData(ACCESS_TOKEN_KEY)
                 contentType(ContentType.Application.Json)
+                url(HttpRoutes.BASE_URL)
+
+                val accessToken = PDataStore(context).getData(ACCESS_TOKEN_KEY)
                 if (accessToken.isNotEmpty())
                     headers.appendIfNameAbsent(HttpHeaders.Authorization, accessToken)
-                url(HttpRoutes.BASE_URL)
             }
         }
     }
