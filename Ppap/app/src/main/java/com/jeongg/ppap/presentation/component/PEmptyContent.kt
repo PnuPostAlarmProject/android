@@ -23,23 +23,31 @@ import com.jeongg.ppap.theme.gray3
 fun PEmptyContent(
     modifier: Modifier = Modifier,
     @DrawableRes id: Int = R.drawable.pineapple_gray,
-    message: String = stringResource(R.string.empty_scrap)
+    message: String = stringResource(R.string.empty_subscribes),
+    buttonText: String = "구독 추가하기",
+    onClick: () -> Unit = {}
 ){
     Column(
         modifier = modifier.fillMaxSize().testTag("empty_content"),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically)
     ){
         Image(
             painter = painterResource(id),
             contentDescription = message,
-            modifier = Modifier.width(if (id == R.drawable.pineapple_gray) 100.dp else 60.dp)
+            modifier = Modifier.width(130.dp)
         )
         Text(
             text = message,
             style = MaterialTheme.typography.bodyLarge,
             color = gray3,
             textAlign = TextAlign.Center
+        )
+        PButton(
+            text = buttonText,
+            horizontalPadding = 45.dp,
+            verticalPadding = 3.dp,
+            onClick = onClick
         )
     }
 }
