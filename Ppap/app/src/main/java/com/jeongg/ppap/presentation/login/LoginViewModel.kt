@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val dataStore: PDataStore,
-    private val kakaoLoginUsecase: KakaoLogin,
+    private val kakaoLoginUseCase: KakaoLogin,
 ): ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<PEvent>()
@@ -52,13 +52,14 @@ class LoginViewModel @Inject constructor(
 
     private fun kakaoToServer(accessToken: String, fcmToken: String){
         viewModelScope.launch {
-            kakaoLoginUsecase(accessToken, fcmToken).collect { response ->
+            kakaoLoginUseCase(accessToken, fcmToken).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Success -> _eventFlow.emit(PEvent.NAVIGATE)
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
     }
+
 }
