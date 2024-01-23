@@ -14,12 +14,20 @@ import com.jeongg.ppap.presentation.subscribe.SubscribeScreen
 import com.jeongg.ppap.presentation.subscribe_add.SubscribeAddScreen
 
 fun NavGraphBuilder.ppapGraph(
-    navController: NavController,
-    upPress: () -> Unit
+    navController: NavController
 ){
-    composable(route = Screen.LoginScreen.route){ LoginScreen(navController)}
-    composable(route = Screen.SplashScreen.route){ SplashScreen(navController) }
-    composable(route = Screen.SubscribeScreen.route){ SubscribeScreen(navController, upPress) }
+    composable(
+        route = Screen.LoginScreen.route,
+        content = { LoginScreen(navController) }
+    )
+    composable(
+        route = Screen.SplashScreen.route,
+        content = { SplashScreen(navController) }
+    )
+    composable(
+        route = Screen.SubscribeScreen.route,
+        content = { SubscribeScreen(navController) }
+    )
     composable(
         route = Screen.SubscribeAddScreen.route + "?subscribeId={subscribeId}",
         arguments = listOf(
@@ -27,11 +35,19 @@ fun NavGraphBuilder.ppapGraph(
                 type = NavType.LongType
                 defaultValue = -1L
             },
-        )
-    ){
-        SubscribeAddScreen(navController, upPress)
-    }
-    composable(route = Screen.NoticeListScreen.route){ NoticeListScreen(navController)}
-    composable(route = Screen.ScrapScreen.route){ ScrapScreen(navController, upPress)}
-    composable(route = Screen.SettingScreen.route){ SettingScreen(navController, upPress)}
+        ),
+        content = { SubscribeAddScreen(navController) }
+    )
+    composable(
+        route = Screen.NoticeListScreen.route,
+        content = { NoticeListScreen(navController) }
+    )
+    composable(
+        route = Screen.ScrapScreen.route,
+        content = { ScrapScreen(navController) }
+    )
+    composable(
+        route = Screen.SettingScreen.route,
+        content = { SettingScreen(navController)}
+    )
 }

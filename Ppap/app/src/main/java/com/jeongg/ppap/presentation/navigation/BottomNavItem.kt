@@ -4,12 +4,27 @@ import androidx.annotation.DrawableRes
 import com.jeongg.ppap.R
 
 sealed class BottomNavItem(
-    val text: String,
+    val title: String,
     @DrawableRes val icon: Int,
-    val screen: Screen
+    val screenList: List<Screen>
 ) {
-    object Home: BottomNavItem("홈", R.drawable.home, Screen.NoticeListScreen)
-    object Scrap: BottomNavItem("스크랩", R.drawable.bookmark, Screen.ScrapScreen)
-    object Subscribe: BottomNavItem("구독", R.drawable.subscribe, Screen.SubscribeScreen)
-    object Setting: BottomNavItem("설정", R.drawable.setting, Screen.SettingScreen)
+    object Home: BottomNavItem(
+        title = "홈",
+        icon = R.drawable.home,
+        screenList = listOf(Screen.NoticeListScreen))
+
+    object Scrap: BottomNavItem(
+        title = "스크랩",
+        icon = R.drawable.bookmark,
+        screenList = listOf(Screen.ScrapScreen))
+
+    object Subscribe: BottomNavItem(
+        title = "구독",
+        icon = R.drawable.subscribe,
+        screenList = listOf(Screen.SubscribeScreen, Screen.SubscribeAddScreen))
+
+    object Setting: BottomNavItem(
+        title = "설정",
+        icon = R.drawable.setting,
+        screenList = listOf(Screen.SettingScreen))
 }
