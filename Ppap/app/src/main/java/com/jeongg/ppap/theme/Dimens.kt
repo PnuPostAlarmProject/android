@@ -11,5 +11,5 @@ object Dimens {
     val PaddingNormal: Dp @Composable get() = 30.dp
     val PaddingSmall: Dp @Composable get() = 20.dp
 
-    val ScreenPadding = PaddingValues(30.dp, 30.dp, 30.dp, 0.dp)
+    val ScreenPadding = PaddingValues(20.dp, 20.dp, 20.dp, 0.dp)
 }

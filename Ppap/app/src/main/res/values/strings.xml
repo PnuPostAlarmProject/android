@@ -46,7 +46,9 @@
     <string name="subscribe_button">구독하기</string>
     <string name="subscribe_delete_button">구독 취소하기</string>
     <string name="custom_subscribes">내가 추가한 구독</string>
-    <string name="empty_subscribes">새로 추가한\n공지사항이 없습니다</string>
+    <string name="empty_subscribes">아직 구독 중인\n공지사항이 없어요</string>
     <string name="update_subscribe_button_text">공지사항 수정하기</string>
     <string name="subscribe_add">새로운 구독 추가하기</string>
+    <string name="answer_no">아니요</string>
+    <string name="answer_yes">예</string>
 </resources>
