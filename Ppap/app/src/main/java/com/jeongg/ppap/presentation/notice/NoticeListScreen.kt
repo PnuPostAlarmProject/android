@@ -10,13 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,15 +21,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.jeongg.ppap.R
-import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
+import com.jeongg.ppap.presentation.noticeItem.noticeItemContent
 import com.jeongg.ppap.theme.bright_yellow
 
 
@@ -59,11 +54,13 @@ fun NoticeListScreen(
         PTabLayer(
             tabs = subscribeList,
             selectedTabIndex = selectedTabIndex,
-            contents = { noticeItemContent(contents = contents) },
             onTabClick = { tabIndex ->
-                selectedTabIndex = tabIndex
-                viewModel.getNoticePage(subscribeList[tabIndex].subscribeId)
-            }
+                if (selectedTabIndex != tabIndex){
+                    selectedTabIndex = tabIndex
+                    viewModel.getNoticePage(subscribeList[tabIndex].subscribeId)
+                }
+            },
+            contents = { noticeItemContent(contents = contents) }
         )
     }
 }

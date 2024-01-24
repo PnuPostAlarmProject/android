@@ -19,7 +19,7 @@ import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.notice.noticeItemContent
+import com.jeongg.ppap.presentation.noticeItem.noticeItemContent
 
 @Composable
 fun ScrapScreen(
@@ -34,12 +34,8 @@ fun ScrapScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = "스크랩",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(start = 20.dp, top = 20.dp)
-        )
-        if (viewModel.isEmpty()) {
+        ScrapTitle()
+        if (viewModel.isSubscribeListEmpty()) {
             PEmptyContent(
                 onClick = { navController.navigate(Screen.SubscribeAddScreen.route) }
             )
@@ -48,11 +44,22 @@ fun ScrapScreen(
         PTabLayer(
             tabs = subscribeList,
             selectedTabIndex = selectedTabIndex,
-            contents = { noticeItemContent(contents = contents) },
             onTabClick = { tabIndex ->
-                selectedTabIndex = tabIndex
-                viewModel.getScrapPage(subscribeList[tabIndex].subscribeId)
-            }
+                if (selectedTabIndex != tabIndex) {
+                    selectedTabIndex = tabIndex
+                    viewModel.getScrapPage(subscribeList[tabIndex].subscribeId)
+                }
+            },
+            contents = { noticeItemContent(contents = contents) }
         )
     }
+}
+
+@Composable
+private fun ScrapTitle() {
+    Text(
+        text = "스크랩",
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier.padding(start = 20.dp, top = 20.dp)
+    )
 }
