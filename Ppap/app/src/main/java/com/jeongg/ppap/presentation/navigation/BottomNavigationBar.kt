@@ -1,7 +1,5 @@
 package com.jeongg.ppap.presentation.navigation
 
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,11 +27,14 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import com.jeongg.ppap.util.log
 
 @Composable
-fun BottomNavigationBar(navController: NavController){
+fun BottomNavigationBar(
+    navController: NavController
+){
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     val screens = listOf(
         BottomNavItem.Home,
         BottomNavItem.Scrap,
@@ -50,9 +51,6 @@ fun BottomNavigationBar(navController: NavController){
                 .selectableGroup(),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
         ){
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-
             screens.forEach { screen ->
                 AddItem(
                     bottomNavItem = screen,
@@ -65,33 +63,16 @@ fun BottomNavigationBar(navController: NavController){
 }
 
 @Composable
-fun RowScope.AddItem(
+private fun RowScope.AddItem(
     bottomNavItem: BottomNavItem,
     currentDestination: NavDestination?,
     navController: NavController
 ){
     NavigationBarItem (
-        icon = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painter = painterResource(bottomNavItem.icon),
-                    contentDescription = bottomNavItem.text,
-                    modifier = Modifier.size(30.dp)
-                )
-                Text(
-                    text = bottomNavItem.text,
-                    style = MaterialTheme.typography.labelMedium
-                )
-            }
-        },
-        alwaysShowLabel = false,
-        selected = currentDestination?.hierarchy?.any {
-            it.route == bottomNavItem.screen.route
-        } == true,
+        icon = { NavigationItem(bottomNavItem) },
+        selected = isSelected(currentDestination, bottomNavItem),
         onClick = {
-            navController.navigate(bottomNavItem.screen.route) {
+            navController.navigate(bottomNavItem.screenList.first().route) {
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }
@@ -106,4 +87,33 @@ fun RowScope.AddItem(
         ),
         interactionSource = NoRippleInteractionSource
     )
+}
+
+@Composable
+private fun isSelected(
+    currentDestination: NavDestination?,
+    bottomNavItem: BottomNavItem
+): Boolean {
+    return currentDestination?.hierarchy?.any { navDestination ->
+        // SubscribeAddScreen 의 경우 route에 navArgument가 포함되어있으므로 파싱이 필요함
+        val route = navDestination.route?.split("?")?.get(0) ?: ""
+        bottomNavItem.screenList.map { screen -> screen.route }.contains(route)
+    } == true
+}
+
+@Composable
+private fun NavigationItem(bottomNavItem: BottomNavItem) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(bottomNavItem.icon),
+            contentDescription = bottomNavItem.title,
+            modifier = Modifier.size(30.dp)
+        )
+        Text(
+            text = bottomNavItem.title,
+            style = MaterialTheme.typography.labelMedium
+        )
+    }
 }

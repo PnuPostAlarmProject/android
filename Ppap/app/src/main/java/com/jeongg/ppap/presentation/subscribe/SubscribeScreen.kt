@@ -1,14 +1,9 @@
 package com.jeongg.ppap.presentation.subscribe
 
-import android.widget.Toast
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,62 +14,37 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.PEmptyContent
-import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.theme.Dimens
 import com.jeongg.ppap.theme.gray3
-import com.jeongg.ppap.theme.main_yellow
-import com.jeongg.ppap.presentation.util.PEvent
-import com.jeongg.ppap.util.log
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SubscribeScreen(
     navController: NavController,
-    onUpPress: () -> Unit = {},
     viewModel: SubscribeViewModel = hiltViewModel()
 ){
-    val context = LocalContext.current
-    LaunchedEffect(key1 = true){
-        viewModel.eventFlow.collectLatest{ event ->
-            when(event){
-                is PEvent.GET -> { "구독 목록 조회 성공 in Screen".log() }
-                is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                is PEvent.LOADING -> { "구독 로딩중".log() }
-                else -> { }
-            }
-        }
-    }
-    PTitle(
-        title = stringResource(R.string.subscribe_title),
-        description = stringResource(R.string.subscribe_description),
-        onUpPress = onUpPress
+    LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
+    Column(
+        //title = stringResource(R.string.subscribe_title)
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -85,6 +55,7 @@ fun SubscribeScreen(
                 item {
                     CustomSubscribe(
                         subscribes = viewModel.customSubscribes.value,
+                        onNavigate = { navController.navigate(Screen.SubscribeAddScreen.route) },
                         onDeleteClick = { viewModel.deleteSubscribe(it) },
                         onEditClick = { navController.navigate(it) },
                         onSubscribeClick = { viewModel.updateActive(it) }
@@ -114,6 +85,7 @@ fun SubscribeScreen(
 @Composable
 fun CustomSubscribe(
     subscribes: List<SubscribeGetResponseDTO> = emptyList(),
+    onNavigate: () -> Unit = {},
     onDeleteClick: (Long) -> Unit = {},
     onEditClick: (String) -> Unit = {},
     onSubscribeClick: (Long) -> Unit = {}
@@ -127,7 +99,8 @@ fun CustomSubscribe(
         if (subscribes.isEmpty()){
             PEmptyContent(
                 id = R.drawable.apple_gray, message = stringResource(R.string.empty_subscribes),
-                modifier = Modifier.padding(40.dp)
+                modifier = Modifier.padding(40.dp),
+                onClick = onNavigate
             )
         }
         else {
@@ -135,8 +108,7 @@ fun CustomSubscribe(
                 CustomSubscribeItem(
                     text = it.title,
                     isActive = it.isActive,
-                    onDeleteClick = { onDeleteClick(it.subscribeId) },
-                    onEditClick = { onEditClick(Screen.SubscribeAddScreen.route + "?subscribeId=${it.subscribeId}") },
+                    onConfirmClick = { onDeleteClick(it.subscribeId)},//onEditClick(Screen.SubscribeAddScreen.route + "?subscribeId=${it.subscribeId}") },
                     onSubscribeClick = { onSubscribeClick(it.subscribeId)}
                 )
             }
@@ -148,38 +120,21 @@ fun CustomSubscribe(
 fun CustomSubscribeItem(
     text: String = "최강 정컴 공지",
     isActive: Boolean = true,
-    onDeleteClick: () -> Unit = {},
-    onEditClick: () -> Unit = {},
+    onConfirmClick: () -> Unit = {},
     onSubscribeClick: () -> Unit = {}
 ) {
     val img = if (isActive) R.drawable.checked else R.drawable.unchecked
     val textColor = if (isActive) MaterialTheme.colorScheme.surface else gray3
-    var isDialogOpen by remember { mutableStateOf(false) }
-    if (isDialogOpen){
-        Dialog(
-            onDismissRequest = {isDialogOpen = isDialogOpen.not()}
-        ){
-            PDialog(
-                text = text,
-                onDeleteClick = {
-                    onDeleteClick()
-                    isDialogOpen = isDialogOpen.not()
-                },
-                onEditClick = {
-                    onEditClick()
-                    isDialogOpen = isDialogOpen.not()
-                },
-                onSubscribeClick = {
-                    onSubscribeClick()
-                    isDialogOpen = isDialogOpen.not()
-                },
-                isActive = isActive
-            )
-        }
-    }
+    val isDialogOpen = remember { mutableStateOf(false) }
+
+    PDialog(
+        text = text,
+        onConfirmClick = {onConfirmClick()},
+        isOpen = isDialogOpen
+    )
     Box(
         modifier = Modifier
-            .clickable { isDialogOpen = isDialogOpen.not() }
+            .clickable { isDialogOpen.value = true }
             .padding(15.dp)
             .fillMaxWidth()
     ){

@@ -36,10 +36,7 @@ fun PpapAppTheme(){
                     navController = navController,
                     startDestination = Screen.SplashScreen.route
                 ){
-                    ppapGraph(
-                        navController = navController,
-                        upPress = { navController.popBackStack() }
-                    )
+                    ppapGraph(navController = navController)
                 }
             }
         }

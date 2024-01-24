@@ -1,6 +1,5 @@
 package com.jeongg.ppap.presentation.setting
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,72 +18,44 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
+import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PDialog
-import com.jeongg.ppap.presentation.component.PTitle
 import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.theme.Dimens
 import com.jeongg.ppap.theme.bright_pink
-import com.jeongg.ppap.presentation.util.PEvent
-import com.jeongg.ppap.util.log
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SettingScreen(
     navController: NavController,
-    onUpPress: () -> Unit = {},
     viewModel: SettingViewModel = hiltViewModel()
 ){
-    val context = LocalContext.current
-    var isDialogOpen by remember { mutableIntStateOf(0) }
-    LaunchedEffect(key1 = true){
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                is PEvent.SUCCESS -> { navController.navigate(Screen.LoginScreen.route) }
-                is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                else -> { "로딩중".log() }
-            }
-        }
-    }
-    if (isDialogOpen > 0) {
-        Dialog(
-            onDismissRequest = { isDialogOpen = 0 }
-        ) {
-            val text =  if(isDialogOpen == 1) "로그아웃 하시겠습니까?" else "정말로 회원탈퇴를 계속하시겠습니까?"
-            val okText =  if(isDialogOpen == 1) "로그아웃" else "회원탈퇴"
-            PDialog(
-                text = text,
-                cancelText = "취소하기",
-                okText = okText,
-                onDeleteClick = { isDialogOpen = 0 },
-                onEditClick = {
-                    if (isDialogOpen == 1) viewModel.logout()
-                    else viewModel.withdrawl()
-                },
-                isSubscribe = false
-            )
-        }
-    }
-    PTitle(
-        title = stringResource(R.string.setting_title),
-        onUpPress = onUpPress
+    val isDialogOpen = remember { mutableStateOf(false) }
+
+    LaunchedEffectEvent(
+        eventFlow = viewModel.eventFlow,
+        onNavigate = { navController.navigate(Screen.LoginScreen.route) }
+    )
+
+    PDialog(
+        text = "로그아웃 하시겠습니까?",
+        onConfirmClick = { viewModel.logout() },
+        isOpen = isDialogOpen,
+    )
+    Column(
+        //title = stringResource(R.string.setting_title),
     ){
         DescriptionScreen()
         LazyColumn(
@@ -109,8 +80,8 @@ fun SettingScreen(
             }
             item {
                 MyPageScreen(
-                    onLogOut = {isDialogOpen = 1},
-                    onWithdraw = {isDialogOpen = 2}
+                    onLogOut = {isDialogOpen.value = true},
+                    onWithdraw = {isDialogOpen.value = true}
                 )
             }
         }

@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.jeongg.ppap.data.dto.NoticeDTO
-import com.jeongg.ppap.data.dto.SubscribeDTO
+import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.domain.usecase.notice.GetNoticeList
 import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap
 import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
+import com.jeongg.ppap.presentation.mapper.NoticeItemMapper
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,10 +28,11 @@ class NoticeViewModel  @Inject constructor(
     private val addScrapUseCase: AddScrap,
     private val deleteScrapUseCase: DeleteScrap
 ): ViewModel() {
+
     private val _subscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
     val subscribes = _subscribes
 
-    private val _contents: Flow<PagingData<NoticeDTO>> = flow{}
+    private val _contents: Flow<PagingData<NoticeItemDTO>> = flow{}
     var contents = _contents
 
     private val _eventFlow = MutableSharedFlow<PEvent>()
@@ -39,14 +40,26 @@ class NoticeViewModel  @Inject constructor(
 
     init {
         getNoticePage(null)
+        getSubscribes()
     }
 
-    fun isEmptyList(): Boolean{
+    fun isEmpty(): Boolean {
         return subscribes.value.isEmpty()
     }
 
     fun getNoticePage(subscribeId: Long?){
-        contents = getNoticeListUseCase(subscribeId).cachedIn(viewModelScope)
+        contents = NoticeItemMapper().noticeToNoticeItem(
+            noticePagingData = getNoticeListUseCase(subscribeId).cachedIn(viewModelScope),
+            scrapEvent = { isScraped, contentId -> scrapEvent(isScraped, contentId) }
+        )
+    }
+
+    private fun scrapEvent(isScraped: Boolean = false, contentId: Long = 0){
+        if (isScraped) deleteScrap(contentId)
+        else addScrap(contentId)
+    }
+
+    private fun getSubscribes(){
         viewModelScope.launch {
             getSubscribesUseCase().collect { response ->
                 when(response){
@@ -55,14 +68,10 @@ class NoticeViewModel  @Inject constructor(
                         _subscribes.value = response.data ?: emptyList()
                         _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
-    }
-    fun scrapEvent(isScraped: Boolean = false, contentId: Long = 0){
-        if (isScraped) deleteScrap(contentId)
-        else addScrap(contentId)
     }
 
     private fun addScrap(contentId: Long){
@@ -70,8 +79,8 @@ class NoticeViewModel  @Inject constructor(
             addScrapUseCase(contentId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.ADD)
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
@@ -81,8 +90,8 @@ class NoticeViewModel  @Inject constructor(
             deleteScrapUseCase(contentId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.DELETE)
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }

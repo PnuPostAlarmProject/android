@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
+import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PTextField
 import com.jeongg.ppap.presentation.component.PTitle
@@ -52,28 +53,18 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SubscribeAddScreen(
     navController: NavController,
-    onUpPress: () -> Unit = {},
     viewModel: SubscribeAddViewModel = hiltViewModel()
 ){
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    LaunchedEffect(key1 = true){
-        viewModel.eventFlow.collectLatest{ event ->
-            when(event){
-                is PEvent.GET -> { "구독 목록 조회 성공 in Screen".log() }
-                is PEvent.UPDATE, PEvent.ADD -> {
-                    navController.navigate(Screen.SubscribeScreen.route)
-                }
-                is PEvent.ERROR -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                else -> { "구독 로딩중".log() }
-            }
-        }
-    }
-    PTitle(
+
+    LaunchedEffectEvent(
+        eventFlow = viewModel.eventFlow,
+        onNavigate = { navController.navigate(Screen.SubscribeScreen.route) }
+    )
+    Column(
         modifier = Modifier.addFocusCleaner(focusManager),
-        title = stringResource(if (viewModel.isUpdate()) R.string.update_subscribe_title else R.string.add_subscribe_title),
-        description = stringResource(R.string.add_subscribe_description),
-        onUpPress = onUpPress
+        //title = stringResource(if (viewModel.isUpdate()) R.string.update_subscribe_title else R.string.add_subscribe_title),
     ){
         LazyColumn {
             item { PHorizontalPager() }
@@ -81,8 +72,6 @@ fun SubscribeAddScreen(
                 PTextFields(
                     title = viewModel.subscribe.value.title,
                     onTitleChange = { viewModel.onEvent(SubscribeAddEvent.EnteredTitle(it)) },
-                    notice = viewModel.subscribe.value.noticeLink,
-                    onNoticeChange = { viewModel.onEvent(SubscribeAddEvent.EnteredNoticeLink(it)) },
                     rss = viewModel.subscribe.value.rssLink,
                     onRssChange = { viewModel.onEvent(SubscribeAddEvent.EnteredRssLink(it)) },
                     enabled = !viewModel.isUpdate()
@@ -101,8 +90,6 @@ fun SubscribeAddScreen(
 fun PTextFields(
     title: String = "",
     onTitleChange: (String) -> Unit = {},
-    notice: String? = "",
-    onNoticeChange: (String) -> Unit = {},
     rss: String = "",
     onRssChange: (String) -> Unit = {},
     enabled: Boolean = false
@@ -118,17 +105,6 @@ fun PTextFields(
             text = title,
             onValueChange = onTitleChange,
             placeholder = stringResource(R.string.subscribe_field_title_hint)
-        )
-
-        Text(
-            text = stringResource(R.string.subscribe_field_link),
-            style = typography.displayLarge,
-            modifier = Modifier.padding(top = 20.dp, bottom = 5.dp)
-        )
-        PTextField(
-            text = notice ?: "",
-            onValueChange = onNoticeChange,
-            placeholder = stringResource(R.string.subscribe_field_link_hint)
         )
 
         if (enabled) {

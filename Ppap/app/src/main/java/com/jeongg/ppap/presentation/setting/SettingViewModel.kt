@@ -29,9 +29,9 @@ class SettingViewModel @Inject constructor(
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
                     is Resource.Success -> {
                         kakaoLogout()
-                        _eventFlow.emit(PEvent.SUCCESS)
+                        _eventFlow.emit(PEvent.NAVIGATE)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
@@ -43,9 +43,9 @@ class SettingViewModel @Inject constructor(
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
                     is Resource.Success -> {
                         kakaoLogout()
-                        _eventFlow.emit(PEvent.SUCCESS)
+                        _eventFlow.emit(PEvent.NAVIGATE)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }

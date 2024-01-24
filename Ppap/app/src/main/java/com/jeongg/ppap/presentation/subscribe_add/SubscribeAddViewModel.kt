@@ -51,11 +51,6 @@ class SubscribeAddViewModel @Inject constructor(
                     title = event.title
                 )
             }
-            is SubscribeAddEvent.EnteredNoticeLink -> {
-                _subscribe.value = _subscribe.value.copy(
-                    noticeLink = event.notice?.ifBlank { null }
-                )
-            }
             is SubscribeAddEvent.EnteredRssLink -> {
                 _subscribe.value = _subscribe.value.copy(
                     rssLink = event.rss
@@ -70,14 +65,14 @@ class SubscribeAddViewModel @Inject constructor(
     private fun saveSubscribe(){
         viewModelScope.launch {
             if (subscribe.value.title.isEmpty() || subscribe.value.rssLink.isEmpty()){
-                _eventFlow.emit(PEvent.ERROR("제목과 rss 링크는 비어있으면 안됩니다."))
+                _eventFlow.emit(PEvent.TOAST("제목과 rss 링크는 비어있으면 안됩니다."))
                 return@launch
             }
             createSubscribeUseCase(subscribe.value).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.ADD)
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Success -> _eventFlow.emit(PEvent.NAVIGATE)
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
@@ -86,7 +81,7 @@ class SubscribeAddViewModel @Inject constructor(
     private fun updateSubscribe(){
         viewModelScope.launch {
             if (subscribe.value.title.isEmpty()){
-                _eventFlow.emit(PEvent.ERROR("제목은 비어있으면 안됩니다."))
+                _eventFlow.emit(PEvent.TOAST("제목은 비어있으면 안됩니다."))
                 return@launch
             }
             updateSubscribeUseCase(
@@ -98,8 +93,8 @@ class SubscribeAddViewModel @Inject constructor(
             ).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.ADD)
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Success -> _eventFlow.emit(PEvent.NAVIGATE)
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
@@ -116,9 +111,9 @@ class SubscribeAddViewModel @Inject constructor(
                             noticeLink = response.data?.noticeLink ?: "",
                             rssLink = response.data?.rssLink ?: ""
                         )
-                        _eventFlow.emit(PEvent.GET)
+                        _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }

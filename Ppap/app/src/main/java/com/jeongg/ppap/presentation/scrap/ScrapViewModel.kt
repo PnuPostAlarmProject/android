@@ -5,19 +5,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
+import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.data.dto.ScrapDTO
-import com.jeongg.ppap.data.dto.SubscribeDTO
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap
 import com.jeongg.ppap.domain.usecase.scrap.GetScrapList
 import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
+import com.jeongg.ppap.presentation.mapper.NoticeItemMapper
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,27 +34,34 @@ class ScrapViewModel @Inject constructor(
     private val _subscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
     val subscribes = _subscribes
 
-    private val _contents: Flow<PagingData<ScrapDTO>> = flow{}
+    private val _contents: Flow<PagingData<NoticeItemDTO>> = flow{}
     var contents = _contents
 
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
 
     init {
-        getScrapList(null)
+        getScrapPage(null)
+        getSubscribes()
     }
 
-    fun isEmptyList(): Boolean{
+    fun isSubscribeListEmpty(): Boolean {
         return subscribes.value.isEmpty()
     }
 
-    fun scrapEvent(isScraped: Boolean = false, contentId: Long = 0){
+    fun getScrapPage(subscribeId: Long?){
+        contents = NoticeItemMapper().scrapToNoticeItem(
+            scrapPagingData = getScrapListUseCase(subscribeId).cachedIn(viewModelScope),
+            scrapEvent = { isScraped, contentId -> scrapEvent(isScraped, contentId) }
+        )
+    }
+
+    private fun scrapEvent(isScraped: Boolean = false, contentId: Long = 0){
         if (isScraped) deleteScrap(contentId)
         else addScrap(contentId)
     }
 
-    fun getScrapList(subscribeId: Long?) {
-        contents = getScrapListUseCase(subscribeId).cachedIn(viewModelScope)
+    private fun getSubscribes(){
         viewModelScope.launch {
             getSubscribesUseCase().collect { response ->
                 when(response){
@@ -60,7 +70,7 @@ class ScrapViewModel @Inject constructor(
                         _subscribes.value = response.data ?: emptyList()
                         _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
@@ -71,19 +81,20 @@ class ScrapViewModel @Inject constructor(
             addScrapUseCase(contentId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.ADD)
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
     }
+
     private fun deleteScrap(contentId: Long){
         viewModelScope.launch{
             deleteScrapUseCase(contentId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.DELETE)
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }

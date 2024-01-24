@@ -40,7 +40,7 @@ class SubscribeViewModel @Inject constructor(
                         getSubscribes()
                         _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
@@ -52,9 +52,9 @@ class SubscribeViewModel @Inject constructor(
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
                     is Resource.Success -> {
                         getSubscribes()
-                        _eventFlow.emit(PEvent.DELETE)
+                        _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
@@ -66,9 +66,9 @@ class SubscribeViewModel @Inject constructor(
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
                     is Resource.Success -> {
                         _customSubscribes.value = response.data ?: emptyList()
-                        _eventFlow.emit(PEvent.GET)
+                        _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.ERROR(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }

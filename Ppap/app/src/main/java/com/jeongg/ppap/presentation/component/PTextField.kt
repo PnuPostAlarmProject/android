@@ -1,6 +1,5 @@
 package com.jeongg.ppap.presentation.component
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +16,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
 import com.jeongg.ppap.theme.gray3
 import com.jeongg.ppap.theme.typography
 
@@ -28,8 +28,6 @@ fun PTextField(
     placeholder: String = "힌트"
 ){
     val focusRequester = remember { FocusRequester() }
-    val interactionSource = remember { MutableInteractionSource() }
-
     BasicTextField(
         value = text,
         onValueChange = onValueChange,
@@ -44,32 +42,39 @@ fun PTextField(
             innerTextField = it,
             enabled = true,
             singleLine = false,
-            interactionSource = interactionSource,
+            interactionSource = NoRippleInteractionSource,
             visualTransformation = VisualTransformation.None,
-            placeholder = {
-                Text(
-                    text = placeholder,
-                    style = typography.bodyMedium,
-                    color = gray3,
-                )
-            },
+            placeholder = { TextFieldPlaceHolder(placeholder) },
             contentPadding = PaddingValues(10.dp),
-            container = {
-                TextFieldDefaults.OutlinedBorderContainerBox(
-                    enabled = true,
-                    isError = false,
-                    interactionSource = interactionSource,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.Black,
-                        containerColor = Color.White,
-                        placeholderColor = gray3,
-                        unfocusedBorderColor = gray3,
-                        focusedBorderColor = Color.Black,
-                    ),
-                    shape = MaterialTheme.shapes.small,
-                )
-            }
+            container = { TextFieldOutlineBorder() }
         )
     }
 
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun TextFieldOutlineBorder() {
+    TextFieldDefaults.OutlinedBorderContainerBox(
+        enabled = true,
+        isError = false,
+        interactionSource = NoRippleInteractionSource,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = Color.Black,
+            containerColor = Color.White,
+            placeholderColor = gray3,
+            unfocusedBorderColor = gray3,
+            focusedBorderColor = Color.Black,
+        ),
+        shape = MaterialTheme.shapes.small,
+    )
+}
+
+@Composable
+private fun TextFieldPlaceHolder(placeholder: String) {
+    Text(
+        text = placeholder,
+        style = typography.bodyMedium,
+        color = gray3,
+    )
 }
