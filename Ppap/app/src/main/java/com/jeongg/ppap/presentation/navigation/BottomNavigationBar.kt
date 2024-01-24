@@ -70,10 +70,7 @@ private fun RowScope.AddItem(
 ){
     NavigationBarItem (
         icon = { NavigationItem(bottomNavItem) },
-        selected = currentDestination?.hierarchy?.any { navDestination ->
-            val route = navDestination.route?.split("?")?.get(0) ?: ""
-            bottomNavItem.screenList.map { screen -> screen.route }.contains(route)
-        } == true,
+        selected = isSelected(currentDestination, bottomNavItem),
         onClick = {
             navController.navigate(bottomNavItem.screenList.first().route) {
                 popUpTo(navController.graph.findStartDestination().id) {
@@ -90,6 +87,18 @@ private fun RowScope.AddItem(
         ),
         interactionSource = NoRippleInteractionSource
     )
+}
+
+@Composable
+private fun isSelected(
+    currentDestination: NavDestination?,
+    bottomNavItem: BottomNavItem
+): Boolean {
+    return currentDestination?.hierarchy?.any { navDestination ->
+        // SubscribeAddScreen 의 경우 route에 navArgument가 포함되어있으므로 파싱이 필요함
+        val route = navDestination.route?.split("?")?.get(0) ?: ""
+        bottomNavItem.screenList.map { screen -> screen.route }.contains(route)
+    } == true
 }
 
 @Composable

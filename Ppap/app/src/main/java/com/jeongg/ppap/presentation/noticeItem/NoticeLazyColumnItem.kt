@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.notice
+package com.jeongg.ppap.presentation.noticeItem
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.mutableStateOf

@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -48,18 +49,18 @@ fun PDialog(
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black
             )
-            DialogButton(cancelText, isOpen, onCancelClick, confirmText, onConfirmClick)
+            DialogButton(isOpen,cancelText, confirmText, onCancelClick, onConfirmClick)
         }
     }
 }
 
 @Composable
 private fun DialogButton(
-    cancelText: String,
-    isOpen: MutableState<Boolean>,
-    onCancelClick: () -> Unit,
-    confirmText: String,
-    onConfirmClick: () -> Unit
+    isOpen: MutableState<Boolean> = mutableStateOf(false),
+    cancelText: String = "",
+    confirmText: String = "",
+    onCancelClick: () -> Unit = {},
+    onConfirmClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier

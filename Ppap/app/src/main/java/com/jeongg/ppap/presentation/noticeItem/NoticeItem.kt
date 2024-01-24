@@ -1,7 +1,6 @@
-package com.jeongg.ppap.presentation.notice
+package com.jeongg.ppap.presentation.noticeItem
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import com.jeongg.ppap.R
 import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.noRippleClickable
-import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
 import com.jeongg.ppap.theme.gray3
 
 @Composable

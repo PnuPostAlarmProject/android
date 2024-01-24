@@ -14,9 +14,9 @@ class SubscribeApi(
     private val client: HttpClient
 ): SubscribeRepository {
 
-    override suspend fun createSubscribe(subscribeCreateRequestDTO: SubscribeCreateRequestDTO): HttpResponse {
+    override suspend fun createSubscribe(requestDTO: SubscribeCreateRequestDTO): HttpResponse {
         return client.post(HttpRoutes.CREATE_SUBSCRIBE){
-            setBody(subscribeCreateRequestDTO)
+            setBody(requestDTO)
         }
     }
 
@@ -28,9 +28,9 @@ class SubscribeApi(
         return client.get(HttpRoutes.GET_SUBSCRIBE + "/$subscribeId")
     }
 
-    override suspend fun updateSubscribe(subscribeId: Long, subscribeUpdateRequestDTO: SubscribeUpdateRequestDTO): HttpResponse{
+    override suspend fun updateSubscribe(subscribeId: Long, requestDTO: SubscribeUpdateRequestDTO): HttpResponse{
         return client.post(HttpRoutes.UPDATE_SUBSCRIBE + "/$subscribeId"){
-            setBody(subscribeUpdateRequestDTO)
+            setBody(requestDTO)
         }
     }
 

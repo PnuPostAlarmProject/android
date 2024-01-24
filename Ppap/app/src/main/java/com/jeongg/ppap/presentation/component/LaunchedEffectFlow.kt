@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import com.jeongg.ppap.presentation.util.PEvent
-import com.jeongg.ppap.util.log
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -20,8 +19,7 @@ fun LaunchedEffectEvent(
             when (event) {
                 is PEvent.NAVIGATE -> onNavigate()
                 is PEvent.TOAST -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                is PEvent.LOADING -> { "로딩중".log() }
-                is PEvent.SUCCESS -> { }
+                is PEvent.LOADING, PEvent.SUCCESS -> { }
             }
         }
     }
