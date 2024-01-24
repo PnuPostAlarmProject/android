@@ -5,21 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.jeongg.ppap.data.dto.NoticeDTO
 import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.domain.usecase.notice.GetNoticeList
 import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap
 import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
+import com.jeongg.ppap.presentation.mapper.NoticeItemMapper
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +28,7 @@ class NoticeViewModel  @Inject constructor(
     private val addScrapUseCase: AddScrap,
     private val deleteScrapUseCase: DeleteScrap
 ): ViewModel() {
+
     private val _subscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
     val subscribes = _subscribes
 
@@ -49,22 +48,11 @@ class NoticeViewModel  @Inject constructor(
     }
 
     fun getNoticePage(subscribeId: Long?){
-        contents = getNoticeListUseCase(subscribeId)
-            .cachedIn(viewModelScope)
-            .map { noticeMapping(it) }
+        contents = NoticeItemMapper().noticeToNoticeItem(
+            noticePagingData = getNoticeListUseCase(subscribeId).cachedIn(viewModelScope),
+            scrapEvent = { isScraped, contentId -> scrapEvent(isScraped, contentId) }
+        )
     }
-
-    private fun noticeMapping(noticeDTO: PagingData<NoticeDTO>) =
-        noticeDTO.map { notice ->
-            NoticeItemDTO(
-                contentId = notice.contentId,
-                title = notice.title,
-                date = notice.pubDate.date.toString(),
-                link = notice.link,
-                isScraped = notice.isScraped,
-                onScrapClick = { scrapEvent(notice.isScraped, notice.contentId) }
-            )
-        }
 
     private fun scrapEvent(isScraped: Boolean = false, contentId: Long = 0){
         if (isScraped) deleteScrap(contentId)

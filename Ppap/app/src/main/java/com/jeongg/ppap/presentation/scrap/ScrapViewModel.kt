@@ -13,6 +13,7 @@ import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap
 import com.jeongg.ppap.domain.usecase.scrap.GetScrapList
 import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
+import com.jeongg.ppap.presentation.mapper.NoticeItemMapper
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,27 +45,16 @@ class ScrapViewModel @Inject constructor(
         getSubscribes()
     }
 
-    fun isEmpty(): Boolean {
+    fun isSubscribeListEmpty(): Boolean {
         return subscribes.value.isEmpty()
     }
 
     fun getScrapPage(subscribeId: Long?){
-        contents = getScrapListUseCase(subscribeId)
-            .cachedIn(viewModelScope)
-            .map { scrapMapping(it) }
+        contents = NoticeItemMapper().scrapToNoticeItem(
+            scrapPagingData = getScrapListUseCase(subscribeId).cachedIn(viewModelScope),
+            scrapEvent = { isScraped, contentId -> scrapEvent(isScraped, contentId) }
+        )
     }
-
-    private fun scrapMapping(scrapDTO: PagingData<ScrapDTO>) =
-        scrapDTO.map { scrap ->
-            NoticeItemDTO(
-                contentId = scrap.contentId,
-                title = scrap.contentTitle,
-                date = scrap.pubDate.date.toString(),
-                link = scrap.link,
-                isScraped = scrap.isScrap,
-                onScrapClick = { scrapEvent(scrap.isScrap, scrap.contentId) }
-            )
-        }
 
     private fun scrapEvent(isScraped: Boolean = false, contentId: Long = 0){
         if (isScraped) deleteScrap(contentId)
@@ -97,6 +87,7 @@ class ScrapViewModel @Inject constructor(
             }
         }
     }
+
     private fun deleteScrap(contentId: Long){
         viewModelScope.launch{
             deleteScrapUseCase(contentId).collect { response ->
