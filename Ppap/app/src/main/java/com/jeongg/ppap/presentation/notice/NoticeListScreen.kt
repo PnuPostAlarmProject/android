@@ -68,16 +68,15 @@ fun NoticeListScreen(
 @Composable
 private fun NoticeListTitle() {
     Row(
-        modifier = Modifier
-            .background(bright_yellow)
-            .fillMaxWidth()
-            .height(44.dp),
+        modifier = Modifier.padding(top = 5.dp).height(40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(R.drawable.name_white),
+            painter = painterResource(R.drawable.name_yellow),
             contentDescription = "ppap logo",
-            modifier = Modifier.padding(start = 20.dp, end = 7.dp).width(46.dp)
+            modifier = Modifier
+                .padding(start = 20.dp, end = 7.dp)
+                .width(60.dp)
         )
         Image(
             painter = painterResource(R.drawable.apple),
