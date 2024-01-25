@@ -1,7 +1,9 @@
 package com.jeongg.ppap.presentation.setting
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jeongg.ppap.BuildConfig
 import com.jeongg.ppap.domain.usecase.user.Logout
 import com.jeongg.ppap.domain.usecase.user.Withdrawal
 import com.jeongg.ppap.presentation.util.PEvent
@@ -21,6 +23,15 @@ class SettingViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    private val _email = mutableStateOf("")
+    val email = _email
+
+    val version = BuildConfig.VERSION_NAME
+
+    init {
+        getUserEmail()
+    }
 
     fun logout(){
         viewModelScope.launch {
@@ -47,6 +58,13 @@ class SettingViewModel @Inject constructor(
                     }
                     is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
+            }
+        }
+    }
+    private fun getUserEmail(){
+        UserApiClient.instance.me { user, error ->
+            if (error == null && user != null){
+                _email.value = user.kakaoAccount?.email ?: "이메일을 확인할 수 없습니다."
             }
         }
     }
