@@ -36,10 +36,7 @@ class SubscribeViewModel @Inject constructor(
             updateActiveUseCase(subscribeId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> {
-                        getSubscribes()
-                        _eventFlow.emit(PEvent.SUCCESS)
-                    }
+                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
                     is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
