@@ -27,7 +27,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
-import com.jeongg.ppap.util.log
 
 @Composable
 fun BottomNavigationBar(
@@ -41,6 +40,7 @@ fun BottomNavigationBar(
         BottomNavItem.Subscribe,
         BottomNavItem.Setting
     )
+    if (shouldNotShowBottomNavigation(navController)) return
     Column {
         PDivider()
         Row(
@@ -60,6 +60,15 @@ fun BottomNavigationBar(
             }
         }
     }
+}
+
+@Composable
+private fun shouldNotShowBottomNavigation(
+    navController: NavController
+): Boolean {
+    val shouldNotShown = listOf(Screen.LoginScreen.route, Screen.SplashScreen.route)
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    return currentRoute in shouldNotShown
 }
 
 @Composable
