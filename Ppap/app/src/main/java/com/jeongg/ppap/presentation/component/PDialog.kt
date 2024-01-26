@@ -15,11 +15,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.jeongg.ppap.R
 import com.jeongg.ppap.theme.Dimens
 import com.jeongg.ppap.theme.gray1
 
@@ -27,10 +25,7 @@ import com.jeongg.ppap.theme.gray1
 fun PDialog(
     text: String = "",
     isOpen: MutableState<Boolean>,
-    confirmText: String = stringResource(R.string.answer_yes),
-    cancelText: String = stringResource(R.string.answer_no),
     onConfirmClick: () -> Unit = {},
-    onCancelClick: () -> Unit = {},
 ){
     if(isOpen.value.not()) return
     Dialog(
@@ -49,7 +44,7 @@ fun PDialog(
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black
             )
-            DialogButton(isOpen,cancelText, confirmText, onCancelClick, onConfirmClick)
+            DialogButton(isOpen, onConfirmClick)
         }
     }
 }
@@ -57,9 +52,6 @@ fun PDialog(
 @Composable
 private fun DialogButton(
     isOpen: MutableState<Boolean> = mutableStateOf(false),
-    cancelText: String = "",
-    confirmText: String = "",
-    onCancelClick: () -> Unit = {},
     onConfirmClick: () -> Unit = {}
 ) {
     Row(
@@ -70,15 +62,12 @@ private fun DialogButton(
     ) {
         MiniButton(
             modifier = Modifier.weight(1f),
-            text = cancelText,
-            onClick = {
-                isOpen.value = false
-                onCancelClick()
-            }
+            text = "아니요",
+            onClick = { isOpen.value = false }
         )
         MiniButton(
             modifier = Modifier.weight(1f),
-            text = confirmText,
+            text = "예",
             onClick = {
                 isOpen.value = false
                 onConfirmClick()
@@ -95,6 +84,8 @@ private fun MiniButton(
 ){
     Text(
         text = text,
+        color = Color.Black,
+        textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleSmall,
         modifier = modifier
             .clip(MaterialTheme.shapes.extraSmall)
@@ -102,7 +93,5 @@ private fun MiniButton(
             .noRippleClickable(onClick = onClick)
             .fillMaxWidth()
             .padding(vertical = 10.dp),
-        color = Color.Black,
-        textAlign = TextAlign.Center
     )
 }
