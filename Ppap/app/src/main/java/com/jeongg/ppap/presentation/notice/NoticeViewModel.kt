@@ -55,7 +55,7 @@ class NoticeViewModel  @Inject constructor(
         )
     }
 
-    private fun scrapEvent(isScraped: MutableState<Boolean>, contentId: Long ){
+    private fun scrapEvent(isScraped: MutableState<Boolean>, contentId: Long){
         if (isScraped.value) deleteScrap(isScraped, contentId)
         else addScrap(isScraped, contentId)
     }
@@ -75,7 +75,7 @@ class NoticeViewModel  @Inject constructor(
         }
     }
 
-    private fun addScrap(isScraped: MutableState<Boolean>, contentId: Long ){
+    private fun addScrap(isScraped: MutableState<Boolean>, contentId: Long){
         viewModelScope.launch{
             addScrapUseCase(contentId).collect { response ->
                 when(response){
@@ -89,7 +89,7 @@ class NoticeViewModel  @Inject constructor(
             }
         }
     }
-    private fun deleteScrap(isScraped: MutableState<Boolean>, contentId: Long ){
+    private fun deleteScrap(isScraped: MutableState<Boolean>, contentId: Long){
         viewModelScope.launch{
             deleteScrapUseCase(contentId).collect { response ->
                 when(response){

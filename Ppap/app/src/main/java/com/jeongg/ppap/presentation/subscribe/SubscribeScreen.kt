@@ -28,12 +28,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
@@ -68,7 +66,7 @@ fun SubscribeScreen(
                 subscribe = subscribe,
                 onDeleteClick = { viewModel.deleteSubscribe(subscribe.subscribeId) },
                 onUpdateClick = { navController.navigate(route) },
-                onAlarmClick = { viewModel.updateActive(subscribe.subscribeId) }
+                onAlarmClick = { viewModel.updateActive(subscribe.subscribeId, it) }
             )
         }
         item {
@@ -132,7 +130,7 @@ private fun SubscribeItem(
     subscribe: SubscribeGetResponseDTO,
     onDeleteClick: () -> Unit = {},
     onUpdateClick: () -> Unit = {},
-    onAlarmClick: () -> Unit = {}
+    onAlarmClick: (MutableState<Boolean>) -> Unit = {}
 ) {
     val isActive = rememberSaveable { mutableStateOf(subscribe.isActive) }
     val img = if (isActive.value) R.drawable.subscribe_button
@@ -144,15 +142,12 @@ private fun SubscribeItem(
         subscribeTitle = subscribe.title,
         onDeleteClick = onDeleteClick,
         onUpdateClick = onUpdateClick,
-        onAlarmClick = {
-            onAlarmClick()
-            isActive.value = isActive.value.not()
-        }
+        onAlarmClick = { onAlarmClick(isActive) }
     )
     Box(
         modifier = Modifier
             .clip(MaterialTheme.shapes.large)
-            .border(1.dp, gray1, MaterialTheme.shapes.large)
+            .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.large)
             .noRippleClickable { isBottomSheet.value = true }
             .fillMaxWidth()
             .padding(13.dp)
@@ -232,10 +227,6 @@ private fun ModalBottomSheetContent(
     BottomSheetText(
         text = "구독 삭제하기",
         onClick = { isDialogOpen.value = true }
-    )
-    BottomSheetText(
-        text = "취소하기",
-        onClick = { isBottomSheet.value = false }
     )
 }
 

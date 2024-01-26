@@ -1,5 +1,6 @@
 package com.jeongg.ppap.presentation.subscribe
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,12 +32,15 @@ class SubscribeViewModel @Inject constructor(
         getSubscribes()
     }
 
-    fun updateActive(subscribeId: Long){
+    fun updateActive(subscribeId: Long, isActive: MutableState<Boolean>){
         viewModelScope.launch{
             updateActiveUseCase(subscribeId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
+                    is Resource.Success -> {
+                        isActive.value = isActive.value.not()
+                        _eventFlow.emit(PEvent.SUCCESS)
+                    }
                     is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
