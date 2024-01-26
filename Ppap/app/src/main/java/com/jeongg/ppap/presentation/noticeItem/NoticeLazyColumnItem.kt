@@ -2,6 +2,7 @@ package com.jeongg.ppap.presentation.noticeItem
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
@@ -14,11 +15,6 @@ fun LazyListScope.noticeItemContent(
         count = contents.itemCount,
         key = contents.itemKey { it.contentId }
     ) { index ->
-        val items = contents[index]
-        val isBookmarked = rememberSaveable { mutableStateOf(items?.isScraped ?: false) }
-        NoticeItem(
-            isBookmarked = isBookmarked,
-            noticeItemDTO = items ?: NoticeItemDTO()
-        )
+        NoticeItem(noticeItemDTO = contents[index] ?: NoticeItemDTO())
     }
 }

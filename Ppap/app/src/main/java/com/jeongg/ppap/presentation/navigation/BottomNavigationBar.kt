@@ -74,7 +74,7 @@ private fun RowScope.AddItem(
         onClick = {
             navController.navigate(bottomNavItem.screenList.first().route) {
                 popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                    saveState = false
                 }
                 launchSingleTop = true
                 restoreState = true
