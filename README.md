@@ -1,6 +1,9 @@
 # PPAP (Pnu Post Alarm Project)
 부산대학교 학과 게시판의 공지사항을 알림으로 받아보고 한눈에 모아볼 수 있는 서비스입니다.
 
+<p align="center"><img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/61db8d01-2c0f-4733-8172-539e349f0c78" width = "700px" alt = "introduction"></p>
+
+
 ## Introduction of PPAP
 ### 🤔 Why?
 > 부산대학교 학생들은 졸업, 장학, 수업 등 중요한 정보를 얻기 위해 학과 게시판을 주로 이용합니다.
@@ -12,8 +15,6 @@
 **PPAP는 다음과 같은 두 가지 욕구를 만족하기 위해 탄생했습니다. 🥳**
 - 중요 공지사항을 빠르게 알림으로 받아보고 싶다.
 - 여러 게시판의 공지사항을 한 눈에 모아보고 싶다.
-
-<p align="center"><img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/61db8d01-2c0f-4733-8172-539e349f0c78" width = "700px" alt = "introduction"></p>
 
 ### ☺️ 팀원
 |   [김태호](https://github.com/Train0303)  |   [남원정](https://github.com/1jeongg)     |
