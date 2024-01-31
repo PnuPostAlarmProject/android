@@ -11,4 +11,6 @@ interface SubscribeRepository {
     suspend fun updateSubscribe(subscribeId: Long, requestDTO: SubscribeUpdateRequestDTO): HttpResponse
     suspend fun deleteSubscribe(subscribeId: Long):HttpResponse
     suspend fun updateActive(subscribeId: Long): HttpResponse
+    suspend fun getUnivList(): HttpResponse
+    suspend fun getUnivSubscribeList(univId: Long): HttpResponse
 }
