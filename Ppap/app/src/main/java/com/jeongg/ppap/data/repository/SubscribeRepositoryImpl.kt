@@ -36,4 +36,12 @@ class SubscribeRepositoryImpl @Inject constructor(
     override suspend fun updateActive(subscribeId: Long): HttpResponse{
         return subscribeApi.updateActive(subscribeId)
     }
+
+    override suspend fun getUnivList(): HttpResponse{
+        return subscribeApi.getUnivList()
+    }
+
+    override suspend fun getUnivSubscribeList(univId: Long): HttpResponse{
+        return subscribeApi.getUnivSubscribeList(univId)
+    }
 }

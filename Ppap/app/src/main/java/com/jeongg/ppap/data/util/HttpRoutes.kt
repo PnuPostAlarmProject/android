@@ -14,6 +14,8 @@ object HttpRoutes {
     const val UPDATE_SUBSCRIBE = "/subscribe"
     const val DELETE_SUBSCRIBE = "/subscribe/delete"
     const val UPDATE_ACTIVE = "/subscribe/active"
+    const val GET_UNIV_LIST = "/univ/list"
+    const val GET_UNIV_SUBSCRIBE_LIST = "/univ"
     // notice
     const val GET_NOTICES = "/content"
     const val ADD_SCRAP = "/scrap/create"

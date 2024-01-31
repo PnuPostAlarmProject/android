@@ -41,4 +41,12 @@ class SubscribeApi(
     override suspend fun updateActive(subscribeId: Long): HttpResponse{
         return client.post(HttpRoutes.UPDATE_ACTIVE + "/$subscribeId"){}
     }
+
+    override suspend fun getUnivList(): HttpResponse {
+        return client.get(HttpRoutes.GET_UNIV_LIST){}
+    }
+
+    override suspend fun getUnivSubscribeList(univId: Long): HttpResponse {
+        return client.get(HttpRoutes.GET_UNIV_SUBSCRIBE_LIST + "/$univId/subscribe"){}
+    }
 }
