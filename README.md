@@ -1,8 +1,7 @@
 # PPAP (Pnu Post Alarm Project)
 부산대학교 학과 게시판의 공지사항을 알림으로 받아보고 한눈에 모아볼 수 있는 서비스입니다.
 
-<p align="center"><img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/61db8d01-2c0f-4733-8172-539e349f0c78" width = "700px" alt = "introduction"></p>
-
+<p align="center"><img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/banner.png" width = "700px" alt = "introduction"></p>
 
 ## Introduction of PPAP
 ### 🤔 Why?
@@ -28,13 +27,14 @@
 
 | 공지사항 | 스크랩 | 구독 | 설정 |
 |:---:|:--:|:--:|:--:|
-| <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/7ea0e234-493a-4cb3-8967-1bf31c7656ac" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/59a445d5-12c2-42ac-a136-60b5767ad7c2" width = "300px">  | <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/61a9f465-08d9-425b-8b01-ea0b13cb2198" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/a98aeebc-919a-4e1c-928f-11629f2e00de" width = "300px"> | 
+| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/notice.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/scrap.jpg" width = "300px">  | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/subscribe.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting.jpg" width = "300px"> | 
 | 스플래시 | 로그인 | 알림 설정 변경 | 구독 추가 |
-| <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/38f4ff60-aade-4c13-80ab-c511dbd2a55e" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/983ed44a-9938-4935-adda-b8436e5df1e2" width = "300px">   |  <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/20f3f624-4aec-483a-abd7-9e9337b5d3b6" width = "300px"> |  <img src="https://github.com/PnuPostAlarmProject/android/assets/84652886/058e1a3d-c0f2-49d6-9e35-197f975c7c12" width = "300px"> |
+| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/splash.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/login.jpg" width = "300px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/alarm_change.jpg" width = "300px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe.jpg" width = "300px"> |
 
 ### 🎥 시연 영상
 
 https://github.com/PnuPostAlarmProject/android/assets/84652886/d1ad6b62-e2a0-48da-af43-76bc98d8e2b2
+
 
 ### ♥️ 사용자 친화적 UI
 - 다크모드 지원 ➡️ 접근성 UP
@@ -98,11 +98,3 @@ https://github.com/PnuPostAlarmProject/android/assets/84652886/d1ad6b62-e2a0-48d
 └───📁util
 ```
 
-## License
-Copyright 2024 ppap
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
