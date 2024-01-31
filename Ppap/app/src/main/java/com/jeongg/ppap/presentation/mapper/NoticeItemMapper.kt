@@ -1,5 +1,6 @@
 package com.jeongg.ppap.presentation.mapper
 
+import androidx.compose.runtime.MutableState
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.jeongg.ppap.data.dto.NoticeDTO
@@ -12,7 +13,7 @@ class NoticeItemMapper {
 
     fun noticeToNoticeItem(
         noticePagingData: Flow<PagingData<NoticeDTO>>,
-        scrapEvent: (Boolean, Long) -> Unit,
+        scrapEvent: (MutableState<Boolean>, NoticeDTO) -> Unit,
     ): Flow<PagingData<NoticeItemDTO>> {
         return noticePagingData.map { noticeDTO ->
             noticeDTO.map { notice ->
@@ -22,7 +23,7 @@ class NoticeItemMapper {
                     date = notice.pubDate.date.toString(),
                     link = notice.link,
                     isScraped = notice.isScraped,
-                    onScrapClick = { scrapEvent(notice.isScraped, notice.contentId) }
+                    onScrapClick = { scrapEvent(it, notice) }
                 )
             }
         }
@@ -30,7 +31,7 @@ class NoticeItemMapper {
 
     fun scrapToNoticeItem(
         scrapPagingData: Flow<PagingData<ScrapDTO>>,
-        scrapEvent: (Boolean, Long) -> Unit,
+        scrapEvent: (MutableState<Boolean>, ScrapDTO) -> Unit,
     ): Flow<PagingData<NoticeItemDTO>> {
         return scrapPagingData.map { scrapDTO ->
             scrapDTO.map { notice ->
@@ -40,7 +41,7 @@ class NoticeItemMapper {
                     date = notice.pubDate.date.toString(),
                     link = notice.link,
                     isScraped = notice.isScrap,
-                    onScrapClick = { scrapEvent(notice.isScrap, notice.contentId) }
+                    onScrapClick = { scrapEvent(it, notice) }
                 )
             }
         }

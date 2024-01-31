@@ -1,28 +1,36 @@
 package com.jeongg.ppap.presentation.subscribe
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -32,143 +40,225 @@ import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.PEmptyContent
+import com.jeongg.ppap.presentation.component.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.theme.Dimens
-import com.jeongg.ppap.theme.gray3
+import com.jeongg.ppap.theme.gray1
+import com.jeongg.ppap.theme.gray5
+import com.jeongg.ppap.theme.gray6
 
 @Composable
 fun SubscribeScreen(
     navController: NavController,
     viewModel: SubscribeViewModel = hiltViewModel()
 ){
+    val subscribeList = viewModel.customSubscribes.value
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
-    Column(
-        //title = stringResource(R.string.subscribe_title)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            LazyColumn(
-                modifier = Modifier.padding(bottom = 120.dp),
-            ) {
-                item {
-                    CustomSubscribe(
-                        subscribes = viewModel.customSubscribes.value,
-                        onNavigate = { navController.navigate(Screen.SubscribeAddScreen.route) },
-                        onDeleteClick = { viewModel.deleteSubscribe(it) },
-                        onEditClick = { navController.navigate(it) },
-                        onSubscribeClick = { viewModel.updateActive(it) }
-                    )
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .height(130.dp)
-                    .align(Alignment.BottomCenter)
-            ) {
-                PButton(
-                    text = stringResource(R.string.add_subscribe),
-                    color = Color.White,
-                    modifier = Modifier.padding(vertical = Dimens.PaddingSmall),
-                    onClick = {navController.navigate(Screen.SubscribeAddScreen.route)}
-                )
-                PButton(
-                    text = stringResource(R.string.goto_home),
-                    onClick = {navController.navigate(Screen.NoticeListScreen.route)}
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun CustomSubscribe(
-    subscribes: List<SubscribeGetResponseDTO> = emptyList(),
-    onNavigate: () -> Unit = {},
-    onDeleteClick: (Long) -> Unit = {},
-    onEditClick: (String) -> Unit = {},
-    onSubscribeClick: (Long) -> Unit = {}
-){
-    Column {
-        Text(
-            text = stringResource(R.string.custom_subscribes),
-            style = MaterialTheme.typography.titleSmall,
-        )
-        PDivider(modifier = Modifier.padding(top = 5.dp))
-        if (subscribes.isEmpty()){
-            PEmptyContent(
-                id = R.drawable.apple_gray, message = stringResource(R.string.empty_subscribes),
-                modifier = Modifier.padding(40.dp),
-                onClick = onNavigate
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
+        contentPadding = PaddingValues(20.dp)
+    ){
+        item { SubscribeTitle() }
+        item { SubscribeListTitle() }
+        items(subscribeList) { subscribe ->
+            val route = Screen.SubscribeAddScreen.route + "?subscribeId=${subscribe.subscribeId}"
+            SubscribeItem(
+                subscribe = subscribe,
+                onDeleteClick = { viewModel.deleteSubscribe(subscribe.subscribeId) },
+                onUpdateClick = { navController.navigate(route) },
+                onAlarmClick = { viewModel.updateActive(subscribe, it) }
             )
         }
-        else {
-            subscribes.forEach {
-                CustomSubscribeItem(
-                    text = it.title,
-                    isActive = it.isActive,
-                    onConfirmClick = { onDeleteClick(it.subscribeId)},//onEditClick(Screen.SubscribeAddScreen.route + "?subscribeId=${it.subscribeId}") },
-                    onSubscribeClick = { onSubscribeClick(it.subscribeId)}
-                )
-            }
+        item {
+            SubscribeAddButton(
+                onDefaultAddClick = { navController.navigate(Screen.SubscribeAddScreen.route) },
+                onCustomAddClick = { navController.navigate(Screen.SubscribeAddScreen.route) }
+            )
         }
     }
 }
 
 @Composable
-fun CustomSubscribeItem(
-    text: String = "최강 정컴 공지",
-    isActive: Boolean = true,
-    onConfirmClick: () -> Unit = {},
-    onSubscribeClick: () -> Unit = {}
+private fun SubscribeAddButton(
+    onDefaultAddClick: () -> Unit,
+    onCustomAddClick: () -> Unit
 ) {
-    val img = if (isActive) R.drawable.checked else R.drawable.unchecked
-    val textColor = if (isActive) MaterialTheme.colorScheme.surface else gray3
-    val isDialogOpen = remember { mutableStateOf(false) }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically)
+    ){
+        Image(
+            painter = painterResource(R.drawable.apple_transparent),
+            contentDescription = "apple character",
+            modifier = Modifier.width(140.dp)
+        )
+        PButton(
+            text = "구독 추가하기",
+            onClick = onDefaultAddClick
+        )
+        CustomSubscribeAdd(onCustomAddClick)
+    }
+}
 
-    PDialog(
-        text = text,
-        onConfirmClick = {onConfirmClick()},
-        isOpen = isDialogOpen
+@Composable
+private fun CustomSubscribeAdd(
+    onCustomAddClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.noRippleClickable(onClick = onCustomAddClick),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "원하는 게시판이 등록되어있지 않다면 \n직접 등록해보세요!",
+            style = MaterialTheme.typography.labelLarge,
+            textAlign = TextAlign.Center,
+            color = gray5,
+            modifier = Modifier.padding(end = 3.dp)
+        )
+        Icon(
+            painter = painterResource(R.drawable.arrow),
+            contentDescription = "navigate arrow",
+            tint = gray6,
+            modifier = Modifier.height(30.dp)
+        )
+    }
+}
+
+@Composable
+private fun SubscribeItem(
+    subscribe: SubscribeGetResponseDTO,
+    onDeleteClick: () -> Unit = {},
+    onUpdateClick: () -> Unit = {},
+    onAlarmClick: (MutableState<Boolean>) -> Unit = {}
+) {
+    val isActive = rememberSaveable { mutableStateOf(subscribe.isActive) }
+    val img = if (isActive.value) R.drawable.subscribe_button
+              else R.drawable.unsubscribe_button
+    val isBottomSheet = remember { mutableStateOf(false) }
+
+    SubscribeBottomSheet(
+        isBottomSheet = isBottomSheet,
+        subscribeTitle = subscribe.title,
+        onDeleteClick = onDeleteClick,
+        onUpdateClick = onUpdateClick,
+        onAlarmClick = { onAlarmClick(isActive) }
     )
     Box(
         modifier = Modifier
-            .clickable { isDialogOpen.value = true }
-            .padding(15.dp)
+            .clip(MaterialTheme.shapes.large)
+            .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.large)
+            .noRippleClickable { isBottomSheet.value = true }
             .fillMaxWidth()
+            .padding(13.dp)
     ){
-        Box(
+        Text(
+            text = subscribe.title,
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .padding(end = 31.dp)
-                .fillMaxHeight()
-                .align(Alignment.CenterStart),
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(end = 24.dp),
-                color = textColor,
-            )
-            Image(
-                painter = painterResource(R.drawable.arrow),
-                contentDescription = "edit or delete",
-                colorFilter = ColorFilter.tint(textColor),
-                modifier = Modifier
-                    .rotate(0f)
-                    .align(Alignment.CenterEnd)
-            )
-        }
+                .align(Alignment.CenterStart)
+                .padding(end = 78.dp)
+        )
         Image(
             painter = painterResource(img),
-            contentDescription = "checked: $isActive",
+            contentDescription = "active / unactive alarm",
             modifier = Modifier
-                .size(31.dp)
                 .align(Alignment.CenterEnd)
-                .clickable { onSubscribeClick() }
+                .width(68.dp)
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SubscribeBottomSheet(
+    isBottomSheet: MutableState<Boolean>,
+    subscribeTitle: String = "",
+    canUpdate: Boolean = true,
+    onDeleteClick: () -> Unit = {},
+    onUpdateClick: () -> Unit = {},
+    onAlarmClick: () -> Unit = {}
+) {
+    if (isBottomSheet.value.not()) return
+    val modalBottomSheetState = rememberModalBottomSheetState()
+    val isDialogOpen = remember { mutableStateOf(false) }
+
+    PDialog(
+        text = "$subscribeTitle 을 구독목록에서 삭제하시겠습니까?",
+        onConfirmClick = onDeleteClick,
+        isOpen = isDialogOpen,
+    )
+    ModalBottomSheet(
+        onDismissRequest = { isBottomSheet.value = false },
+        sheetState = modalBottomSheetState,
+        containerColor = MaterialTheme.colorScheme.background,
+        shape = MaterialTheme.shapes.large
+    ) {
+        ModalBottomSheetContent(onAlarmClick, isBottomSheet, canUpdate, onUpdateClick, isDialogOpen)
+    }
+}
+
+@Composable
+private fun ModalBottomSheetContent(
+    onAlarmClick: () -> Unit,
+    isBottomSheet: MutableState<Boolean>,
+    canUpdate: Boolean,
+    onUpdateClick: () -> Unit,
+    isDialogOpen: MutableState<Boolean>
+) {
+    BottomSheetText(
+        text = "알림 설정 변경하기",
+        onClick = {
+            onAlarmClick()
+            isBottomSheet.value = false
+        }
+    )
+    if (canUpdate) {
+        BottomSheetText(
+            text = "구독 수정하기",
+            onClick = {
+                isBottomSheet.value = false
+                onUpdateClick()
+            }
+        )
+    }
+    BottomSheetText(
+        text = "구독 삭제하기",
+        onClick = { isDialogOpen.value = true }
+    )
+}
+
+@Composable
+private fun BottomSheetText(
+    text: String = "",
+    onClick: () -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .noRippleClickable(onClick)
+            .padding(20.dp),
+        style = MaterialTheme.typography.bodyLarge,
+        textAlign = TextAlign.Center
+    )
     PDivider()
+}
+
+@Composable
+private fun SubscribeListTitle() {
+    Text(
+        text = "나의 구독 목록",
+        style = MaterialTheme.typography.titleSmall
+    )
+}
+
+@Composable
+private fun SubscribeTitle() {
+    Text(
+        text = "구독",
+        style = MaterialTheme.typography.titleLarge
+    )
 }

@@ -1,12 +1,15 @@
 package com.jeongg.ppap.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import com.jeongg.ppap.data.util.DARK_THEME
+import com.jeongg.ppap.data.util.PDataStore
+import com.jeongg.ppap.data.util.PPAP_THEME_KEY
 
 private val DarkColorScheme = darkColorScheme(
     background = Color.Black,
@@ -28,17 +31,13 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun PpapTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            if (darkTheme) DarkColorScheme else LightColorScheme
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val context = LocalContext.current
+    val dataStoreTheme = PDataStore(context).getData(PPAP_THEME_KEY)
+    val theme = if (dataStoreTheme == "") isSystemInDarkTheme()
+                else (dataStoreTheme == DARK_THEME)
+    val colorScheme = if (theme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,

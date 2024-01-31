@@ -80,15 +80,15 @@ class SubscribeAddViewModel @Inject constructor(
 
     private fun updateSubscribe(){
         viewModelScope.launch {
-            if (subscribe.value.title.isEmpty()){
-                _eventFlow.emit(PEvent.TOAST("제목은 비어있으면 안됩니다."))
+            if (subscribe.value.title.isEmpty() || subscribe.value.title.length > 20){
+                _eventFlow.emit(PEvent.TOAST("제목은 20자 이하여야 하고 비어있으면 안됩니다."))
                 return@launch
             }
             updateSubscribeUseCase(
                 subscribeId = subscribeId.longValue,
                 requestDTO = SubscribeUpdateRequestDTO(
                     title = subscribe.value.title,
-                    noticeLink = subscribe.value.noticeLink
+                    noticeLink = null
                 )
             ).collect { response ->
                 when(response){

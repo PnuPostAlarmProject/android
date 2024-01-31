@@ -1,11 +1,12 @@
 package com.jeongg.ppap.presentation.scrap
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
+import com.jeongg.ppap.data.dto.NoticeDTO
 import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.data.dto.ScrapDTO
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
@@ -20,7 +21,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,13 +52,13 @@ class ScrapViewModel @Inject constructor(
     fun getScrapPage(subscribeId: Long?){
         contents = NoticeItemMapper().scrapToNoticeItem(
             scrapPagingData = getScrapListUseCase(subscribeId).cachedIn(viewModelScope),
-            scrapEvent = { isScraped, contentId -> scrapEvent(isScraped, contentId) }
+            scrapEvent = { isScraped, scrapDTO -> scrapEvent(isScraped, scrapDTO) }
         )
     }
 
-    private fun scrapEvent(isScraped: Boolean = false, contentId: Long = 0){
-        if (isScraped) deleteScrap(contentId)
-        else addScrap(contentId)
+    private fun scrapEvent(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO ){
+        if (isScraped.value) deleteScrap(isScraped, scrapDTO)
+        else addScrap(isScraped, scrapDTO)
     }
 
     private fun getSubscribes(){
@@ -76,24 +76,32 @@ class ScrapViewModel @Inject constructor(
         }
     }
 
-    private fun addScrap(contentId: Long){
+    private fun addScrap(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO ){
         viewModelScope.launch{
-            addScrapUseCase(contentId).collect { response ->
+            addScrapUseCase(scrapDTO.contentId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
+                    is Resource.Success -> {
+                        isScraped.value = true
+                        scrapDTO.isScrap = true
+                        _eventFlow.emit(PEvent.SUCCESS)
+                    }
                     is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }
         }
     }
 
-    private fun deleteScrap(contentId: Long){
+    private fun deleteScrap(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO ){
         viewModelScope.launch{
-            deleteScrapUseCase(contentId).collect { response ->
+            deleteScrapUseCase(scrapDTO.contentId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.SUCCESS)
+                    is Resource.Success -> {
+                        isScraped.value = false
+                        scrapDTO.isScrap = false
+                        _eventFlow.emit(PEvent.SUCCESS)
+                    }
                     is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
                 }
             }

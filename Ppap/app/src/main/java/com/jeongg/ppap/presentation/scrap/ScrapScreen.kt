@@ -6,15 +6,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.jeongg.ppap.presentation.component.ExitBackHandler
 import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
@@ -26,11 +25,12 @@ fun ScrapScreen(
     navController: NavController,
     viewModel: ScrapViewModel = hiltViewModel()
 ){
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val selectedTabIndex = rememberSaveable { mutableIntStateOf(0) }
     val contents = viewModel.contents.collectAsLazyPagingItems()
     val subscribeList = viewModel.subscribes.value
 
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
+    ExitBackHandler()
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -43,10 +43,10 @@ fun ScrapScreen(
         }
         PTabLayer(
             tabs = subscribeList,
-            selectedTabIndex = selectedTabIndex,
+            selectedTabIndex = selectedTabIndex.intValue,
             onTabClick = { tabIndex ->
-                if (selectedTabIndex != tabIndex) {
-                    selectedTabIndex = tabIndex
+                if (selectedTabIndex.intValue != tabIndex) {
+                    selectedTabIndex.intValue = tabIndex
                     viewModel.getScrapPage(subscribeList[tabIndex].subscribeId)
                 }
             },
