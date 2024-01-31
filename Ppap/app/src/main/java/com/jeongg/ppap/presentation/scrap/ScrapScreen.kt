@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.jeongg.ppap.presentation.component.ExitBackHandler
 import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
@@ -29,6 +30,7 @@ fun ScrapScreen(
     val subscribeList = viewModel.subscribes.value
 
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
+    ExitBackHandler()
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

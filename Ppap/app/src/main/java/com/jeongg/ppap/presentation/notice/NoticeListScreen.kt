@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.jeongg.ppap.R
+import com.jeongg.ppap.presentation.component.ExitBackHandler
 import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
@@ -36,6 +37,7 @@ fun NoticeListScreen(
     val subscribeList = viewModel.subscribes.value
 
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
+    ExitBackHandler()
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -63,7 +65,9 @@ fun NoticeListScreen(
 @Composable
 private fun NoticeListTitle() {
     Row(
-        modifier = Modifier.padding(top = 5.dp).height(40.dp),
+        modifier = Modifier
+            .padding(top = 5.dp)
+            .height(40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

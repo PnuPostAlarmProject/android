@@ -9,5 +9,5 @@ data class NoticeDTO (
     val title: String,
     val pubDate: LocalDateTime,
     val link: String,
-    val isScraped: Boolean
+    var isScraped: Boolean
 )
