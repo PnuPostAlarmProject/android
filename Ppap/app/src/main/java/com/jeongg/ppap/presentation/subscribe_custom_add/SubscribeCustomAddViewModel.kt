@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.subscribe_add
+package com.jeongg.ppap.presentation.subscribe_custom_add
 
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SubscribeAddViewModel @Inject constructor(
+class SubscribeCustomAddViewModel @Inject constructor(
     private val createSubscribeUseCase: CreateSubscribe,
     private val updateSubscribeUseCase: UpdateSubscribe,
     private val getSubscribeByIdUseCase: GetSubscribeById,
@@ -44,19 +44,19 @@ class SubscribeAddViewModel @Inject constructor(
         return subscribeId.longValue >= 0
     }
 
-    fun onEvent(event: SubscribeAddEvent){
+    fun onEvent(event: SubscribeCustomAddEvent){
         when (event){
-            is SubscribeAddEvent.EnteredTitle -> {
+            is SubscribeCustomAddEvent.EnteredTitle -> {
                 _subscribe.value = _subscribe.value.copy(
                     title = event.title
                 )
             }
-            is SubscribeAddEvent.EnteredRssLink -> {
+            is SubscribeCustomAddEvent.EnteredRssLink -> {
                 _subscribe.value = _subscribe.value.copy(
                     rssLink = event.rss
                 )
             }
-            is SubscribeAddEvent.SaveSubscribe -> {
+            is SubscribeCustomAddEvent.SaveSubscribe -> {
                 if (subscribeId.longValue < 0) saveSubscribe()
                 else updateSubscribe()
             }

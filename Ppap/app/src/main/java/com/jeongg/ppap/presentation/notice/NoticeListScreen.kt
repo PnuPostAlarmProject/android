@@ -44,7 +44,7 @@ fun NoticeListScreen(
         NoticeListTitle()
         if (viewModel.isEmpty()) {
             PEmptyContent(
-                onClick = { navController.navigate(Screen.SubscribeAddScreen.route) }
+                onClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
             )
             return
         }
@@ -66,8 +66,8 @@ fun NoticeListScreen(
 private fun NoticeListTitle() {
     Row(
         modifier = Modifier
-            .padding(top = 5.dp)
-            .height(40.dp),
+            .padding(top = 8.dp)
+            .height(35.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

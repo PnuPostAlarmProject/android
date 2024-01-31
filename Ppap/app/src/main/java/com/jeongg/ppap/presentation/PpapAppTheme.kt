@@ -27,7 +27,8 @@ fun PpapAppTheme(){
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = Screen.SplashScreen.route
+                    startDestination = Screen.SplashScreen.route,
+                    route = "ppap_route"
                 ){
                     ppapGraph(navController = navController)
                 }

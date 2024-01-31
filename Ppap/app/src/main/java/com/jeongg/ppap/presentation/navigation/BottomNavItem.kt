@@ -21,7 +21,13 @@ sealed class BottomNavItem(
     object Subscribe: BottomNavItem(
         title = "구독",
         icon = R.drawable.subscribe,
-        screenList = listOf(Screen.SubscribeScreen, Screen.SubscribeAddScreen))
+        screenList = listOf(
+            Screen.SubscribeScreen,
+            Screen.SubscribeCustomAddScreen,
+            Screen.UnivListScreen,
+            Screen.DepartmentListScreen,
+            Screen.NoticeBoardListScreen
+        ))
 
     object Setting: BottomNavItem(
         title = "설정",

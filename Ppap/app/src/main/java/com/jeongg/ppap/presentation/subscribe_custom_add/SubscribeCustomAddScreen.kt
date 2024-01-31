@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.subscribe_add
+package com.jeongg.ppap.presentation.subscribe_custom_add
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -44,9 +44,9 @@ import com.jeongg.ppap.theme.bright_yellow
 import com.jeongg.ppap.theme.typography
 
 @Composable
-fun SubscribeAddScreen(
+fun SubscribeCustomAddScreen(
     navController: NavController,
-    viewModel: SubscribeAddViewModel = hiltViewModel()
+    viewModel: SubscribeCustomAddViewModel = hiltViewModel()
 ){
     val focusManager = LocalFocusManager.current
     val title = stringResource(if (viewModel.isUpdate()) R.string.update_subscribe_button_text else R.string.add_subscribe_button_text)
@@ -65,9 +65,9 @@ fun SubscribeAddScreen(
         item {
             PTextFields(
                 title = viewModel.subscribe.value.title,
-                onTitleChange = { viewModel.onEvent(SubscribeAddEvent.EnteredTitle(it)) },
+                onTitleChange = { viewModel.onEvent(SubscribeCustomAddEvent.EnteredTitle(it)) },
                 rss = viewModel.subscribe.value.rssLink,
-                onRssChange = { viewModel.onEvent(SubscribeAddEvent.EnteredRssLink(it)) },
+                onRssChange = { viewModel.onEvent(SubscribeCustomAddEvent.EnteredRssLink(it)) },
                 enabled = !viewModel.isUpdate()
             )
         }
@@ -75,7 +75,7 @@ fun SubscribeAddScreen(
             Column(modifier = Modifier.fillMaxWidth()){
                 PButton(
                     text = title,
-                    onClick = { viewModel.onEvent(SubscribeAddEvent.SaveSubscribe)},
+                    onClick = { viewModel.onEvent(SubscribeCustomAddEvent.SaveSubscribe)},
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
