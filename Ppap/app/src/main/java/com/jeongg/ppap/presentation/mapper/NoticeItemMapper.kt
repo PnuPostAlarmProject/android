@@ -13,7 +13,7 @@ class NoticeItemMapper {
 
     fun noticeToNoticeItem(
         noticePagingData: Flow<PagingData<NoticeDTO>>,
-        scrapEvent: (MutableState<Boolean>, Long) -> Unit,
+        scrapEvent: (MutableState<Boolean>, NoticeDTO) -> Unit,
     ): Flow<PagingData<NoticeItemDTO>> {
         return noticePagingData.map { noticeDTO ->
             noticeDTO.map { notice ->
@@ -23,7 +23,7 @@ class NoticeItemMapper {
                     date = notice.pubDate.date.toString(),
                     link = notice.link,
                     isScraped = notice.isScraped,
-                    onScrapClick = { scrapEvent(it, notice.contentId) }
+                    onScrapClick = { scrapEvent(it, notice) }
                 )
             }
         }
@@ -31,7 +31,7 @@ class NoticeItemMapper {
 
     fun scrapToNoticeItem(
         scrapPagingData: Flow<PagingData<ScrapDTO>>,
-        scrapEvent: (MutableState<Boolean>, Long) -> Unit,
+        scrapEvent: (MutableState<Boolean>, ScrapDTO) -> Unit,
     ): Flow<PagingData<NoticeItemDTO>> {
         return scrapPagingData.map { scrapDTO ->
             scrapDTO.map { notice ->
@@ -41,7 +41,7 @@ class NoticeItemMapper {
                     date = notice.pubDate.date.toString(),
                     link = notice.link,
                     isScraped = notice.isScrap,
-                    onScrapClick = { scrapEvent(it, notice.contentId) }
+                    onScrapClick = { scrapEvent(it, notice) }
                 )
             }
         }

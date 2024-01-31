@@ -9,5 +9,5 @@ data class ScrapDTO(
     val contentTitle: String,
     val link: String,
     val pubDate: LocalDateTime,
-    val isScrap: Boolean
+    var isScrap: Boolean
 )

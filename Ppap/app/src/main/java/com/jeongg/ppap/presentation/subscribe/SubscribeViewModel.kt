@@ -32,12 +32,13 @@ class SubscribeViewModel @Inject constructor(
         getSubscribes()
     }
 
-    fun updateActive(subscribeId: Long, isActive: MutableState<Boolean>){
+    fun updateActive(subscribe: SubscribeGetResponseDTO, isActive: MutableState<Boolean>){
         viewModelScope.launch{
-            updateActiveUseCase(subscribeId).collect { response ->
+            updateActiveUseCase(subscribe.subscribeId).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
                     is Resource.Success -> {
+                        subscribe.isActive = subscribe.isActive.not()
                         isActive.value = isActive.value.not()
                         _eventFlow.emit(PEvent.SUCCESS)
                     }

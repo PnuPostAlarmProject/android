@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class SubscribeGetResponseDTO(
     val subscribeId: Long,
     val title: String,
-    val isActive: Boolean
+    var isActive: Boolean
 )

@@ -66,7 +66,7 @@ fun SubscribeScreen(
                 subscribe = subscribe,
                 onDeleteClick = { viewModel.deleteSubscribe(subscribe.subscribeId) },
                 onUpdateClick = { navController.navigate(route) },
-                onAlarmClick = { viewModel.updateActive(subscribe.subscribeId, it) }
+                onAlarmClick = { viewModel.updateActive(subscribe, it) }
             )
         }
         item {
