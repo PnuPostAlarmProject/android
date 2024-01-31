@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
 import com.jeongg.ppap.theme.gray3
+import com.jeongg.ppap.theme.main_yellow
 import com.jeongg.ppap.theme.typography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,16 +39,17 @@ fun PTextField(
             .focusRequester(focusRequester),
         textStyle = typography.bodyMedium,
     ){
-        TextFieldDefaults.OutlinedTextFieldDecorationBox(
+        OutlinedTextFieldDefaults.DecorationBox(
             value = text,
             innerTextField = it,
             enabled = true,
             singleLine = false,
-            interactionSource = NoRippleInteractionSource,
             visualTransformation = VisualTransformation.None,
+            interactionSource = NoRippleInteractionSource,
             placeholder = { TextFieldPlaceHolder(placeholder) },
+            colors = OutlinedTextFieldDefaults.colors(),
             contentPadding = PaddingValues(10.dp),
-            container = { TextFieldOutlineBorder() }
+            container = { TextFieldOutlineBorder() },
         )
     }
 
@@ -55,18 +58,19 @@ fun PTextField(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun TextFieldOutlineBorder() {
-    TextFieldDefaults.OutlinedBorderContainerBox(
+    OutlinedTextFieldDefaults.ContainerBox(
         enabled = true,
         isError = false,
         interactionSource = NoRippleInteractionSource,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = Color.Black,
+            focusedTextColor = Color.Black,
             containerColor = Color.White,
-            placeholderColor = gray3,
-            unfocusedBorderColor = gray3,
+            focusedPlaceholderColor = gray3,
             focusedBorderColor = Color.Black,
+            unfocusedBorderColor = gray3,
+            cursorColor = main_yellow
         ),
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.small
     )
 }
 

@@ -14,6 +14,7 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +27,6 @@ import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
 import com.jeongg.ppap.theme.main_yellow
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PTabLayer(
@@ -34,7 +34,7 @@ fun PTabLayer(
     selectedTabIndex: Int,
     onTabClick: (Int) -> Unit,
     contents: LazyListScope.() -> Unit,
-){
+) {
     val pagerState = rememberPagerState { tabs.size }
     LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress) {
@@ -49,7 +49,7 @@ fun PTabLayer(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Top
         ) {
-            LazyColumn{
+            LazyColumn {
                 item { PDivider(modifier = Modifier.padding(horizontal = 20.dp)) }
                 contents()
             }
@@ -99,10 +99,10 @@ private fun TabLayerIndicator(
     tabPositionList: List<TabPosition>,
     selectedTabIndex: Int
 ) {
-    TabRowDefaults.Indicator(
+    SecondaryIndicator(
         modifier = Modifier.tabIndicatorOffset(
             currentTabPosition = tabPositionList[selectedTabIndex]
         ),
-        color = main_yellow,
+        color = main_yellow
     )
 }

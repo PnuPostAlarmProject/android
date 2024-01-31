@@ -11,10 +11,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-const val FCM_TOKEN_KEY = "fcm-token"
-const val ACCESS_TOKEN_KEY = "access-token"
-const val REFRESH_TOKEN_KEY = "refresh-token"
-
 class PDataStore @Inject constructor(@ApplicationContext val context: Context) {
     private val store = context.dataStore
     fun setData(key: String, value: String){

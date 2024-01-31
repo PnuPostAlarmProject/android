@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -26,13 +26,13 @@ import com.jeongg.ppap.theme.gray3
 
 @Composable
 fun NoticeItem(
-    isBookmarked: MutableState<Boolean> = mutableStateOf(false),
     noticeItemDTO: NoticeItemDTO
 ){
     val urlHandler = LocalUriHandler.current
+    val isScraped = rememberSaveable { mutableStateOf(noticeItemDTO.isScraped) }
     Column(
         modifier = Modifier
-            .noRippleClickable{ urlHandler.openUri(noticeItemDTO.link) }
+            .noRippleClickable { urlHandler.openUri(noticeItemDTO.link) }
             .padding(horizontal = 20.dp)
             .fillMaxWidth()
     ) {
@@ -44,11 +44,8 @@ fun NoticeItem(
             NoticeContent(noticeItemDTO.title, noticeItemDTO.date)
             NoticeBookmark(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                isBookmarked = isBookmarked,
-                onClick = {
-                    noticeItemDTO.onScrapClick()
-                    isBookmarked.value = isBookmarked.value.not()
-                }
+                isBookmarked = isScraped.value,
+                onClick = { noticeItemDTO.onScrapClick(isScraped) }
             )
         }
         PDivider()
@@ -79,13 +76,15 @@ private fun NoticeContent(title: String, date: String) {
 private fun NoticeBookmark(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    isBookmarked: MutableState<Boolean> = mutableStateOf(false),
+    isBookmarked: Boolean,
 ){
-    val favorite = if (isBookmarked.value) R.drawable.heart_filled
+    val favorite = if (isBookmarked) R.drawable.heart_filled
                    else R.drawable.heart_empty
     Image(
         painter = painterResource(favorite),
-        contentDescription = "checked: ${isBookmarked.value}",
-        modifier = modifier.size(25.dp).noRippleClickable(onClick = onClick)
+        contentDescription = "checked: $isBookmarked",
+        modifier = modifier
+            .size(25.dp)
+            .noRippleClickable(onClick = onClick)
     )
 }

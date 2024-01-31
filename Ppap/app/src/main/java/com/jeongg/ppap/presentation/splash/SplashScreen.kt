@@ -45,10 +45,8 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true){
         splashAnimate(animation)
-        val nextScreen = when (viewModel.isUserLoggedIn()) {
-            true -> Screen.NoticeListScreen
-            false -> Screen.LoginScreen
-        }
+        val nextScreen = if (viewModel.isUserLoggedIn()) Screen.NoticeListScreen
+                         else Screen.LoginScreen
         navController.popBackStack()
         navController.navigate(nextScreen.route)
     }
@@ -74,21 +72,21 @@ fun SplashScreen(
     }
 }
 
-suspend fun splashAnimate(animation: Animatable<Float, AnimationVector1D>) {
+private suspend fun splashAnimate(animation: Animatable<Float, AnimationVector1D>) {
     delay(200)
     animation.animateTo(
         targetValue = 1f,
         animationSpec = keyframes {
             durationMillis = 300
-            0.0f at 0 with LinearOutSlowInEasing
-            1.0f at 1000 with LinearOutSlowInEasing
+            0.0f at 0 using LinearOutSlowInEasing
+            1.0f at 1000 using LinearOutSlowInEasing
         }
     )
     delay(100)
 }
 
 @Composable
-fun SplashTitle(){
+private fun SplashTitle(){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -105,7 +103,7 @@ fun SplashTitle(){
     }
 }
 @Composable
-fun SplashCharacters(
+private fun SplashCharacters(
     modifier: Modifier
 ){
     Box(
@@ -134,7 +132,7 @@ fun SplashCharacters(
     }
 }
 @Composable
-fun PenAnimation(
+private fun PenAnimation(
     modifier: Modifier,
     animationModifier: Modifier
 ){
@@ -150,7 +148,7 @@ fun PenAnimation(
     }
 }
 @Composable
-fun Footer(
+private fun Footer(
     modifier: Modifier
 ){
     Text(
