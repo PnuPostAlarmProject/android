@@ -42,7 +42,6 @@ import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
 import com.jeongg.ppap.presentation.component.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.theme.gray1
 import com.jeongg.ppap.theme.gray5
 import com.jeongg.ppap.theme.gray6
 
@@ -61,7 +60,7 @@ fun SubscribeScreen(
         item { SubscribeTitle() }
         item { SubscribeListTitle() }
         items(subscribeList) { subscribe ->
-            val route = Screen.SubscribeAddScreen.route + "?subscribeId=${subscribe.subscribeId}"
+            val route = Screen.SubscribeCustomAddScreen.route + "?subscribeId=${subscribe.subscribeId}"
             SubscribeItem(
                 subscribe = subscribe,
                 onDeleteClick = { viewModel.deleteSubscribe(subscribe.subscribeId) },
@@ -71,8 +70,8 @@ fun SubscribeScreen(
         }
         item {
             SubscribeAddButton(
-                onDefaultAddClick = { navController.navigate(Screen.SubscribeAddScreen.route) },
-                onCustomAddClick = { navController.navigate(Screen.SubscribeAddScreen.route) }
+                onDefaultAddClick = { navController.navigate(Screen.UnivListScreen.route) },
+                onCustomAddClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
             )
         }
     }

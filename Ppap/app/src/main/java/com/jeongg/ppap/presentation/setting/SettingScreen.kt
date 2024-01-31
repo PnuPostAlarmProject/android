@@ -78,7 +78,7 @@ fun SettingScreen(
 @Composable
 private fun SettingTitle() {
     Text(
-        text = "구독",
+        text = "설정",
         style = MaterialTheme.typography.titleLarge
     )
 }

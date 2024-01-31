@@ -36,7 +36,7 @@ fun LoginScreen(
         eventFlow = viewModel.eventFlow,
         onNavigate = {
             navController.popBackStack()
-            navController.navigate(Screen.SubscribeScreen.route)
+            navController.navigate(Screen.NoticeListScreen.route)
         }
     )
     Box(
