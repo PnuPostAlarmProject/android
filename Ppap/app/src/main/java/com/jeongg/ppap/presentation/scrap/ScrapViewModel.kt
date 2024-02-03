@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.jeongg.ppap.data.dto.NoticeDTO
 import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.data.dto.ScrapDTO
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO

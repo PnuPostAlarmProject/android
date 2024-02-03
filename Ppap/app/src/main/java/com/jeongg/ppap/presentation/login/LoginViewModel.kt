@@ -3,7 +3,7 @@ package com.jeongg.ppap.presentation.login
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.util.FCM_TOKEN_KEY
+import com.jeongg.ppap.data._const.DataStoreKey
 import com.jeongg.ppap.data.util.PDataStore
 import com.jeongg.ppap.domain.usecase.user.KakaoLogin
 import com.jeongg.ppap.presentation.util.PEvent
@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     fun kakaoLogin(context: Context) {
-        val fcmToken = dataStore.getData(FCM_TOKEN_KEY)
+        val fcmToken = dataStore.getData(DataStoreKey.FCM_TOKEN_KEY.name)
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null && token != null) {
                 kakaoToServer(token.accessToken, fcmToken)

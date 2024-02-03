@@ -1,6 +1,6 @@
 package com.jeongg.ppap.data.api
 
-import com.jeongg.ppap.data.util.HttpRoutes
+import com.jeongg.ppap.data._const.HttpRoutes
 import com.jeongg.ppap.domain.repository.ScrapRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -14,17 +14,17 @@ class ScrapApi(
 
     override suspend fun getScrapList(subscribeId: Long?, page: Int?): HttpResponse {
         val path = if (subscribeId == null) "" else "/$subscribeId"
-        return client.get(HttpRoutes.GET_SCRAPS + path){
+        return client.get(HttpRoutes.GET_SCRAPS.path + path){
             parameter("page", page)
         }
     }
 
     override suspend fun addScrap(contentId: Long): HttpResponse {
-        return client.post(HttpRoutes.ADD_SCRAP + "/$contentId"){}
+        return client.post(HttpRoutes.ADD_SCRAP.path + "/$contentId"){}
     }
 
     override suspend fun deleteScrap(contentId: Long): HttpResponse {
-        return client.post(HttpRoutes.DELETE_SCRAP + "/$contentId"){}
+        return client.post(HttpRoutes.DELETE_SCRAP.path + "/$contentId"){}
     }
 
 }

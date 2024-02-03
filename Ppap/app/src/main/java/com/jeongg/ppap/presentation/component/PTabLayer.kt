@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.jeongg.ppap.data.dto.NoticeItemDTO
@@ -54,26 +55,37 @@ fun PTabLayer(
                 scope.launch { pagerState.scrollToPage(index) }
             }
         )
+        PCircularProgress(
+            isVisible = contents.loadState.refresh is LoadState.Loading,
+        )
         HorizontalPager(
             state = pagerState,
             pageSpacing = 15.dp,
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Top
         ) {page ->
-            LazyColumn {
-                if (page == selectedTabIndex){
-                    items(
-                        count = contents.itemCount,
-                        key = contents.itemKey { it.contentId }
-                    ) { index ->
-                        NoticeItem(noticeItemDTO = contents[index] ?: NoticeItemDTO())
-                    }
-                }
-            }
+            HorizontalPagerContent(page, selectedTabIndex, contents)
         }
     }
 }
 
+@Composable
+private fun HorizontalPagerContent(
+    page: Int,
+    selectedTabIndex: Int,
+    contents: LazyPagingItems<NoticeItemDTO>
+) {
+    LazyColumn {
+        if (page == selectedTabIndex) {
+            items(
+                count = contents.itemCount,
+                key = contents.itemKey { it.contentId }
+            ) { index ->
+                NoticeItem(noticeItemDTO = contents[index] ?: NoticeItemDTO())
+            }
+        }
+    }
+}
 
 @Composable
 private fun TopSubscribeList(

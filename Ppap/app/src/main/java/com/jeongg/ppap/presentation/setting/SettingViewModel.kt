@@ -8,10 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jeongg.ppap.BuildConfig
-import com.jeongg.ppap.data.util.DARK_THEME
-import com.jeongg.ppap.data.util.LIGHT_THEME
+import com.jeongg.ppap.data._const.AppTheme
+import com.jeongg.ppap.data._const.DataStoreKey
 import com.jeongg.ppap.data.util.PDataStore
-import com.jeongg.ppap.data.util.PPAP_THEME_KEY
 import com.jeongg.ppap.domain.usecase.user.Logout
 import com.jeongg.ppap.domain.usecase.user.Withdrawal
 import com.jeongg.ppap.presentation.util.PEvent
@@ -38,7 +37,7 @@ class SettingViewModel @Inject constructor(
 
     val version = BuildConfig.VERSION_NAME
 
-    private val _theme = mutableStateOf("")
+    private val _theme = mutableStateOf(AppTheme.DYNAMIC_THEME)
     val theme = _theme
 
     init {
@@ -82,21 +81,16 @@ class SettingViewModel @Inject constructor(
             e.printStackTrace()
         }
     }
-    fun changeAppTheme(newTheme: String){
-        dataStore.setData(PPAP_THEME_KEY, newTheme)
-        theme.value = themeToString(newTheme)
+    fun changeAppTheme(newTheme: AppTheme){
+        dataStore.setData(DataStoreKey.PPAP_THEME_KEY.name, newTheme.name)
+        theme.value = newTheme
     }
     private fun getTheme(){
-        val dataStoreTheme = dataStore.getData(PPAP_THEME_KEY)
-        _theme.value = themeToString(dataStoreTheme)
+        val dataStoreTheme = dataStore.getData(DataStoreKey.PPAP_THEME_KEY.name).ifEmpty {
+            AppTheme.DYNAMIC_THEME.name
+        }
+        _theme.value = AppTheme.valueOf(dataStoreTheme)
     }
-
-    private fun themeToString(dataStoreTheme: String) = when (dataStoreTheme) {
-        DARK_THEME -> "어두운 테마"
-        LIGHT_THEME -> "밝은 테마"
-        else -> "시스템 설정"
-    }
-
     private fun notificationSettingOreo(context: Context): Intent {
         return Intent().also { intent ->
             intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS

@@ -9,5 +9,6 @@ import dagger.hilt.android.HiltAndroidApp
 class PpapApp: Application() {
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, KAKAO_NATIVE_APP_KEY)    }
+        KakaoSdk.init(this, KAKAO_NATIVE_APP_KEY)
+    }
 }
