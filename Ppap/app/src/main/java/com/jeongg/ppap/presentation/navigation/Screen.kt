@@ -5,6 +5,7 @@ sealed class Screen (val route: String){
     object SplashScreen: Screen("splash_screen")
     object SubscribeScreen: Screen("subscribe_screen")
     object SubscribeCustomAddScreen: Screen("subscribe_custom_add_screen")
+    object SubscribeCustomUpdateScreen: Screen("subscribe_custom_update_screen")
     object UnivListScreen: Screen("univ_list_screen")
     object DepartmentListScreen: Screen("department_list_screen")
     object NoticeBoardListScreen: Screen("notice_board_list_screen")

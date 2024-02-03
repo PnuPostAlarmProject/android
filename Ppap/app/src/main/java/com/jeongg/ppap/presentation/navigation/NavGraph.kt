@@ -17,6 +17,7 @@ import com.jeongg.ppap.presentation.setting.SettingScreen
 import com.jeongg.ppap.presentation.splash.SplashScreen
 import com.jeongg.ppap.presentation.subscribe.SubscribeScreen
 import com.jeongg.ppap.presentation.subscribe_custom_add.SubscribeCustomAddScreen
+import com.jeongg.ppap.presentation.subscribe_custom_update.SubscribeCustomUpdateScreen
 import com.jeongg.ppap.presentation.subscribe_default_add.board_list.NoticeBoardListScreen
 import com.jeongg.ppap.presentation.subscribe_default_add.univ_list.DepartmentListScreen
 import com.jeongg.ppap.presentation.subscribe_default_add.univ_list.UnivListScreen
@@ -38,14 +39,22 @@ fun NavGraphBuilder.ppapGraph(
         content = { SubscribeScreen(navController) }
     )
     composable(
-        route = Screen.SubscribeCustomAddScreen.route + "?subscribeId={subscribeId}",
+        route = Screen.SubscribeCustomAddScreen.route,
+        content = { SubscribeCustomAddScreen(navController) }
+    )
+    composable(
+        route = Screen.SubscribeCustomUpdateScreen.route + "?subscribeId={subscribeId}&subscribeName={name}",
         arguments = listOf(
             navArgument("subscribeId"){
                 type = NavType.LongType
                 defaultValue = -1L
             },
+            navArgument("subscribeName"){
+                type = NavType.StringType
+                defaultValue = ""
+            }
         ),
-        content = { SubscribeCustomAddScreen(navController) }
+        content = { SubscribeCustomUpdateScreen(navController) }
     )
     composable(
         route = Screen.UnivListScreen.route,

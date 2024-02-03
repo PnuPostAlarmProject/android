@@ -60,11 +60,12 @@ fun SubscribeScreen(
         item { SubscribeTitle() }
         item { SubscribeListTitle() }
         items(subscribeList) { subscribe ->
-            val route = Screen.SubscribeCustomAddScreen.route + "?subscribeId=${subscribe.subscribeId}"
+            val route = Screen.SubscribeCustomUpdateScreen.route
+            val query = "?subscribeId=${subscribe.subscribeId}&subscribeName=${subscribe.title}"
             SubscribeItem(
                 subscribe = subscribe,
                 onDeleteClick = { viewModel.deleteSubscribe(subscribe.subscribeId) },
-                onUpdateClick = { navController.navigate(route) },
+                onUpdateClick = { navController.navigate(route + query) },
                 onAlarmClick = { viewModel.updateActive(subscribe, it) }
             )
         }
