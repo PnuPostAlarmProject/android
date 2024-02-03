@@ -35,7 +35,7 @@ import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PButton
-import com.jeongg.ppap.presentation.component.PTextField
+import com.jeongg.ppap.presentation.component.PTextFieldCard
 import com.jeongg.ppap.presentation.component.addFocusCleaner
 import com.jeongg.ppap.presentation.component.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
@@ -49,8 +49,6 @@ fun SubscribeCustomAddScreen(
     viewModel: SubscribeCustomAddViewModel = hiltViewModel()
 ){
     val focusManager = LocalFocusManager.current
-    val title = stringResource(if (viewModel.isUpdate()) R.string.update_subscribe_button_text else R.string.add_subscribe_button_text)
-
     LaunchedEffectEvent(
         eventFlow = viewModel.eventFlow,
         onNavigate = { navController.navigate(Screen.SubscribeScreen.route) }
@@ -60,7 +58,7 @@ fun SubscribeCustomAddScreen(
         contentPadding = Dimens.ScreenPadding,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        item { SubscribeCustomAddTitle(title) }
+        item { SubscribeCustomAddTitle() }
         item { PHorizontalPager() }
         item {
             PTextFields(
@@ -68,15 +66,16 @@ fun SubscribeCustomAddScreen(
                 onTitleChange = { viewModel.onEvent(SubscribeCustomAddEvent.EnteredTitle(it)) },
                 rss = viewModel.subscribe.value.rssLink,
                 onRssChange = { viewModel.onEvent(SubscribeCustomAddEvent.EnteredRssLink(it)) },
-                enabled = !viewModel.isUpdate()
             )
         }
         item {
-            Column(modifier = Modifier.fillMaxWidth()){
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ){
                 PButton(
-                    text = title,
+                    text = stringResource(R.string.add_subscribe_button_text),
                     onClick = { viewModel.onEvent(SubscribeCustomAddEvent.SaveSubscribe)},
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
                 )
             }
         }
@@ -84,11 +83,9 @@ fun SubscribeCustomAddScreen(
 }
 
 @Composable
-private fun SubscribeCustomAddTitle(
-    title: String
-) {
+private fun SubscribeCustomAddTitle(){
     Text(
-        text = title,
+        text = stringResource(R.string.add_subscribe_button_text),
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.padding(bottom = 20.dp)
     )
@@ -108,7 +105,7 @@ private fun PHorizontalPager() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .defaultMinSize(minHeight = 160.dp)
+                .defaultMinSize(minHeight = 170.dp)
                 .alpha(if (state.currentPage == index) 1f else 0.5f)
                 .clip(MaterialTheme.shapes.medium)
                 .background(bright_yellow),
@@ -125,19 +122,25 @@ private fun PHorizontalPager() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ){
-                repeat(2) { iteration ->
-                    val color = if (state.currentPage == iteration) Color.White else Color.White.copy(alpha = 0.5f)
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 2.dp, vertical = 5.dp)
-                            .clip(CircleShape)
-                            .background(color)
-                            .size(6.dp),
-                    )
-                }
+                PHorizontalIndicator(index == 0)
+                PHorizontalIndicator(index == 1)
             }
         }
     }
+}
+
+@Composable
+private fun PHorizontalIndicator(
+    isSelected: Boolean = false
+) {
+    val color = if (isSelected) Color.White else Color.White.copy(alpha = 0.5f)
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 2.dp, vertical = 5.dp)
+            .clip(CircleShape)
+            .background(color)
+            .size(6.dp),
+    )
 }
 
 @Composable
@@ -146,48 +149,20 @@ private fun PTextFields(
     onTitleChange: (String) -> Unit = {},
     rss: String = "",
     onRssChange: (String) -> Unit = {},
-    enabled: Boolean = false
 ) {
     Column {
-        PTextFieldTitle(
-            modifier = Modifier.padding(top = 15.dp, bottom = 7.dp),
-            title = stringResource(R.string.subscribe_field_title)
-        )
-        PTextField(
+        PTextFieldCard(
+            title = stringResource(R.string.subscribe_field_title),
             text = title,
             onValueChange = onTitleChange,
             placeholder = stringResource(R.string.subscribe_field_title_hint)
         )
-        if (enabled) {
-            PTextFieldTitle(
-                modifier = Modifier.padding(top = 25.dp, bottom = 7.dp),
-                title = stringResource(R.string.subscribe_field_rss)
-            )
-            PTextField(
-                text = rss,
-                onValueChange = onRssChange,
-                placeholder = stringResource(R.string.subscribe_field_rss_hint)
-            )
-        }
-    }
-}
-
-@Composable
-private fun PTextFieldTitle(
-    modifier: Modifier = Modifier,
-    title: String = ""
-) {
-    Row(
-        modifier = modifier
-    ) {
-        Text(
-            text = title,
-            style = typography.displayLarge
-        )
-        Text(
-            text = "*",
-            style = typography.displayLarge,
-            color = Color.Red
+        PTextFieldCard(
+            modifier = Modifier.padding(top = 10.dp, bottom = 25.dp),
+            title = stringResource(R.string.subscribe_field_rss),
+            text = rss,
+            onValueChange = onRssChange,
+            placeholder = stringResource(R.string.subscribe_field_rss_hint)
         )
     }
 }

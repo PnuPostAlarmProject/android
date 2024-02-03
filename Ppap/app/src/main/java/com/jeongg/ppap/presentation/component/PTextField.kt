@@ -1,8 +1,11 @@
 package com.jeongg.ppap.presentation.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +24,29 @@ import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
 import com.jeongg.ppap.theme.gray3
 import com.jeongg.ppap.theme.main_yellow
 import com.jeongg.ppap.theme.typography
+
+@Composable
+fun PTextFieldCard(
+    modifier: Modifier = Modifier,
+    title: String = "",
+    text: String = "",
+    onValueChange: (String) -> Unit = {},
+    placeholder: String = ""
+){
+    Column(
+        modifier = modifier
+    ) {
+        PTextFieldTitle(
+            modifier = Modifier.padding(top = 15.dp, bottom = 7.dp),
+            title = title
+        )
+        PTextField(
+            text = text,
+            onValueChange = onValueChange,
+            placeholder = placeholder
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +79,26 @@ fun PTextField(
         )
     }
 
+}
+
+@Composable
+fun PTextFieldTitle(
+    modifier: Modifier = Modifier,
+    title: String = ""
+) {
+    Row(
+        modifier = modifier
+    ) {
+        Text(
+            text = title,
+            style = typography.displayLarge
+        )
+        Text(
+            text = "*",
+            style = typography.displayLarge,
+            color = Color.Red
+        )
+    }
 }
 
 @Composable
