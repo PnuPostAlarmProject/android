@@ -15,7 +15,7 @@ class GetNoticeList @Inject constructor(
 ) {
     operator fun invoke(subscribeId: Long?): Flow<PagingData<NoticeDTO>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = HttpRoutes.PER_PAGE_SIZE, prefetchDistance = 3),
+            config = PagingConfig(enablePlaceholders = false, pageSize = HttpRoutes.PER_PAGE_SIZE, prefetchDistance = 1),
             pagingSourceFactory = { NoticePagingSource(noticeRepository, subscribeId) }
         ).flow
     }

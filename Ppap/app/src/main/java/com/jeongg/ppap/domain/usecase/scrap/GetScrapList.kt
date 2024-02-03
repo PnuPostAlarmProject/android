@@ -15,7 +15,7 @@ class GetScrapList @Inject constructor(
 ){
     operator fun invoke(subscribeId: Long?): Flow<PagingData<ScrapDTO>> {
         return Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = HttpRoutes.PER_PAGE_SIZE, prefetchDistance = 3),
+            config = PagingConfig(enablePlaceholders = false, pageSize = HttpRoutes.PER_PAGE_SIZE, prefetchDistance = 1),
             pagingSourceFactory = { ScrapPagingSource(scrapRepository, subscribeId) }
         ).flow
     }
