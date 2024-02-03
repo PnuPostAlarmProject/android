@@ -24,8 +24,6 @@ import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.noticeItem.noticeItemContent
-
 
 @Composable
 fun NoticeListScreen(
@@ -51,13 +49,13 @@ fun NoticeListScreen(
         PTabLayer(
             tabs = subscribeList,
             selectedTabIndex = selectedTabIndex.intValue,
+            contents = contents,
             onTabClick = { tabIndex ->
                 if (selectedTabIndex.intValue != tabIndex){
                     selectedTabIndex.intValue = tabIndex
                     viewModel.getNoticePage(subscribeList[tabIndex].subscribeId)
                 }
             },
-            contents = { noticeItemContent(contents = contents) }
         )
     }
 }

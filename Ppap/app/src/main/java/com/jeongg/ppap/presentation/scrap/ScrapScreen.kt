@@ -2,7 +2,6 @@ package com.jeongg.ppap.presentation.scrap
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,7 +18,6 @@ import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.noticeItem.noticeItemContent
 
 @Composable
 fun ScrapScreen(
@@ -45,13 +43,13 @@ fun ScrapScreen(
         PTabLayer(
             tabs = subscribeList,
             selectedTabIndex = selectedTabIndex.intValue,
+            contents = contents,
             onTabClick = { tabIndex ->
                 if (selectedTabIndex.intValue != tabIndex) {
                     selectedTabIndex.intValue = tabIndex
                     viewModel.getScrapPage(subscribeList[tabIndex].subscribeId)
                 }
-            },
-            contents = { noticeItemContent(contents = contents) }
+            }
         )
     }
 }
