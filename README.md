@@ -1,5 +1,5 @@
 # PPAP (Pnu Post Alarm Project)
-부산대학교 학과 게시판의 공지사항을 알림으로 받아보고 한눈에 모아볼 수 있는 서비스입니다.
+부산대학교 학과 게시판을 **한눈에** 모아보고 새로운 공지를 푸시 알림으로 **빠르게** 확인하는 서비스입니다.
 
 <p align="center"><img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/banner.png" width = "700px" alt = "introduction"></p>
 
@@ -23,25 +23,40 @@
 
 
 ## 주요 기능
+### 기능 
+
+⭐ **부산대 내 원하는 게시판 구독**
+> - 모든 학과의 게시판 (자유, 취업, 공지) 을 구독할 수 있어요
+> - 등록되어있지 않는 게시판은 직접 사용자가 추가할 수도 있어요
+
+⏰ **새 공지사항 푸시 알림**
+> - 구독한 게시판 중 알림 설정을 `ON` 해두면 새로운 공지사항이 등록되었을 때 푸시 알림으로 받아볼 수 있어요
+
+📢 **공지사항 조회하기**
+> -  구독중인 게시판의 공지사항을 한눈에 확인할 수 있어요
+
+❤️ **마음에 드는 공지사항 스크랩하기**
+> -  “ 이건 꼭.. 소장해야 돼🥹 “ 하는 공지사항은 하트를 눌러 스크랩 화면에서 모아볼 수 있어요
+
 ### ✏️ 화면 구성
 
 | 공지사항 | 스크랩 | 구독 | 설정 |
 |:---:|:--:|:--:|:--:|
-| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/notice.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/scrap.jpg" width = "300px">  | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/subscribe.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting.jpg" width = "300px"> | 
-| 스플래시 | 로그인 | 알림 설정 변경 | 구독 추가 |
-| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/splash.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/login.jpg" width = "300px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/alarm_change.jpg" width = "300px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe.jpg" width = "300px"> |
+| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/notice.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/scrap.jpg" width = "300px">  | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/subscribe.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting2.jpg" width = "300px"> | 
+| 스플래시 | 로그인 | 구독 추가1 | 구독 추가2 |
+| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/splash.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/login.jpg" width = "300px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1.jpg" width = "300px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe.jpg" width = "300px"> |
 
 ### 🎥 시연 영상
 
-https://github.com/PnuPostAlarmProject/android/assets/84652886/d1ad6b62-e2a0-48da-af43-76bc98d8e2b2
+https://github.com/PnuPostAlarmProject/android/assets/84652886/e9e169a0-a3e1-4aa8-aaa2-796d1f9bcc59
 
 
-### ♥️ 사용자 친화적 UI
+### ♥️ 우리 PPAP는요…
+- 게시판 추가 로직의 단순화 ➡️ 사용자의 불편 감소
+- RSS 를 지원하지 않는 학과 (기계공학과 등) 지원 ➡️ 모두에게 서비스 이용의 기회 제공
 - 다크모드 지원 ➡️ 접근성 UP
 - Bottom Navigation Bar, Scrollable Tab Bar ➡️ 편리한 화면 이동
-- 디바이스 내 알림 설정 바로가기
-- 바텀 Sheet와 Dialog의 적절한 사용
-- 앱 종료 전 Toast Bar를 사용한 확인
+- 디바이스 내 알림 설정 바로가기 ➡️ 간편한 알림 설정 변경
 
 ## 개발
 ### 📖 Libraries
