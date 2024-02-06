@@ -88,8 +88,8 @@ private fun SettingUserInfo(
     email: String = ""
 ) {
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText("가입 정보")
         SettingText(text = email)
@@ -106,8 +106,8 @@ private fun SettingService(
 ) {
     val urlHandler = LocalUriHandler.current
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText(text = "서비스")
         SettingServiceItem(
@@ -137,8 +137,8 @@ private fun SettingMyPage(
         onConfirmClick = onWithdrawlClick
     )
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText(text = "마이페이지")
         SettingServiceItem(
@@ -157,8 +157,8 @@ private fun SettingMyPage(
 private fun SettingExtra() {
     val urlHandler = LocalUriHandler.current
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText(text = "기타")
         SettingServiceItem(
@@ -298,7 +298,7 @@ private fun SettingVersion(
     ) {
         SettingText(text = "버전")
         SettingText(
-            modifier = Modifier.align(Alignment.CenterEnd),
+            modifier = Modifier. align(Alignment.CenterEnd),
             text = "v$version"
         )
     }

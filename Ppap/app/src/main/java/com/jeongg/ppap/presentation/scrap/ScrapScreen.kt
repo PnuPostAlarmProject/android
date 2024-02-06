@@ -16,6 +16,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.jeongg.ppap.presentation.component.ExitBackHandler
 import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PEmptyContent
+import com.jeongg.ppap.presentation.component.PEmptyContentWithButton
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
 
@@ -35,7 +36,7 @@ fun ScrapScreen(
     ) {
         ScrapTitle()
         if (viewModel.isSubscribeListEmpty()) {
-            PEmptyContent(
+            PEmptyContentWithButton(
                 onClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
             )
             return

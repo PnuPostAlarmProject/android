@@ -21,7 +21,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.ExitBackHandler
 import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
+import com.jeongg.ppap.presentation.component.PCircularProgress
 import com.jeongg.ppap.presentation.component.PEmptyContent
+import com.jeongg.ppap.presentation.component.PEmptyContentWithButton
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
 
@@ -33,6 +35,7 @@ fun NoticeListScreen(
     val selectedTabIndex = rememberSaveable { mutableIntStateOf(0) }
     val contents = viewModel.contents.collectAsLazyPagingItems()
     val subscribeList = viewModel.subscribes.value
+    val state = viewModel.state.value
 
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
     ExitBackHandler()
@@ -40,23 +43,28 @@ fun NoticeListScreen(
         modifier = Modifier.fillMaxSize()
     ){
         NoticeListTitle()
-        if (viewModel.isEmpty()) {
-            PEmptyContent(
-                onClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
-            )
-            return
-        }
-        PTabLayer(
-            tabs = subscribeList,
-            selectedTabIndex = selectedTabIndex.intValue,
-            contents = contents,
-            onTabClick = { tabIndex ->
-                if (selectedTabIndex.intValue != tabIndex){
-                    selectedTabIndex.intValue = tabIndex
-                    viewModel.getNoticePage(subscribeList[tabIndex].subscribeId)
-                }
-            },
+        PCircularProgress(isVisible = state.isLoading)
+        PEmptyContent(
+            isVisible = state.errorMessage.isNotEmpty(),
+            message = state.errorMessage
         )
+        PEmptyContentWithButton(
+            isVisible = viewModel.isEmpty(),
+            onClick = { navController.navigate(Screen.SubscribeScreen.route) }
+        )
+        if (!viewModel.isEmpty()){
+            PTabLayer(
+                tabs = subscribeList,
+                selectedTabIndex = selectedTabIndex.intValue,
+                contents = contents,
+                onTabClick = { tabIndex ->
+                    if (selectedTabIndex.intValue != tabIndex){
+                        selectedTabIndex.intValue = tabIndex
+                        viewModel.getNoticePage(subscribeList[tabIndex].subscribeId)
+                    }
+                }
+            )
+        }
     }
 }
 

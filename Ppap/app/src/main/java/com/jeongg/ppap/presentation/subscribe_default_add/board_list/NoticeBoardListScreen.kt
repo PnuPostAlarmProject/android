@@ -3,7 +3,6 @@ package com.jeongg.ppap.presentation.subscribe_default_add.board_list
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
@@ -11,12 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.data.dto.UnivNoticeBoardDTO
 import com.jeongg.ppap.presentation.component.PButton
+import com.jeongg.ppap.presentation.component.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.subscribe_default_add.SubscribeAddCardTheme
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
@@ -61,11 +60,7 @@ private fun NoticeBoardContent(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .selectable(
-                selected = isSelected,
-                onClick = onClick,
-                role = Role.RadioButton
-            ),
+            .noRippleClickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(

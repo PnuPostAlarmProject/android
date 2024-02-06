@@ -14,11 +14,12 @@ import com.jeongg.ppap.theme.main_yellow
 
 @Composable
 fun PCircularProgress(
-    isVisible: Boolean
+    modifier: Modifier = Modifier,
+    isVisible: Boolean = true
 ) {
     if (!isVisible) return
     Column (
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

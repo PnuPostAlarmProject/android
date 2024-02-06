@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -17,14 +18,22 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
@@ -41,6 +50,8 @@ fun PTabLayer(
 ) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState { tabs.size }
+    val refreshState = rememberSwipeRefreshState(isRefreshing = false)
+
     LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress) {
             onTabClick(pagerState.currentPage)
@@ -58,31 +69,52 @@ fun PTabLayer(
         PCircularProgress(
             isVisible = contents.loadState.refresh is LoadState.Loading,
         )
-        HorizontalPager(
-            state = pagerState,
-            pageSpacing = 15.dp,
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.Top
-        ) {page ->
-            HorizontalPagerContent(page, selectedTabIndex, contents)
+        SwipeRefresh(
+            state = refreshState,
+            onRefresh = { contents.refresh() },
+            indicator = { state, trigger -> PSwipeRefreshIndicator(state, trigger) }
+        ) {
+            HorizontalPager(
+                state = pagerState,
+                pageSpacing = 15.dp,
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Top
+            ) {page ->
+                if (page == selectedTabIndex) {
+                    PEmptyContent(
+                        message = "아직 등록된 게시글이 없어요.",
+                        isVisible = contents.itemCount == 0
+                    )
+                    HorizontalPagerContent(contents)
+                }
+            }
         }
     }
 }
 
 @Composable
+private fun PSwipeRefreshIndicator(
+    state: SwipeRefreshState,
+    refreshTrigger: Dp
+) {
+    SwipeRefreshIndicator(
+        state = state,
+        refreshTriggerDistance = refreshTrigger,
+        backgroundColor = Color.White,
+        contentColor = main_yellow
+    )
+}
+
+@Composable
 private fun HorizontalPagerContent(
-    page: Int,
-    selectedTabIndex: Int,
     contents: LazyPagingItems<NoticeItemDTO>
 ) {
     LazyColumn {
-        if (page == selectedTabIndex) {
-            items(
-                count = contents.itemCount,
-                key = contents.itemKey { it.contentId }
-            ) { index ->
-                NoticeItem(noticeItemDTO = contents[index] ?: NoticeItemDTO())
-            }
+        items(
+            count = contents.itemCount,
+            key = contents.itemKey { it.contentId }
+        ) { index ->
+            NoticeItem(noticeItemDTO = contents[index] ?: NoticeItemDTO())
         }
     }
 }
