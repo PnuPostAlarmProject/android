@@ -43,7 +43,9 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
+import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
@@ -91,7 +93,11 @@ class NetworkModule {
             }
             defaultRequest{
                 contentType(ContentType.Application.Json)
-                url(HttpRoutes.BASE_URL.path)
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = HttpRoutes.BASE_HOST.path
+                    path(HttpRoutes.BASE_PATH.path)
+                }
 
                 val accessToken = PDataStore(context).getData(DataStoreKey.ACCESS_TOKEN_KEY.name)
                 if (accessToken.isNotEmpty())
