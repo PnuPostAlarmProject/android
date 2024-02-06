@@ -7,7 +7,6 @@ import io.ktor.client.statement.HttpResponse
 interface SubscribeRepository {
     suspend fun createSubscribe(requestDTO: SubscribeCreateRequestDTO): HttpResponse
     suspend fun getSubscribes(): HttpResponse
-    suspend fun getSubscribeById(subscribeId: Long): HttpResponse
     suspend fun updateSubscribe(subscribeId: Long, requestDTO: SubscribeUpdateRequestDTO): HttpResponse
     suspend fun deleteSubscribe(subscribeId: Long):HttpResponse
     suspend fun updateActive(subscribeId: Long): HttpResponse

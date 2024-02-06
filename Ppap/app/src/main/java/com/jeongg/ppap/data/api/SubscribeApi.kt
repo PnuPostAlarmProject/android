@@ -24,10 +24,6 @@ class SubscribeApi(
         return client.get(HttpRoutes.GET_SUBSCRIBES.path)
     }
 
-    override suspend fun getSubscribeById(subscribeId: Long): HttpResponse {
-        return client.get(HttpRoutes.GET_SUBSCRIBE.path + "/$subscribeId")
-    }
-
     override suspend fun updateSubscribe(subscribeId: Long, requestDTO: SubscribeUpdateRequestDTO): HttpResponse{
         return client.post(HttpRoutes.UPDATE_SUBSCRIBE.path + "/$subscribeId"){
             setBody(requestDTO)
