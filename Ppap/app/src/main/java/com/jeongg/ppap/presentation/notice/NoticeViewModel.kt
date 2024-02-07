@@ -4,22 +4,20 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.jeongg.ppap.data.dto.NoticeDTO
-import com.jeongg.ppap.data.dto.NoticeItemDTO
-import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.domain.usecase.notice.GetNoticeList
 import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap
 import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
 import com.jeongg.ppap.presentation.mapper.NoticeItemMapper
+import com.jeongg.ppap.presentation.state.NoticeItemState
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,11 +29,8 @@ class NoticeViewModel  @Inject constructor(
     private val deleteScrapUseCase: DeleteScrap
 ): ViewModel() {
 
-    private val _subscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
-    val subscribes = _subscribes
-
-    private val _contents: Flow<PagingData<NoticeItemDTO>> = flow{}
-    var contents = _contents
+    private val _state = mutableStateOf(NoticeItemState())
+    val state = _state
 
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
@@ -45,14 +40,12 @@ class NoticeViewModel  @Inject constructor(
         getSubscribes()
     }
 
-    fun isEmpty(): Boolean {
-        return subscribes.value.isEmpty()
-    }
-
     fun getNoticePage(subscribeId: Long?){
-        contents = NoticeItemMapper().noticeToNoticeItem(
-            noticePagingData = getNoticeListUseCase(subscribeId).cachedIn(viewModelScope),
-            scrapEvent = { isScraped, noticeDTO -> scrapEvent(isScraped, noticeDTO) }
+        _state.value = _state.value.copy(
+            contents = NoticeItemMapper().noticeToNoticeItem(
+                noticePagingData = getNoticeListUseCase(subscribeId).cachedIn(viewModelScope),
+                scrapEvent = { isScraped, noticeDTO -> scrapEvent(isScraped, noticeDTO) }
+            )
         )
     }
 
@@ -62,31 +55,25 @@ class NoticeViewModel  @Inject constructor(
     }
 
     private fun getSubscribes(){
-        viewModelScope.launch {
-            getSubscribesUseCase().collect { response ->
-                when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> {
-                        _subscribes.value = response.data ?: emptyList()
-                        _eventFlow.emit(PEvent.SUCCESS)
-                    }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
-                }
-            }
-        }
+        getSubscribesUseCase().onEach { response ->
+            _state.value = _state.value.copy(
+                isLoading = response is Resource.Loading,
+                errorMessage = if (response is Resource.Error) response.message else "",
+                subscribes = response.data ?: emptyList(),
+            )
+        }.launchIn(viewModelScope)
     }
 
     private fun addScrap(isScraped: MutableState<Boolean>, noticeDTO: NoticeDTO){
         viewModelScope.launch{
             addScrapUseCase(noticeDTO.contentId).collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
                     is Resource.Success -> {
                         isScraped.value = true
                         noticeDTO.isScraped = true
-                        _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }
@@ -95,13 +82,12 @@ class NoticeViewModel  @Inject constructor(
         viewModelScope.launch{
             deleteScrapUseCase(noticeDTO.contentId).collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
                     is Resource.Success -> {
                         isScraped.value = false
                         noticeDTO.isScraped = false
-                        _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }

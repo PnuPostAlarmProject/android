@@ -24,6 +24,7 @@ sealed class BottomNavItem(
         screenList = listOf(
             Screen.SubscribeScreen,
             Screen.SubscribeCustomAddScreen,
+            Screen.SubscribeCustomUpdateScreen,
             Screen.UnivListScreen,
             Screen.DepartmentListScreen,
             Screen.NoticeBoardListScreen

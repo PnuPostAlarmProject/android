@@ -2,10 +2,10 @@ package com.jeongg.ppap.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.jeongg.ppap.data._const.PagingConst
 import com.jeongg.ppap.data.dto.NoticeDTO
 import com.jeongg.ppap.data.dto.NoticeListDTO
 import com.jeongg.ppap.data.util.ApiUtils
-import com.jeongg.ppap.data.util.HttpRoutes.STARTING_PAGE_INDEX
 import com.jeongg.ppap.domain.repository.NoticeRepository
 import io.ktor.client.call.body
 import io.ktor.http.HttpStatusCode
@@ -24,7 +24,7 @@ class NoticePagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NoticeDTO> {
         return try {
-            val page = params.key ?: STARTING_PAGE_INDEX
+            val page = params.key ?: PagingConst.STARTING_PAGE_INDEX.value
             val response = noticeRepository.getNoticeList(subscribeId, page)
             val body = response.body<ApiUtils.ApiResult<NoticeListDTO>>()
             val contents = body.response?.contents ?: emptyList()
@@ -33,7 +33,7 @@ class NoticePagingSource(
             if (response.status == HttpStatusCode.OK && body.success) {
                 LoadResult.Page(
                     data = contents,
-                    prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1,
+                    prevKey = if (page == PagingConst.STARTING_PAGE_INDEX.value) null else page - 1,
                     nextKey = if (contents.isEmpty()) null else page + 1
                 )
             }

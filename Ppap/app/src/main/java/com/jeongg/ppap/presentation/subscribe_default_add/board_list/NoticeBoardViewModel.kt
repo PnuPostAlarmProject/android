@@ -31,6 +31,9 @@ class NoticeBoardViewModel @Inject constructor(
     private val _noticeBoard = mutableStateOf<List<UnivNoticeBoardDTO>>(emptyList())
     val noticeBoard = _noticeBoard
 
+    private val _errorMessage = mutableStateOf("")
+    val errorMessage = _errorMessage
+
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
 
@@ -46,25 +49,23 @@ class NoticeBoardViewModel @Inject constructor(
 
     fun addSubscribe(){
         viewModelScope.launch {
-            val failedList = mutableListOf<Int>()
-            selected.forEach { index ->
-                val title = _noticeBoard.value[index].title
-                val link  = _noticeBoard.value[index].link
+            if (selected.isEmpty()){
+                _eventFlow.emit(PEvent.MakeToast("게시판이 추가되지 않았습니다."))
+                return@launch
+            }
+
+            selected.forEach { num ->
+                val title = _noticeBoard.value[num].title
+                val link  = _noticeBoard.value[num].link
                 createSubscribeUseCase(
                     SubscribeCreateRequestDTO(title, link, null)
                 ).collect { response ->
                     if (response is Resource.Error) {
-                        _eventFlow.emit(PEvent.TOAST("$title\n${response.message}"))
-                        failedList.add(index)
+                        _eventFlow.emit(PEvent.MakeToast("$title\n${response.message}"))
                     }
                 }
             }
-            if (selected.isEmpty()){
-                _eventFlow.emit(PEvent.TOAST("게시판이 추가되지 않았습니다."))
-            }
-            else if (failedList.isEmpty()) {
-                _eventFlow.emit(PEvent.NAVIGATE)
-            }
+            _eventFlow.emit(PEvent.Navigate)
         }
     }
 
@@ -80,14 +81,11 @@ class NoticeBoardViewModel @Inject constructor(
     private fun getUnivSubscribeList(){
         viewModelScope.launch{
             getUnivSubscribeListUseCase(univId.longValue).collect { response ->
-                when(response) {
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> {
-                        _noticeBoard.value = response.data ?: emptyList()
-                        _eventFlow.emit(PEvent.SUCCESS)
-                    }
-                    is Resource.Error ->  _eventFlow.emit(PEvent.TOAST(response.message))
-                }
+                val isError = (response is Resource.Error)
+                val isSuccess = (response is Resource.Success)
+
+                errorMessage.value = if (isError) response.message else ""
+                _noticeBoard.value = if (isSuccess) response.data ?: emptyList() else emptyList()
             }
         }
     }

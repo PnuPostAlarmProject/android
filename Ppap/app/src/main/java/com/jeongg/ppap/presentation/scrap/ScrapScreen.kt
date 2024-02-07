@@ -2,7 +2,6 @@ package com.jeongg.ppap.presentation.scrap
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,13 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.jeongg.ppap.presentation.component.ExitBackHandler
-import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
-import com.jeongg.ppap.presentation.component.PEmptyContent
+import com.jeongg.ppap.presentation.component.util.ExitBackHandler
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.noticeItem.noticeItemContent
 
 @Composable
 fun ScrapScreen(
@@ -27,8 +23,6 @@ fun ScrapScreen(
     viewModel: ScrapViewModel = hiltViewModel()
 ){
     val selectedTabIndex = rememberSaveable { mutableIntStateOf(0) }
-    val contents = viewModel.contents.collectAsLazyPagingItems()
-    val subscribeList = viewModel.subscribes.value
 
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
     ExitBackHandler()
@@ -36,22 +30,16 @@ fun ScrapScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         ScrapTitle()
-        if (viewModel.isSubscribeListEmpty()) {
-            PEmptyContent(
-                onClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
-            )
-            return
-        }
         PTabLayer(
-            tabs = subscribeList,
+            state = viewModel.state.value,
             selectedTabIndex = selectedTabIndex.intValue,
-            onTabClick = { tabIndex ->
-                if (selectedTabIndex.intValue != tabIndex) {
+            onNavigate = { navController.navigate(Screen.SubscribeScreen.route) },
+            onTabClick = { tabIndex, subscribeId ->
+                if (selectedTabIndex.intValue != tabIndex){
                     selectedTabIndex.intValue = tabIndex
-                    viewModel.getScrapPage(subscribeList[tabIndex].subscribeId)
+                    viewModel.getScrapPage(subscribeId)
                 }
-            },
-            contents = { noticeItemContent(contents = contents) }
+            }
         )
     }
 }

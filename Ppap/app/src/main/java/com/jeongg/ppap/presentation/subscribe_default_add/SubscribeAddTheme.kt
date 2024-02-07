@@ -21,8 +21,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
-import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
-import com.jeongg.ppap.presentation.component.noRippleClickable
+import com.jeongg.ppap.presentation.component.PEmptyContent
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
+import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.theme.Dimens
 import com.jeongg.ppap.theme.gray5
@@ -32,9 +33,11 @@ import kotlinx.coroutines.flow.SharedFlow
 @Composable
 fun SubscribeAddCardTheme(
     eventFlow: SharedFlow<PEvent>,
+    errorMessage: String,
     text: String = "전체",
+    isContentEmpty: Boolean = false,
     onNavigate: () -> Unit = {},
-    contents: @Composable ColumnScope.() -> Unit,
+    contents: @Composable (ColumnScope.() -> Unit)
 ){
     LaunchedEffectEvent(
         eventFlow = eventFlow,
@@ -47,15 +50,29 @@ fun SubscribeAddCardTheme(
     ) {
         item { SubscribeDefaultAddTitle() }
         item { SubscribeDefaultAddSubTitle(text) }
-        item {
-            Column(
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.large)
-                    .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outline), MaterialTheme.shapes.large)
-                    .padding(20.dp),
-                content = contents
+        item { SubscribeAddCardContent(errorMessage, isContentEmpty, contents) }
+    }
+}
+
+@Composable
+private fun SubscribeAddCardContent(
+    errorMessage: String,
+    isContentEmpty: Boolean = false,
+    contents: @Composable (ColumnScope.() -> Unit)
+) {
+    Column(
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.large)
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                MaterialTheme.shapes.large
             )
+            .padding(20.dp)
+    ) {
+        if (errorMessage.isNotEmpty()) {
+            PEmptyContent(message = errorMessage)
         }
+        else if (!isContentEmpty) contents()
     }
 }
 

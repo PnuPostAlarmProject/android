@@ -1,9 +1,8 @@
 package com.jeongg.ppap.domain.usecase.user
 
-import com.jeongg.ppap.data.util.ACCESS_TOKEN_KEY
+import com.jeongg.ppap.data._const.DataStoreKey
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.data.util.PDataStore
-import com.jeongg.ppap.data.util.REFRESH_TOKEN_KEY
 import com.jeongg.ppap.data.util.getErrorMessage
 import com.jeongg.ppap.domain.repository.UserRepository
 import com.jeongg.ppap.util.Resource
@@ -26,8 +25,8 @@ class Withdrawal @Inject constructor(
             val errorMessage = body.error?.message ?: "회원탈퇴에 실패하였습니다."
 
             if (response.status == HttpStatusCode.OK && body.success) {
-                dataStore.setData(ACCESS_TOKEN_KEY, "")
-                dataStore.setData(REFRESH_TOKEN_KEY, "")
+                dataStore.setData(DataStoreKey.ACCESS_TOKEN_KEY.name, "")
+                dataStore.setData(DataStoreKey.REFRESH_TOKEN_KEY.name, "")
                 emit(Resource.Success(successMessage))
             }
             else {

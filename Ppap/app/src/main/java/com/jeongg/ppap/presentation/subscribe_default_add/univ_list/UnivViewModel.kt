@@ -23,6 +23,9 @@ class UnivViewModel @Inject constructor(
     private val _univList = mutableStateOf<List<UnivListDTO>>(emptyList())
     val univList = _univList
 
+    private val _errorMessage = mutableStateOf("")
+    val errorMessage = _errorMessage
+
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
 
@@ -32,12 +35,12 @@ class UnivViewModel @Inject constructor(
 
     fun selectSubscribe(index: Int){
         viewModelScope.launch {
-            if (index >= univList.value.size) {
-                _eventFlow.emit(PEvent.TOAST("index 범위를 초과하였습니다."))
+            if (index >= _univList.value.size) {
+                _eventFlow.emit(PEvent.MakeToast("index 범위를 초과하였습니다."))
             }
             else {
                 _selected.value = _univList.value[index]
-                _eventFlow.emit(PEvent.NAVIGATE)
+                _eventFlow.emit(PEvent.Navigate)
             }
         }
     }
@@ -45,14 +48,11 @@ class UnivViewModel @Inject constructor(
     private fun getUnivList() {
         viewModelScope.launch{
             getUnivListUseCase().collect { response ->
-                when(response) {
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> {
-                        _univList.value = response.data ?: emptyList()
-                        _eventFlow.emit(PEvent.SUCCESS)
-                    }
-                    is Resource.Error ->  _eventFlow.emit(PEvent.TOAST(response.message))
-                }
+                val isError = (response is Resource.Error)
+                val isSuccess = (response is Resource.Success)
+
+                errorMessage.value = if (isError) response.message else ""
+                _univList.value = if (isSuccess) response.data ?: emptyList() else emptyList()
             }
         }
     }

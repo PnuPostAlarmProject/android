@@ -21,10 +21,6 @@ class SubscribeRepositoryImpl @Inject constructor(
         return subscribeApi.getSubscribes()
     }
 
-    override suspend fun getSubscribeById(subscribeId: Long): HttpResponse{
-        return subscribeApi.getSubscribeById(subscribeId)
-    }
-
     override suspend fun updateSubscribe(subscribeId: Long, requestDTO: SubscribeUpdateRequestDTO): HttpResponse{
         return subscribeApi.updateSubscribe(subscribeId, requestDTO)
     }

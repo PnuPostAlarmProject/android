@@ -2,6 +2,8 @@ package com.jeongg.ppap.di
 
 import android.content.Context
 import android.util.Log
+import com.jeongg.ppap.data._const.DataStoreKey
+import com.jeongg.ppap.data._const.HttpRoutes
 import com.jeongg.ppap.data.api.NoticeApi
 import com.jeongg.ppap.data.api.ScrapApi
 import com.jeongg.ppap.data.api.SubscribeApi
@@ -12,11 +14,8 @@ import com.jeongg.ppap.data.repository.NoticeRepositoryImpl
 import com.jeongg.ppap.data.repository.ScrapRepositoryImpl
 import com.jeongg.ppap.data.repository.SubscribeRepositoryImpl
 import com.jeongg.ppap.data.repository.UserRepositoryImpl
-import com.jeongg.ppap.data.util.ACCESS_TOKEN_KEY
 import com.jeongg.ppap.data.util.ApiUtils
-import com.jeongg.ppap.data.util.HttpRoutes
 import com.jeongg.ppap.data.util.PDataStore
-import com.jeongg.ppap.data.util.REFRESH_TOKEN_KEY
 import com.jeongg.ppap.domain.repository.NoticeRepository
 import com.jeongg.ppap.domain.repository.ScrapRepository
 import com.jeongg.ppap.domain.repository.SubscribeRepository
@@ -32,6 +31,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.RefreshTokensParams
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -43,7 +43,9 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
+import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.appendIfNameAbsent
 import kotlinx.serialization.json.Json
@@ -81,20 +83,7 @@ class NetworkModule {
             install(Auth){
                 bearer {
                     refreshTokens {
-                        val refreshToken = PDataStore(context).getData(REFRESH_TOKEN_KEY)
-                        val token = client.post(HttpRoutes.KAKAO_REISSUE){
-                            setBody(RefreshTokenDTO(refreshToken))
-                            markAsRefreshTokenRequest()
-                        }.body<ApiUtils.ApiResult<KakaoLoginDTO>>()
-
-                        if (token.success){
-                            PDataStore(context).setData(ACCESS_TOKEN_KEY, token.response?.accessToken ?: "")
-                            PDataStore(context).setData(REFRESH_TOKEN_KEY, token.response?.refreshToken ?: "")
-                        }
-                        BearerTokens(
-                            accessToken = token.response?.accessToken ?: "",
-                            refreshToken = token.response?.refreshToken ?: ""
-                        )
+                        getRefreshToken(context)
                     }
                 }
             }
@@ -104,14 +93,42 @@ class NetworkModule {
             }
             defaultRequest{
                 contentType(ContentType.Application.Json)
-                url(HttpRoutes.BASE_URL)
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = HttpRoutes.BASE_HOST.path
+                    path(HttpRoutes.BASE_PATH.path)
+                }
 
-                val accessToken = PDataStore(context).getData(ACCESS_TOKEN_KEY)
+                val accessToken = PDataStore(context).getData(DataStoreKey.ACCESS_TOKEN_KEY.name)
                 if (accessToken.isNotEmpty())
                     headers.appendIfNameAbsent(HttpHeaders.Authorization, accessToken)
             }
         }
     }
+
+    private suspend fun RefreshTokensParams.getRefreshToken(context: Context): BearerTokens {
+        val accessKey = DataStoreKey.ACCESS_TOKEN_KEY.name
+        val refreshKey = DataStoreKey.REFRESH_TOKEN_KEY.name
+        val refreshToken = PDataStore(context).getData(refreshKey)
+
+        val apiResult = client.post(HttpRoutes.KAKAO_REISSUE.path) {
+            setBody(RefreshTokenDTO(refreshToken))
+            markAsRefreshTokenRequest()
+        }.body<ApiUtils.ApiResult<KakaoLoginDTO>>()
+
+        val newAccessToken = apiResult.response?.accessToken ?: ""
+        val newRefreshToken = apiResult.response?.refreshToken ?: ""
+
+        if (apiResult.success) {
+            PDataStore(context).setData(accessKey, newAccessToken)
+            PDataStore(context).setData(refreshKey, newRefreshToken)
+        }
+        return BearerTokens(
+            accessToken = newAccessToken,
+            refreshToken = newRefreshToken
+        )
+    }
+
     @Provides
     @Singleton
     fun provideUserApi(client: HttpClient): UserRepository {

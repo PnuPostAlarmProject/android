@@ -46,7 +46,7 @@
         </service>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/apple" />
+            android:resource="@drawable/icon" />
     </application>
 
 </manifest>

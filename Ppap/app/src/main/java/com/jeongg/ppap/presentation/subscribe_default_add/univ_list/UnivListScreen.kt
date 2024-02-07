@@ -16,6 +16,8 @@ fun UnivListScreen(
     SubscribeAddCardTheme(
         eventFlow = viewModel.eventFlow,
         onNavigate = { navController.navigate(Screen.DepartmentListScreen.route) },
+        errorMessage = viewModel.errorMessage.value,
+        isContentEmpty = univList.isEmpty()
     ){
         univList.forEachIndexed { index, text ->
             NoticeBoardItem(

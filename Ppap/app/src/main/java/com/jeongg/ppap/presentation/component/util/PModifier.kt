@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.component
+package com.jeongg.ppap.presentation.component.util
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures

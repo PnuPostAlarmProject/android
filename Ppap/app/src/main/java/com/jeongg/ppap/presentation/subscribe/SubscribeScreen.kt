@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,13 +33,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.jeongg.ppap.R
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
-import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PButton
+import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.noRippleClickable
+import com.jeongg.ppap.presentation.component.loading.PSwipeRefreshIndicator
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
+import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.theme.gray5
 import com.jeongg.ppap.theme.gray6
@@ -50,30 +53,57 @@ fun SubscribeScreen(
     navController: NavController,
     viewModel: SubscribeViewModel = hiltViewModel()
 ){
-    val subscribeList = viewModel.customSubscribes.value
+    val refreshState = rememberSwipeRefreshState(isRefreshing = false)
+
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-        contentPadding = PaddingValues(20.dp)
-    ){
-        item { SubscribeTitle() }
-        item { SubscribeListTitle() }
-        items(subscribeList) { subscribe ->
-            val route = Screen.SubscribeCustomAddScreen.route + "?subscribeId=${subscribe.subscribeId}"
-            SubscribeItem(
-                subscribe = subscribe,
-                onDeleteClick = { viewModel.deleteSubscribe(subscribe.subscribeId) },
-                onUpdateClick = { navController.navigate(route) },
-                onAlarmClick = { viewModel.updateActive(subscribe, it) }
-            )
+    SwipeRefresh(
+        state = refreshState,
+        onRefresh = { viewModel.refreshSubscribe() },
+        indicator = { state, trigger -> PSwipeRefreshIndicator(state, trigger) }
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            contentPadding = PaddingValues(20.dp)
+        ) {
+            item { SubscribeTitle() }
+            item { SubscribeListTitle() }
+            item {
+                if (viewModel.isLoading.value) {
+                    PCircularProgress()
+                } else {
+                    SubscribeContent(
+                        subscribeList = viewModel.customSubscribes.value,
+                        onDeleteClick = { subscribeId -> viewModel.deleteSubscribe(subscribeId) },
+                        onUpdateClick = { path -> navController.navigate(path) },
+                        onAlarmClick = { subscribe, isActive -> viewModel.updateActive(subscribe, isActive) }
+                    )
+                    SubscribeAddButton(
+                        onDefaultAddClick = { navController.navigate(Screen.UnivListScreen.route) },
+                        onCustomAddClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
+                    )
+                }
+            }
         }
-        item {
-            SubscribeAddButton(
-                onDefaultAddClick = { navController.navigate(Screen.UnivListScreen.route) },
-                onCustomAddClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
-            )
-        }
+    }
+}
+
+@Composable
+private fun SubscribeContent(
+    subscribeList: List<SubscribeGetResponseDTO>,
+    onDeleteClick: (Long) -> Unit,
+    onUpdateClick: (String) -> Unit,
+    onAlarmClick: (SubscribeGetResponseDTO, MutableState<Boolean>) -> Unit,
+) {
+    subscribeList.forEach { subscribe ->
+        val route = Screen.SubscribeCustomUpdateScreen.route
+        val query = "?subscribeId=${subscribe.subscribeId}&subscribeName=${subscribe.title}"
+        SubscribeItem(
+            subscribe = subscribe,
+            onDeleteClick = { onDeleteClick(subscribe.subscribeId) },
+            onUpdateClick = { onUpdateClick(route + query) },
+            onAlarmClick = { onAlarmClick(subscribe, it) }
+        )
     }
 }
 
@@ -83,7 +113,7 @@ private fun SubscribeAddButton(
     onCustomAddClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.padding(top = 15.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically)
     ){
@@ -145,6 +175,7 @@ private fun SubscribeItem(
     )
     Box(
         modifier = Modifier
+            .padding(bottom = 15.dp)
             .clip(MaterialTheme.shapes.large)
             .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.large)
             .noRippleClickable { isBottomSheet.value = true }
@@ -162,7 +193,7 @@ private fun SubscribeItem(
         )
         Image(
             painter = painterResource(img),
-            contentDescription = "active / unactive alarm",
+            contentDescription = "알림 설정 변경",
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .width(68.dp)
@@ -175,7 +206,6 @@ private fun SubscribeItem(
 private fun SubscribeBottomSheet(
     isBottomSheet: MutableState<Boolean>,
     subscribeTitle: String = "",
-    canUpdate: Boolean = true,
     onDeleteClick: () -> Unit = {},
     onUpdateClick: () -> Unit = {},
     onAlarmClick: () -> Unit = {}
@@ -186,7 +216,10 @@ private fun SubscribeBottomSheet(
 
     PDialog(
         text = "$subscribeTitle 을 구독목록에서 삭제하시겠습니까?",
-        onConfirmClick = onDeleteClick,
+        onConfirmClick = {
+            onDeleteClick()
+            isBottomSheet.value = false
+        },
         isOpen = isDialogOpen,
     )
     ModalBottomSheet(
@@ -195,7 +228,7 @@ private fun SubscribeBottomSheet(
         containerColor = MaterialTheme.colorScheme.background,
         shape = MaterialTheme.shapes.large
     ) {
-        ModalBottomSheetContent(onAlarmClick, isBottomSheet, canUpdate, onUpdateClick, isDialogOpen)
+        ModalBottomSheetContent(onAlarmClick, isBottomSheet, onUpdateClick, isDialogOpen)
     }
 }
 
@@ -203,7 +236,6 @@ private fun SubscribeBottomSheet(
 private fun ModalBottomSheetContent(
     onAlarmClick: () -> Unit,
     isBottomSheet: MutableState<Boolean>,
-    canUpdate: Boolean,
     onUpdateClick: () -> Unit,
     isDialogOpen: MutableState<Boolean>
 ) {
@@ -214,18 +246,18 @@ private fun ModalBottomSheetContent(
             isBottomSheet.value = false
         }
     )
-    if (canUpdate) {
-        BottomSheetText(
-            text = "구독 수정하기",
-            onClick = {
-                isBottomSheet.value = false
-                onUpdateClick()
-            }
-        )
-    }
+    BottomSheetText(
+        text = "구독 수정하기",
+        onClick = {
+            onUpdateClick()
+            isBottomSheet.value = false
+        }
+    )
     BottomSheetText(
         text = "구독 삭제하기",
-        onClick = { isDialogOpen.value = true }
+        onClick = {
+            isDialogOpen.value = true
+        }
     )
 }
 

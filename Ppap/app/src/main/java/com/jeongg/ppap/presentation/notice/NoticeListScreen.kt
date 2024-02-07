@@ -17,15 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.jeongg.ppap.R
-import com.jeongg.ppap.presentation.component.ExitBackHandler
-import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
-import com.jeongg.ppap.presentation.component.PEmptyContent
+import com.jeongg.ppap.presentation.component.util.ExitBackHandler
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
-import com.jeongg.ppap.presentation.noticeItem.noticeItemContent
-
 
 @Composable
 fun NoticeListScreen(
@@ -33,8 +29,6 @@ fun NoticeListScreen(
     viewModel: NoticeViewModel = hiltViewModel()
 ){
     val selectedTabIndex = rememberSaveable { mutableIntStateOf(0) }
-    val contents = viewModel.contents.collectAsLazyPagingItems()
-    val subscribeList = viewModel.subscribes.value
 
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
     ExitBackHandler()
@@ -42,22 +36,16 @@ fun NoticeListScreen(
         modifier = Modifier.fillMaxSize()
     ){
         NoticeListTitle()
-        if (viewModel.isEmpty()) {
-            PEmptyContent(
-                onClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
-            )
-            return
-        }
         PTabLayer(
-            tabs = subscribeList,
+            state = viewModel.state.value,
             selectedTabIndex = selectedTabIndex.intValue,
-            onTabClick = { tabIndex ->
+            onNavigate = { navController.navigate(Screen.SubscribeScreen.route) },
+            onTabClick = { tabIndex, subscribeId ->
                 if (selectedTabIndex.intValue != tabIndex){
                     selectedTabIndex.intValue = tabIndex
-                    viewModel.getNoticePage(subscribeList[tabIndex].subscribeId)
+                    viewModel.getNoticePage(subscribeId)
                 }
-            },
-            contents = { noticeItemContent(contents = contents) }
+            }
         )
     }
 }

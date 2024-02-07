@@ -8,7 +8,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.jeongg.ppap.MainActivity
-import com.jeongg.ppap.data.util.FCM_TOKEN_KEY
+import com.jeongg.ppap.data._const.DataStoreKey
 import com.jeongg.ppap.dataStore
 import kotlinx.coroutines.runBlocking
 
@@ -29,7 +29,7 @@ class FirebaseMessageService: FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        val key = stringPreferencesKey(FCM_TOKEN_KEY)
+        val key = stringPreferencesKey(DataStoreKey.FCM_TOKEN_KEY.name)
         runBlocking {
             dataStore.edit{ it[key] = token }
         }

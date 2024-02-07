@@ -29,12 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
-import com.jeongg.ppap.data.util.DARK_THEME
-import com.jeongg.ppap.data.util.LIGHT_THEME
-import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
+import com.jeongg.ppap.data._const.AppTheme
+import com.jeongg.ppap.data._const.NotionLink
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.noRippleClickable
+import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.theme.Dimens
 import com.jeongg.ppap.theme.gray5
@@ -88,8 +88,8 @@ private fun SettingUserInfo(
     email: String = ""
 ) {
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText("가입 정보")
         SettingText(text = email)
@@ -100,23 +100,23 @@ private fun SettingUserInfo(
 @Composable
 private fun SettingService(
     version: String = "",
-    theme: String = "",
+    theme: AppTheme = AppTheme.DYNAMIC_THEME,
     onAlarmClick: () -> Unit = {},
-    onThemeClick: (String) -> Unit = {}
+    onThemeClick: (AppTheme) -> Unit = {}
 ) {
     val urlHandler = LocalUriHandler.current
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText(text = "서비스")
         SettingServiceItem(
             text = "공지 사항",
-            onClick = { urlHandler.openUri("https://taeho1234.notion.site/ddd5759a400f4c35b146bbc16d64c8cf?pvs=4") }
+            onClick = { urlHandler.openUri(NotionLink.NOTICE.link) }
         )
         SettingServiceItem(
             text = "FAQ",
-            onClick = { urlHandler.openUri("https://taeho1234.notion.site/FAQ-25f5b65310cf45e7a6ba1d5b77c5ab53?pvs=4") }
+            onClick = { urlHandler.openUri(NotionLink.FAQ.link) }
         )
         SettingVersion(version)
         SettingAlarm(onAlarmClick)
@@ -137,8 +137,8 @@ private fun SettingMyPage(
         onConfirmClick = onWithdrawlClick
     )
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText(text = "마이페이지")
         SettingServiceItem(
@@ -157,21 +157,21 @@ private fun SettingMyPage(
 private fun SettingExtra() {
     val urlHandler = LocalUriHandler.current
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.padding(vertical = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SettingGrayText(text = "기타")
         SettingServiceItem(
             text = "개인 정보 처리 방침",
-            onClick = { urlHandler.openUri("https://taeho1234.notion.site/70367ab597ff46a18548126da46186c9?pvs=4") }
+            onClick = { urlHandler.openUri(NotionLink.PERSONAL_INFORMATION.link) }
         )
         SettingServiceItem(
             text = "서비스 약관",
-            onClick = { urlHandler.openUri("https://taeho1234.notion.site/7e7411fb884d4a269baa429474a96ed7?pvs=4") }
+            onClick = { urlHandler.openUri(NotionLink.SERVICE.link) }
         )
         SettingServiceItem(
             text = "오픈 소스 라이브러리",
-            onClick = { urlHandler.openUri("https://taeho1234.notion.site/05ae7cb193b4483c94ae4b4acfb86b80?pvs=4") }
+            onClick = { urlHandler.openUri(NotionLink.OPEN_SOURCE.link) }
         )
     }
 }
@@ -190,8 +190,8 @@ private fun SettingCopyRight() {
 }
 @Composable
 private fun SettingTheme(
-    theme: String = "",
-    onThemeClick: (String) -> Unit
+    theme: AppTheme = AppTheme.DYNAMIC_THEME,
+    onThemeClick: (AppTheme) -> Unit
 ) {
     val context = LocalContext.current
     val isBottomSheetOpen = remember { mutableStateOf(false) }
@@ -216,7 +216,7 @@ private fun SettingTheme(
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             SettingText(text = "테마")
-            SettingGrayText(text = theme)
+            SettingGrayText(text = theme.text)
         }
         SettingArrowIcon(
             modifier = Modifier.align(Alignment.CenterEnd)
@@ -228,7 +228,7 @@ private fun SettingTheme(
 @Composable
 fun SettingThemeBottomSheet(
     isBottomSheetOpen: MutableState<Boolean>,
-    onThemeClick: (String) -> Unit
+    onThemeClick: (AppTheme) -> Unit
 ) {
     if (isBottomSheetOpen.value.not()) return
     val modalBottomSheetState = rememberModalBottomSheetState()
@@ -239,18 +239,12 @@ fun SettingThemeBottomSheet(
         containerColor = MaterialTheme.colorScheme.background,
         shape = MaterialTheme.shapes.large
     ) {
-        BottomSheetText(
-            text = "밝은 테마",
-            onClick = { onThemeClick(LIGHT_THEME) }
-        )
-        BottomSheetText(
-            text = "어두운 테마",
-            onClick = { onThemeClick(DARK_THEME) }
-        )
-        BottomSheetText(
-            text = "시스템 설정",
-            onClick = { onThemeClick("") }
-        )
+        AppTheme.values().forEach { theme ->
+            BottomSheetText(
+                text = theme.text,
+                onClick = { onThemeClick(theme) }
+            )
+        }
     }
 }
 
@@ -304,7 +298,7 @@ private fun SettingVersion(
     ) {
         SettingText(text = "버전")
         SettingText(
-            modifier = Modifier.align(Alignment.CenterEnd),
+            modifier = Modifier. align(Alignment.CenterEnd),
             text = "v$version"
         )
     }

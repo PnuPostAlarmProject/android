@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.noticeItem
+package com.jeongg.ppap.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
 import com.jeongg.ppap.data.dto.NoticeItemDTO
-import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.noRippleClickable
+import com.jeongg.ppap.presentation.component.util.clickAsSingle
+import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.theme.gray3
 
 @Composable
@@ -85,6 +85,6 @@ private fun NoticeBookmark(
         contentDescription = "checked: $isBookmarked",
         modifier = modifier
             .size(25.dp)
-            .noRippleClickable(onClick = onClick)
+            .clickAsSingle(onClick = onClick)
     )
 }
