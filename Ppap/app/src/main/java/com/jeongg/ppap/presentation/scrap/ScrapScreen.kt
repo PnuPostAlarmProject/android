@@ -12,11 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.jeongg.ppap.presentation.component.ExitBackHandler
-import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
-import com.jeongg.ppap.presentation.component.PEmptyContent
-import com.jeongg.ppap.presentation.component.PEmptyContentWithButton
+import com.jeongg.ppap.presentation.component.util.ExitBackHandler
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PTabLayer
 import com.jeongg.ppap.presentation.navigation.Screen
 
@@ -26,8 +23,6 @@ fun ScrapScreen(
     viewModel: ScrapViewModel = hiltViewModel()
 ){
     val selectedTabIndex = rememberSaveable { mutableIntStateOf(0) }
-    val contents = viewModel.contents.collectAsLazyPagingItems()
-    val subscribeList = viewModel.subscribes.value
 
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
     ExitBackHandler()
@@ -35,20 +30,14 @@ fun ScrapScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         ScrapTitle()
-        if (viewModel.isSubscribeListEmpty()) {
-            PEmptyContentWithButton(
-                onClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
-            )
-            return
-        }
         PTabLayer(
-            tabs = subscribeList,
+            state = viewModel.state.value,
             selectedTabIndex = selectedTabIndex.intValue,
-            contents = contents,
-            onTabClick = { tabIndex ->
-                if (selectedTabIndex.intValue != tabIndex) {
+            onNavigate = { navController.navigate(Screen.SubscribeScreen.route) },
+            onTabClick = { tabIndex, subscribeId ->
+                if (selectedTabIndex.intValue != tabIndex){
                     selectedTabIndex.intValue = tabIndex
-                    viewModel.getScrapPage(subscribeList[tabIndex].subscribeId)
+                    viewModel.getScrapPage(subscribeId)
                 }
             }
         )

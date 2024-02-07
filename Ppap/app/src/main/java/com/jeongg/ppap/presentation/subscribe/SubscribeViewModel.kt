@@ -22,8 +22,11 @@ class SubscribeViewModel @Inject constructor(
     private val getSubscribesUseCase: GetSubscribes,
 ): ViewModel()  {
 
-    private var _customSubscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
+    private val _customSubscribes = mutableStateOf<List<SubscribeGetResponseDTO>>(emptyList())
     val customSubscribes = _customSubscribes
+
+    private val _isLoading = mutableStateOf(true)
+    val isLoading = _isLoading
 
     private val _eventFlow = MutableSharedFlow<PEvent>()
     val eventFlow = _eventFlow
@@ -36,13 +39,12 @@ class SubscribeViewModel @Inject constructor(
         viewModelScope.launch{
             updateActiveUseCase(subscribe.subscribeId).collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
                     is Resource.Success -> {
                         subscribe.isActive = subscribe.isActive.not()
                         isActive.value = isActive.value.not()
-                        _eventFlow.emit(PEvent.SUCCESS)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }
@@ -51,27 +53,29 @@ class SubscribeViewModel @Inject constructor(
         viewModelScope.launch{
             deleteSubscribeUseCase(subscribeId).collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
                     is Resource.Success -> {
-                        getSubscribes()
-                        _eventFlow.emit(PEvent.SUCCESS)
+                        _customSubscribes.value = _customSubscribes.value.filter {
+                            it.subscribeId != subscribeId
+                        }
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }
     }
-    private fun getSubscribes(){
+    fun refreshSubscribe(){
+        getSubscribes(true)
+    }
+    private fun getSubscribes(isRefresh: Boolean = false){
         viewModelScope.launch {
             getSubscribesUseCase().collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> {
-                        _customSubscribes.value = response.data ?: emptyList()
-                        _eventFlow.emit(PEvent.SUCCESS)
-                    }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
+                    is Resource.Success -> _customSubscribes.value = response.data ?: emptyList()
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
+                if (!isRefresh) _isLoading.value = response is Resource.Loading
             }
         }
     }

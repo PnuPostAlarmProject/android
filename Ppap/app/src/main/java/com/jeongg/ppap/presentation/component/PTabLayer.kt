@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -18,56 +17,84 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.jeongg.ppap.data.dto.NoticeItemDTO
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.presentation.component.loading.PCircularProgress
+import com.jeongg.ppap.presentation.component.loading.PSwipeRefreshIndicator
+import com.jeongg.ppap.presentation.state.NoticeItemState
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
 import com.jeongg.ppap.theme.main_yellow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PTabLayer(
-    tabs: List<SubscribeGetResponseDTO>,
+    state: NoticeItemState,
     selectedTabIndex: Int,
-    onTabClick: (Int) -> Unit,
-    contents: LazyPagingItems<NoticeItemDTO>,
+    onNavigate: () -> Unit = {},
+    onTabClick: (Int, Long) -> Unit,
+) {
+    val subscribes = state.subscribes
+    val contents = state.contents.collectAsLazyPagingItems()
+
+    if (state.isLoading){
+        PCircularProgress()
+    }
+    else if (state.errorMessage.isNotEmpty()){
+        PEmptyContent(message = state.errorMessage)
+    }
+    else if (subscribes.isEmpty()){
+        PEmptyContentWithButton(onClick = onNavigate)
+    }
+    else {
+        PTabLayerContent(
+            onTabClick = onTabClick,
+            subscribes = subscribes,
+            selectedTabIndex = selectedTabIndex,
+            contents = contents
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun PTabLayerContent(
+    onTabClick: (Int, Long) -> Unit,
+    subscribes: List<SubscribeGetResponseDTO>,
+    selectedTabIndex: Int,
+    contents: LazyPagingItems<NoticeItemDTO>
 ) {
     val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState { tabs.size }
+    val pagerState = rememberPagerState { subscribes.size }
     val refreshState = rememberSwipeRefreshState(isRefreshing = false)
 
     LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress) {
-            onTabClick(pagerState.currentPage)
+            val index = pagerState.currentPage
+            if (index < subscribes.size)
+                onTabClick(index, subscribes[index].subscribeId)
         }
     }
     Column {
         TopSubscribeList(
             selectedTabIndex = selectedTabIndex,
-            tabs = tabs,
-            onTabClick= { index ->
-                onTabClick(index)
-                scope.launch { pagerState.scrollToPage(index) }
+            tabs = subscribes,
+            onTabClick = { index ->
+                if (index < subscribes.size) {
+                    onTabClick(index, subscribes[index].subscribeId)
+                    scope.launch { pagerState.scrollToPage(index) }
+                }
             }
-        )
-        PCircularProgress(
-            isVisible = contents.loadState.refresh is LoadState.Loading,
         )
         SwipeRefresh(
             state = refreshState,
@@ -79,12 +106,10 @@ fun PTabLayer(
                 pageSpacing = 15.dp,
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.Top
-            ) {page ->
-                if (page == selectedTabIndex) {
-                    PEmptyContent(
-                        message = "아직 등록된 게시글이 없어요.",
-                        isVisible = contents.itemCount == 0
-                    )
+            ) { page ->
+                if (page == selectedTabIndex &&
+                    contents.loadState.refresh !is LoadState.Loading
+                ) {
                     HorizontalPagerContent(contents)
                 }
             }
@@ -93,28 +118,20 @@ fun PTabLayer(
 }
 
 @Composable
-private fun PSwipeRefreshIndicator(
-    state: SwipeRefreshState,
-    refreshTrigger: Dp
-) {
-    SwipeRefreshIndicator(
-        state = state,
-        refreshTriggerDistance = refreshTrigger,
-        backgroundColor = Color.White,
-        contentColor = main_yellow
-    )
-}
-
-@Composable
 private fun HorizontalPagerContent(
     contents: LazyPagingItems<NoticeItemDTO>
 ) {
-    LazyColumn {
-        items(
-            count = contents.itemCount,
-            key = contents.itemKey { it.contentId }
-        ) { index ->
-            NoticeItem(noticeItemDTO = contents[index] ?: NoticeItemDTO())
+    if (contents.itemCount == 0) {
+        PEmptyContent(message = "아직 등록된 게시글이 없어요.")
+    }
+    else {
+        LazyColumn {
+            items(
+                count = contents.itemCount,
+                key = contents.itemKey { it.contentId }
+            ) { index ->
+                NoticeItem(noticeItemDTO = contents[index] ?: NoticeItemDTO())
+            }
         }
     }
 }
@@ -132,7 +149,9 @@ private fun TopSubscribeList(
         containerColor = MaterialTheme.colorScheme.background,
         indicator = { TabLayerIndicator(it, selectedTabIndex) },
         divider = { PDivider() },
-        modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth()
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .fillMaxWidth()
     ) {
         tabs.forEachIndexed { index, value ->
             Tab(

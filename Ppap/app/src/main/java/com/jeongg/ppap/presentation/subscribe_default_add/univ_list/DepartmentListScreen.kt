@@ -16,7 +16,9 @@ fun DepartmentListScreen(
     SubscribeAddCardTheme(
         text = "전체 / ${selected.univ}",
         eventFlow = viewModel.eventFlow,
-        onNavigate = { navController.navigate(Screen.DepartmentListScreen.route) }
+        onNavigate = { navController.navigate(Screen.DepartmentListScreen.route) },
+        errorMessage = viewModel.errorMessage.value,
+        isContentEmpty = selected.departments.isEmpty()
     ){
         selected.departments.forEach { department ->
             val title = "전체 / ${selected.univ} / ${department.name}"

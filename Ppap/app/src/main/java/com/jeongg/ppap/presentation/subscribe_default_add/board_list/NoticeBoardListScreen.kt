@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.data.dto.UnivNoticeBoardDTO
 import com.jeongg.ppap.presentation.component.PButton
-import com.jeongg.ppap.presentation.component.noRippleClickable
+import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.subscribe_default_add.SubscribeAddCardTheme
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
@@ -31,7 +31,9 @@ fun NoticeBoardListScreen(
     SubscribeAddCardTheme(
         eventFlow = viewModel.eventFlow,
         text = viewModel.title.value,
-        onNavigate = { navController.navigate(Screen.SubscribeScreen.route) }
+        onNavigate = { navController.navigate(Screen.SubscribeScreen.route) },
+        errorMessage = viewModel.errorMessage.value,
+        isContentEmpty = boardList.isEmpty()
     ) {
         boardList.forEachIndexed { index, board ->
             NoticeBoardContent(
