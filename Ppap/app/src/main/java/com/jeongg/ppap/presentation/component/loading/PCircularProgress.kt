@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.component
+package com.jeongg.ppap.presentation.component.loading
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,9 +15,7 @@ import com.jeongg.ppap.theme.main_yellow
 @Composable
 fun PCircularProgress(
     modifier: Modifier = Modifier,
-    isVisible: Boolean = true
 ) {
-    if (!isVisible) return
     Column (
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

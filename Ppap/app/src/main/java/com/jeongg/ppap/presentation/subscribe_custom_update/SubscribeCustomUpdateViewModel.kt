@@ -46,7 +46,7 @@ class SubscribeCustomUpdateViewModel @Inject constructor(
     fun updateSubscribe(){
         viewModelScope.launch {
             if (isNameInvalid()){
-                _eventFlow.emit(PEvent.TOAST("제목은 20자 이하여야 하고 비어있으면 안됩니다."))
+                _eventFlow.emit(PEvent.MakeToast("제목은 20자 이하여야 하고 비어있으면 안됩니다."))
                 return@launch
             }
             updateSubscribeUseCase(
@@ -57,9 +57,9 @@ class SubscribeCustomUpdateViewModel @Inject constructor(
                 )
             ).collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.NAVIGATE)
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
+                    is Resource.Success -> _eventFlow.emit(PEvent.Navigate)
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }

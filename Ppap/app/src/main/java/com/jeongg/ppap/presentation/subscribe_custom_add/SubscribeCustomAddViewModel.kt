@@ -44,14 +44,14 @@ class SubscribeCustomAddViewModel @Inject constructor(
     private fun saveSubscribe(){
         viewModelScope.launch {
             if (isInvalid()){
-                _eventFlow.emit(PEvent.TOAST("제목은 1~20자여야 하고\nRSS 링크는 비어있으면 안됩니다."))
+                _eventFlow.emit(PEvent.MakeToast("제목은 1~20자여야 하고\nRSS 링크는 비어있으면 안됩니다."))
                 return@launch
             }
             createSubscribeUseCase(subscribe.value).collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.NAVIGATE)
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
+                    is Resource.Success -> _eventFlow.emit(PEvent.Navigate)
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }

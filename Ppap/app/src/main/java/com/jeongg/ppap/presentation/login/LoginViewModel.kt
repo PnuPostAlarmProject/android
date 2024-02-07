@@ -54,9 +54,9 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             kakaoLoginUseCase(accessToken, fcmToken).collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
-                    is Resource.Success -> _eventFlow.emit(PEvent.NAVIGATE)
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
+                    is Resource.Success -> _eventFlow.emit(PEvent.Navigate)
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }

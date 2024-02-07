@@ -21,10 +21,8 @@ import com.jeongg.ppap.theme.gray3
 @Composable
 fun PEmptyContentWithButton(
     modifier: Modifier = Modifier,
-    isVisible: Boolean = false,
     onClick: () -> Unit = {}
 ){
-    if (!isVisible) return
     Column(
         modifier = modifier.fillMaxSize().testTag("empty_content"),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,10 +51,8 @@ fun PEmptyContentWithButton(
 @Composable
 fun PEmptyContent(
     modifier: Modifier = Modifier,
-    isVisible: Boolean = false,
     message: String = "",
 ){
-    if (!isVisible) return
     Column(
         modifier = modifier.fillMaxSize().testTag("empty_content"),
         horizontalAlignment = Alignment.CenterHorizontally,

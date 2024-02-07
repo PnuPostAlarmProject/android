@@ -29,9 +29,6 @@ class SettingViewModel @Inject constructor(
     private val withdrawalUseCase: Withdrawal,
 ): ViewModel() {
 
-    private val _eventFlow = MutableSharedFlow<PEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
-
     private val _email = mutableStateOf("")
     val email = _email
 
@@ -39,6 +36,9 @@ class SettingViewModel @Inject constructor(
 
     private val _theme = mutableStateOf(AppTheme.DYNAMIC_THEME)
     val theme = _theme
+
+    private val _eventFlow = MutableSharedFlow<PEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     init {
         getUserEmail()
@@ -49,12 +49,12 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             logoutUseCase().collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
                     is Resource.Success -> {
                         kakaoLogout()
-                        _eventFlow.emit(PEvent.NAVIGATE)
+                        _eventFlow.emit(PEvent.Navigate)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }
@@ -63,12 +63,12 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             withdrawalUseCase().collect { response ->
                 when(response){
-                    is Resource.Loading -> _eventFlow.emit(PEvent.LOADING)
+                    is Resource.Loading -> _eventFlow.emit(PEvent.Loading)
                     is Resource.Success -> {
                         kakaoLogout()
-                        _eventFlow.emit(PEvent.NAVIGATE)
+                        _eventFlow.emit(PEvent.Navigate)
                     }
-                    is Resource.Error -> _eventFlow.emit(PEvent.TOAST(response.message))
+                    is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
             }
         }

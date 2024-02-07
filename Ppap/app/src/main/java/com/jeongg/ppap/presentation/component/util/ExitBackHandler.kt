@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.component
+package com.jeongg.ppap.presentation.component.util
 
 import android.app.Activity
 import android.widget.Toast
@@ -27,7 +27,7 @@ fun ExitBackHandler() {
             (context as? Activity)?.finish()
         }
         else {
-            Toast.makeText(context, "앱을 종료하고 싶다면\n뒤로 가기를 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
             canFinish.value = true
         }
     }

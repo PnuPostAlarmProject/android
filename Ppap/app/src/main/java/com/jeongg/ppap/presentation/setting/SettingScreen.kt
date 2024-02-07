@@ -31,10 +31,10 @@ import androidx.navigation.NavController
 import com.jeongg.ppap.R
 import com.jeongg.ppap.data._const.AppTheme
 import com.jeongg.ppap.data._const.NotionLink
-import com.jeongg.ppap.presentation.component.LaunchedEffectEvent
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.noRippleClickable
+import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.theme.Dimens
 import com.jeongg.ppap.theme.gray5

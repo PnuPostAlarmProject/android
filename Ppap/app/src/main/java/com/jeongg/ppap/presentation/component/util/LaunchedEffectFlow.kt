@@ -1,4 +1,4 @@
-package com.jeongg.ppap.presentation.component
+package com.jeongg.ppap.presentation.component.util
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -17,9 +17,9 @@ fun LaunchedEffectEvent(
     LaunchedEffect(key1 = true) {
         eventFlow.collectLatest { event ->
             when (event) {
-                is PEvent.NAVIGATE -> onNavigate()
-                is PEvent.TOAST -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                is PEvent.LOADING, PEvent.SUCCESS -> { }
+                is PEvent.Navigate -> onNavigate()
+                is PEvent.MakeToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                is PEvent.Loading -> { }
             }
         }
     }
