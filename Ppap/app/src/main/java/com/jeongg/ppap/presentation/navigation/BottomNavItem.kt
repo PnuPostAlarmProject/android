@@ -33,5 +33,8 @@ sealed class BottomNavItem(
     object Setting: BottomNavItem(
         title = "설정",
         icon = R.drawable.setting,
-        screenList = listOf(Screen.SettingScreen))
+        screenList = listOf(
+            Screen.SettingScreen,
+            Screen.ComplainScreen
+        ))
 }

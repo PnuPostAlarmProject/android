@@ -60,6 +60,7 @@ fun SettingScreen(
             SettingService(
                 version = viewModel.version,
                 theme = viewModel.theme.value,
+                onComplainClick = { navController.navigate(Screen.ComplainScreen.route) },
                 onAlarmClick = { viewModel.presentNotificationSetting(context) },
                 onThemeClick = { viewModel.changeAppTheme(it) }
             )
@@ -101,6 +102,7 @@ private fun SettingUserInfo(
 private fun SettingService(
     version: String = "",
     theme: AppTheme = AppTheme.DYNAMIC_THEME,
+    onComplainClick: () -> Unit = {},
     onAlarmClick: () -> Unit = {},
     onThemeClick: (AppTheme) -> Unit = {}
 ) {
@@ -117,6 +119,10 @@ private fun SettingService(
         SettingServiceItem(
             text = "FAQ",
             onClick = { urlHandler.openUri(NotionLink.FAQ.link) }
+        )
+        SettingServiceItem(
+            text = "건의하기",
+            onClick = onComplainClick
         )
         SettingVersion(version)
         SettingAlarm(onAlarmClick)
