@@ -33,15 +33,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.jeongg.ppap.R
 import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.component.PButton
-import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.loading.PSwipeRefreshIndicator
+import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
@@ -53,36 +50,28 @@ fun SubscribeScreen(
     navController: NavController,
     viewModel: SubscribeViewModel = hiltViewModel()
 ){
-    val refreshState = rememberSwipeRefreshState(isRefreshing = false)
-
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
-    SwipeRefresh(
-        state = refreshState,
-        onRefresh = { viewModel.refreshSubscribe() },
-        indicator = { state, trigger -> PSwipeRefreshIndicator(state, trigger) }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
+        contentPadding = PaddingValues(20.dp)
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(15.dp),
-            contentPadding = PaddingValues(20.dp)
-        ) {
-            item { SubscribeTitle() }
-            item { SubscribeListTitle() }
-            item {
-                if (viewModel.isLoading.value) {
-                    PCircularProgress()
-                } else {
-                    SubscribeContent(
-                        subscribeList = viewModel.customSubscribes.value,
-                        onDeleteClick = { subscribeId -> viewModel.deleteSubscribe(subscribeId) },
-                        onUpdateClick = { path -> navController.navigate(path) },
-                        onAlarmClick = { subscribe, isActive -> viewModel.updateActive(subscribe, isActive) }
-                    )
-                    SubscribeAddButton(
-                        onDefaultAddClick = { navController.navigate(Screen.UnivListScreen.route) },
-                        onCustomAddClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
-                    )
-                }
+        item { SubscribeTitle() }
+        item { SubscribeListTitle() }
+        item {
+            if (viewModel.isLoading.value) {
+                PCircularProgress()
+            } else {
+                SubscribeContent(
+                    subscribeList = viewModel.customSubscribes.value,
+                    onDeleteClick = { subscribeId -> viewModel.deleteSubscribe(subscribeId) },
+                    onUpdateClick = { path -> navController.navigate(path) },
+                    onAlarmClick = { subscribe, isActive -> viewModel.updateActive(subscribe, isActive) }
+                )
+                SubscribeAddButton(
+                    onDefaultAddClick = { navController.navigate(Screen.UnivListScreen.route) },
+                    onCustomAddClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
+                )
             }
         }
     }

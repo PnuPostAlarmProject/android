@@ -107,9 +107,7 @@ private fun PTabLayerContent(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.Top
             ) { page ->
-                if (page == selectedTabIndex &&
-                    contents.loadState.refresh !is LoadState.Loading
-                ) {
+                if (page == selectedTabIndex) {
                     HorizontalPagerContent(contents)
                 }
             }
@@ -121,7 +119,10 @@ private fun PTabLayerContent(
 private fun HorizontalPagerContent(
     contents: LazyPagingItems<NoticeItemDTO>
 ) {
-    if (contents.itemCount == 0) {
+    if (contents.loadState.refresh is LoadState.Loading){
+        PCircularProgress()
+    }
+    else if (contents.itemCount == 0) {
         PEmptyContent(message = "아직 등록된 게시글이 없어요.")
     }
     else {

@@ -9,7 +9,6 @@ import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
 import com.jeongg.ppap.domain.usecase.subscribe.UpdateSubscribe
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
-import com.jeongg.ppap.util.log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -36,7 +35,6 @@ class SubscribeCustomUpdateViewModel @Inject constructor(
         savedStateHandle.get<Long>("subscribeId")?.let{
             subscribeId.longValue = it
         }
-        _subscribeName.value.log()
     }
 
     fun enterTitle(text: String){
