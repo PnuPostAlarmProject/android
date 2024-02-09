@@ -218,7 +218,7 @@ private fun TextDescription(){
 private fun ImageDescription() {
     Image(
         painter = painterResource(R.drawable.rss_description),
-        contentDescription = "explain_subscribe",
+        contentDescription = "RSS 링크 설명하는 그림",
         modifier = Modifier.padding(10.dp).height(120.dp),
         contentScale = ContentScale.Crop,
     )

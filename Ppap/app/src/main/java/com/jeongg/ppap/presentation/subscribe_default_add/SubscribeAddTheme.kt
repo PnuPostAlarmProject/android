@@ -94,7 +94,7 @@ fun NoticeBoardItem(
         )
         Icon(
             painter = painterResource(id = R.drawable.arrow),
-            contentDescription = "navigation arrow",
+            contentDescription = "화살표 그림(이동하기)",
             tint = gray6,
             modifier = Modifier
                 .align(Alignment.CenterEnd)

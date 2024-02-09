@@ -82,7 +82,7 @@ private fun NoticeBookmark(
                    else R.drawable.heart_empty
     Image(
         painter = painterResource(favorite),
-        contentDescription = "checked: $isBookmarked",
+        contentDescription = if (isBookmarked) "스크랩 삭제하기" else "스크랩 추가하기",
         modifier = modifier
             .size(25.dp)
             .clickAsSingle(onClick = onClick)

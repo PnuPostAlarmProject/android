@@ -136,7 +136,7 @@ private fun CustomSubscribeAdd(
         )
         Icon(
             painter = painterResource(R.drawable.arrow),
-            contentDescription = "navigate arrow",
+            contentDescription = "화살표 그림(이동하기)",
             tint = gray6,
             modifier = Modifier.height(30.dp)
         )
@@ -144,7 +144,7 @@ private fun CustomSubscribeAdd(
 }
 
 @Composable
-private fun SubscribeItem(
+fun SubscribeItem(
     subscribe: SubscribeGetResponseDTO,
     onDeleteClick: () -> Unit = {},
     onUpdateClick: () -> Unit = {},
@@ -156,6 +156,7 @@ private fun SubscribeItem(
     val isBottomSheet = remember { mutableStateOf(false) }
 
     SubscribeBottomSheet(
+        isActive = isActive.value,
         isBottomSheet = isBottomSheet,
         subscribeTitle = subscribe.title,
         onDeleteClick = onDeleteClick,
@@ -182,7 +183,7 @@ private fun SubscribeItem(
         )
         Image(
             painter = painterResource(img),
-            contentDescription = "알림 설정 변경",
+            contentDescription = if (isActive.value) "활성화된 알림 그림" else "비활성화된 알림 그림",
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .width(68.dp)
@@ -193,6 +194,7 @@ private fun SubscribeItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SubscribeBottomSheet(
+    isActive: Boolean = false,
     isBottomSheet: MutableState<Boolean>,
     subscribeTitle: String = "",
     onDeleteClick: () -> Unit = {},
@@ -217,19 +219,20 @@ private fun SubscribeBottomSheet(
         containerColor = MaterialTheme.colorScheme.background,
         shape = MaterialTheme.shapes.large
     ) {
-        ModalBottomSheetContent(onAlarmClick, isBottomSheet, onUpdateClick, isDialogOpen)
+        ModalBottomSheetContent(isActive, onAlarmClick, isBottomSheet, onUpdateClick, isDialogOpen)
     }
 }
 
 @Composable
 private fun ModalBottomSheetContent(
+    isActive: Boolean = false,
     onAlarmClick: () -> Unit,
     isBottomSheet: MutableState<Boolean>,
     onUpdateClick: () -> Unit,
     isDialogOpen: MutableState<Boolean>
 ) {
     BottomSheetText(
-        text = "알림 설정 변경하기",
+        text = if (isActive) "알림 활성화하기" else "알림 비활성화하기",
         onClick = {
             onAlarmClick()
             isBottomSheet.value = false

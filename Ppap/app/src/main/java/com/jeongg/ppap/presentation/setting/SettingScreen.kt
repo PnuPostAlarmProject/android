@@ -288,7 +288,7 @@ private fun SettingAlarm(
         }
         Icon(
             painter = painterResource(id = R.drawable.setting),
-            contentDescription = "navigation alarm setting",
+            contentDescription = "디바이스 내 알림 설정으로 이동하기",
             tint = gray6,
             modifier = Modifier.align(Alignment.CenterEnd).height(30.dp)
         )
@@ -337,7 +337,7 @@ private fun SettingArrowIcon(
 ) {
     Icon(
         painter = painterResource(id = R.drawable.arrow),
-        contentDescription = "navigation arrow",
+        contentDescription = "화살표 그림(이동하기)",
         tint = gray6,
         modifier = modifier.height(20.dp)
     )
