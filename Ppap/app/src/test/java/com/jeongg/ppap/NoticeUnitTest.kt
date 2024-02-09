@@ -1,9 +1,8 @@
 package com.jeongg.ppap
 
 import com.jeongg.ppap.data.api.NoticeApi
-import com.jeongg.ppap.data.dto.NoticeListDTO
+import com.jeongg.ppap.data.dto.notice.NoticeListDTO
 import com.jeongg.ppap.data.util.ApiUtils
-import com.jeongg.ppap.domain.usecase.notice.GetNoticeList
 import com.jeongg.ppap.util.getExceptionHttpClient
 import io.ktor.client.call.body
 import kotlinx.coroutines.runBlocking

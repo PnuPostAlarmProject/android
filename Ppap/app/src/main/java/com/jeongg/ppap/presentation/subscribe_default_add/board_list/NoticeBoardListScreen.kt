@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.jeongg.ppap.data.dto.UnivNoticeBoardDTO
+import com.jeongg.ppap.data.dto.univ.UnivNoticeBoardDTO
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.util.checkAndRequestLocationPermissions
 import com.jeongg.ppap.presentation.component.util.noRippleClickable

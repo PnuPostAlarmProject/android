@@ -28,8 +28,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.jeongg.ppap.data.dto.NoticeItemDTO
-import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.notice.NoticeItemDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.loading.PSwipeRefreshIndicator
 import com.jeongg.ppap.presentation.state.NoticeItemState

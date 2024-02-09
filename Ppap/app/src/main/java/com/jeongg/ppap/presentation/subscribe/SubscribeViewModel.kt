@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeGetResponseDTO
 import com.jeongg.ppap.domain.usecase.subscribe.DeleteSubscribe
 import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
 import com.jeongg.ppap.domain.usecase.subscribe.UpdateActive

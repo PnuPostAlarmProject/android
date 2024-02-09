@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.jeongg.ppap.data.dto.NoticeDTO
+import com.jeongg.ppap.data.dto.notice.NoticeDTO
 import com.jeongg.ppap.domain.usecase.notice.GetNoticeList
 import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap

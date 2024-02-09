@@ -3,8 +3,8 @@ package com.jeongg.ppap.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.jeongg.ppap.data._const.PagingConst
-import com.jeongg.ppap.data.dto.NoticeDTO
-import com.jeongg.ppap.data.dto.NoticeListDTO
+import com.jeongg.ppap.data.dto.notice.NoticeDTO
+import com.jeongg.ppap.data.dto.notice.NoticeListDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.domain.repository.NoticeRepository
 import io.ktor.client.call.body

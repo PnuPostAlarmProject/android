@@ -1,7 +1,7 @@
 package com.jeongg.ppap.data.api
 
-import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
-import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeUpdateRequestDTO
 import com.jeongg.ppap.data._const.HttpRoutes
 import com.jeongg.ppap.domain.repository.SubscribeRepository
 import io.ktor.client.HttpClient

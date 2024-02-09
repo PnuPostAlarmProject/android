@@ -1,7 +1,7 @@
 package com.jeongg.ppap
 
 import com.jeongg.ppap.data.api.UserApi
-import com.jeongg.ppap.data.dto.KakaoLoginDTO
+import com.jeongg.ppap.data.dto.user.KakaoLoginDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.util.getExceptionHttpClient
 import io.ktor.client.call.body

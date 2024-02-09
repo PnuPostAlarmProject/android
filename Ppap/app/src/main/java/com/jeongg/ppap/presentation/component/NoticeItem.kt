@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
-import com.jeongg.ppap.data.dto.NoticeItemDTO
+import com.jeongg.ppap.data.dto.notice.NoticeItemDTO
 import com.jeongg.ppap.presentation.component.util.clickAsSingle
 import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.theme.gray3

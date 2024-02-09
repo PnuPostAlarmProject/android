@@ -1,8 +1,8 @@
 package com.jeongg.ppap.data.repository
 
 import com.jeongg.ppap.data.api.SubscribeApi
-import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
-import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeUpdateRequestDTO
 import com.jeongg.ppap.domain.repository.SubscribeRepository
 import io.ktor.client.statement.HttpResponse
 import javax.inject.Inject

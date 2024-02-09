@@ -1,15 +1,14 @@
 package com.jeongg.ppap.di
 
 import android.content.Context
-import android.util.Log
 import com.jeongg.ppap.data._const.DataStoreKey
 import com.jeongg.ppap.data._const.HttpRoutes
 import com.jeongg.ppap.data.api.NoticeApi
 import com.jeongg.ppap.data.api.ScrapApi
 import com.jeongg.ppap.data.api.SubscribeApi
 import com.jeongg.ppap.data.api.UserApi
-import com.jeongg.ppap.data.dto.KakaoLoginDTO
-import com.jeongg.ppap.data.dto.RefreshTokenDTO
+import com.jeongg.ppap.data.dto.user.KakaoLoginDTO
+import com.jeongg.ppap.data.dto.user.RefreshTokenDTO
 import com.jeongg.ppap.data.repository.NoticeRepositoryImpl
 import com.jeongg.ppap.data.repository.ScrapRepositoryImpl
 import com.jeongg.ppap.data.repository.SubscribeRepositoryImpl
@@ -36,9 +35,6 @@ import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -60,14 +56,6 @@ class NetworkModule {
         @ApplicationContext context: Context
     ): HttpClient {
         return HttpClient(CIO) {
-            install(Logging){
-                logger = object: Logger {
-                    override fun log(message: String){
-                        Log.d("ppap_api", message)
-                    }
-                }
-                level = LogLevel.ALL
-            }
             install(ContentNegotiation) {
                 json(Json{
                     prettyPrint = true

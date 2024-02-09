@@ -1,7 +1,7 @@
 package com.jeongg.ppap.domain.usecase.user
 
 import com.jeongg.ppap.data._const.DataStoreKey
-import com.jeongg.ppap.data.dto.KakaoLoginDTO
+import com.jeongg.ppap.data.dto.user.KakaoLoginDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.data.util.PDataStore
 import com.jeongg.ppap.data.util.getErrorMessage

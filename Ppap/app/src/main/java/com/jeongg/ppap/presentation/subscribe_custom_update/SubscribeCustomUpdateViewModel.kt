@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeUpdateRequestDTO
 import com.jeongg.ppap.domain.usecase.subscribe.UpdateSubscribe
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource
