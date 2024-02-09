@@ -1,6 +1,6 @@
 package com.jeongg.ppap.domain.usecase.subscribe
 
-import com.jeongg.ppap.data.dto.SubscribeUpdateResponseDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeUpdateResponseDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.data.util.getErrorMessage
 import com.jeongg.ppap.domain.repository.SubscribeRepository

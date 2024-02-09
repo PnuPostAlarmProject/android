@@ -3,8 +3,8 @@ package com.jeongg.ppap.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.jeongg.ppap.data._const.PagingConst
-import com.jeongg.ppap.data.dto.ScrapDTO
-import com.jeongg.ppap.data.dto.ScrapListDTO
+import com.jeongg.ppap.data.dto.scrap.ScrapDTO
+import com.jeongg.ppap.data.dto.scrap.ScrapListDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.domain.repository.ScrapRepository
 import io.ktor.client.call.body

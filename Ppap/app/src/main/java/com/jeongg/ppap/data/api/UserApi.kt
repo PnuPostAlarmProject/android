@@ -1,6 +1,6 @@
 package com.jeongg.ppap.data.api
 
-import com.jeongg.ppap.data.dto.FcmTokenDTO
+import com.jeongg.ppap.data.dto.user.FcmTokenDTO
 import com.jeongg.ppap.data._const.HttpRoutes
 import com.jeongg.ppap.domain.repository.UserRepository
 import io.ktor.client.HttpClient

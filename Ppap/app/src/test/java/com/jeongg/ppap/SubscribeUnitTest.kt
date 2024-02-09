@@ -1,11 +1,10 @@
 package com.jeongg.ppap
 
 import com.jeongg.ppap.data.api.SubscribeApi
-import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
-import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
-import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
-import com.jeongg.ppap.data.dto.SubscribeUpdateResponseDTO
-import com.jeongg.ppap.data.dto.SubscribeWithContentDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeUpdateResponseDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.util.getExceptionHttpClient
 import io.ktor.client.call.body
@@ -100,54 +99,7 @@ class SubscribeUnitTest {
         }
     }
 
-    @Test
-    fun getSubscribeById_success(){
-        runBlocking {
-            // given
-            val subscribeId = 1L
-            val content = """
-                {
-                    "success": true,
-                    "response": {
-                        "subscribeId": 1,
-                        "title": "테스트1",
-                        "noticeLink": null,
-                        "rssLink": "https://cse.pusan.ac.kr/bbs/cse/2615/rssList.do",
-                        "isActive": true
-                    },
-                    "error": null
-                }
-                """.trimIndent()
 
-            // when
-            val mock = getExceptionHttpClient(content)
-            val data = SubscribeApi(mock).getSubscribeById(subscribeId).body<ApiUtils.ApiResult<SubscribeWithContentDTO>>()
-
-            // then
-            Assert.assertEquals(true, data.success)
-            Assert.assertEquals(1, data.response?.subscribeId ?: 0)
-            Assert.assertEquals("테스트1", data.response?.title ?: "")
-            Assert.assertEquals(null, data.response?.noticeLink)
-            Assert.assertEquals(null, data.error)
-        }
-    }
-    @Test
-    fun getSubscribeById_fail(){
-        runBlocking {
-            // given
-            val subscribeId = 1L
-            val content = """{"success": false, "response": null, "error": {"message": "빈 구독 목록입니다.", "status": 404}}"""
-
-            // when
-            val mock = getExceptionHttpClient(content)
-            val data = SubscribeApi(mock).getSubscribeById(subscribeId).body<ApiUtils.ApiResult<SubscribeWithContentDTO>>()
-
-            // then
-            Assert.assertEquals(false, data.success)
-            Assert.assertEquals(null, data.response)
-            Assert.assertEquals(404, data.error?.status ?: 0)
-        }
-    }
     @Test
     fun updateSubscribe_success(){
         runBlocking {
@@ -171,7 +123,7 @@ class SubscribeUnitTest {
             val data = SubscribeApi(mock)
                 .updateSubscribe(
                     subscribeId = subscribeId,
-                    subscribeUpdateRequestDTO = SubscribeUpdateRequestDTO("정컴 공지",  null)
+                    requestDTO = SubscribeUpdateRequestDTO("정컴 공지",  null)
                 )
                 .body<ApiUtils.ApiResult<SubscribeUpdateResponseDTO>>()
 
@@ -196,7 +148,7 @@ class SubscribeUnitTest {
             val data = SubscribeApi(mock)
                 .updateSubscribe(
                     subscribeId = subscribeId,
-                    subscribeUpdateRequestDTO = SubscribeUpdateRequestDTO("부산대 RSS 링크가 아닙니다.",  null)
+                    requestDTO = SubscribeUpdateRequestDTO("부산대 RSS 링크가 아닙니다.",  null)
                 )
                 .body<ApiUtils.ApiResult<SubscribeUpdateResponseDTO>>()
 

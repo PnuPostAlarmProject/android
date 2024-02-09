@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.jeongg.ppap.presentation.login.LoginScreen
 import com.jeongg.ppap.presentation.notice.NoticeListScreen
 import com.jeongg.ppap.presentation.scrap.ScrapScreen
+import com.jeongg.ppap.presentation.setting_complain.ComplainScreen
 import com.jeongg.ppap.presentation.setting.SettingScreen
 import com.jeongg.ppap.presentation.splash.SplashScreen
 import com.jeongg.ppap.presentation.subscribe.SubscribeScreen
@@ -95,6 +96,10 @@ fun NavGraphBuilder.ppapGraph(
     composable(
         route = Screen.SettingScreen.route,
         content = { SettingScreen(navController)}
+    )
+    composable(
+        route = Screen.ComplainScreen.route,
+        content = { ComplainScreen(navController) }
     )
 }
 

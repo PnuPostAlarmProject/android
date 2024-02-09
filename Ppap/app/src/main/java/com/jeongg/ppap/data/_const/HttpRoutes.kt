@@ -15,7 +15,6 @@ enum class HttpRoutes(
     // subscribe
     CREATE_SUBSCRIBE("subscribe"),
     GET_SUBSCRIBES("subscribe"),
-    GET_SUBSCRIBE("subscribe"),
     UPDATE_SUBSCRIBE("subscribe"),
     DELETE_SUBSCRIBE("subscribe/delete"),
     UPDATE_ACTIVE("subscribe/active"),

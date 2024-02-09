@@ -25,10 +25,23 @@ android {
         vectorDrawables { useSupportLibrary = true }
 
         manifestPlaceholders["NATIVE_APP_KEY"] = properties.getProperty("KAKAO_NATIVE_APP")
+        manifestPlaceholders["EMAIL"] = properties.getProperty("EMAIL")
+        manifestPlaceholders["PASSWORD"] = properties.getProperty("PASSWORD")
+
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",
             properties.getProperty("KAKAO_NATIVE_APP_KEY")
+        )
+        buildConfigField(
+            "String",
+            "EMAIL",
+            properties.getProperty("EMAIL")
+        )
+        buildConfigField(
+            "String",
+            "PASSWORD",
+            properties.getProperty("PASSWORD")
         )
     }
 
@@ -121,6 +134,10 @@ dependencies {
 
     // refresh
     implementation("com.google.accompanist:accompanist-swiperefresh:0.25.1")
+
+    // SMTP
+    implementation ("com.sun.mail:android-mail:1.6.0")
+    implementation ("com.sun.mail:android-activation:1.6.0")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")

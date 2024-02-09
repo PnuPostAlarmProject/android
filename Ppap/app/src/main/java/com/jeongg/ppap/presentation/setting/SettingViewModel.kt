@@ -1,6 +1,5 @@
 package com.jeongg.ppap.presentation.setting
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
@@ -77,9 +76,7 @@ class SettingViewModel @Inject constructor(
         val intent = notificationSettingOreo(context)
         try {
             context.startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            e.printStackTrace()
-        }
+        } catch (_: Exception) { }
     }
     fun changeAppTheme(newTheme: AppTheme){
         dataStore.setData(DataStoreKey.PPAP_THEME_KEY.name, newTheme.name)
@@ -101,9 +98,10 @@ class SettingViewModel @Inject constructor(
     private fun getUserEmail(){
         UserApiClient.instance.me { user, error ->
             if (error == null && user != null){
-                _email.value = user.kakaoAccount?.email ?: "이메일을 확인할 수 없습니다."
+                _email.value = user.kakaoAccount?.email ?: ""
             }
         }
+        if (_email.value.isEmpty()) _email.value = "이메일을 확인할 수 없습니다."
     }
     private fun kakaoLogout() {
         UserApiClient.instance.logout {}

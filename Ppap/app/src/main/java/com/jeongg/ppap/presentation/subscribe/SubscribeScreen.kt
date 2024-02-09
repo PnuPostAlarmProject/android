@@ -33,15 +33,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.jeongg.ppap.R
-import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.component.PButton
-import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.PDialog
 import com.jeongg.ppap.presentation.component.PDivider
-import com.jeongg.ppap.presentation.component.loading.PSwipeRefreshIndicator
+import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
@@ -53,36 +50,28 @@ fun SubscribeScreen(
     navController: NavController,
     viewModel: SubscribeViewModel = hiltViewModel()
 ){
-    val refreshState = rememberSwipeRefreshState(isRefreshing = false)
-
     LaunchedEffectEvent(eventFlow = viewModel.eventFlow)
-    SwipeRefresh(
-        state = refreshState,
-        onRefresh = { viewModel.refreshSubscribe() },
-        indicator = { state, trigger -> PSwipeRefreshIndicator(state, trigger) }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
+        contentPadding = PaddingValues(20.dp)
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(15.dp),
-            contentPadding = PaddingValues(20.dp)
-        ) {
-            item { SubscribeTitle() }
-            item { SubscribeListTitle() }
-            item {
-                if (viewModel.isLoading.value) {
-                    PCircularProgress()
-                } else {
-                    SubscribeContent(
-                        subscribeList = viewModel.customSubscribes.value,
-                        onDeleteClick = { subscribeId -> viewModel.deleteSubscribe(subscribeId) },
-                        onUpdateClick = { path -> navController.navigate(path) },
-                        onAlarmClick = { subscribe, isActive -> viewModel.updateActive(subscribe, isActive) }
-                    )
-                    SubscribeAddButton(
-                        onDefaultAddClick = { navController.navigate(Screen.UnivListScreen.route) },
-                        onCustomAddClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
-                    )
-                }
+        item { SubscribeTitle() }
+        item { SubscribeListTitle() }
+        item {
+            if (viewModel.isLoading.value) {
+                PCircularProgress()
+            } else {
+                SubscribeContent(
+                    subscribeList = viewModel.customSubscribes.value,
+                    onDeleteClick = { subscribeId -> viewModel.deleteSubscribe(subscribeId) },
+                    onUpdateClick = { path -> navController.navigate(path) },
+                    onAlarmClick = { subscribe, isActive -> viewModel.updateActive(subscribe, isActive) }
+                )
+                SubscribeAddButton(
+                    onDefaultAddClick = { navController.navigate(Screen.UnivListScreen.route) },
+                    onCustomAddClick = { navController.navigate(Screen.SubscribeCustomAddScreen.route) }
+                )
             }
         }
     }
@@ -147,7 +136,7 @@ private fun CustomSubscribeAdd(
         )
         Icon(
             painter = painterResource(R.drawable.arrow),
-            contentDescription = "navigate arrow",
+            contentDescription = "화살표 그림(이동하기)",
             tint = gray6,
             modifier = Modifier.height(30.dp)
         )
@@ -155,7 +144,7 @@ private fun CustomSubscribeAdd(
 }
 
 @Composable
-private fun SubscribeItem(
+fun SubscribeItem(
     subscribe: SubscribeGetResponseDTO,
     onDeleteClick: () -> Unit = {},
     onUpdateClick: () -> Unit = {},
@@ -167,6 +156,7 @@ private fun SubscribeItem(
     val isBottomSheet = remember { mutableStateOf(false) }
 
     SubscribeBottomSheet(
+        isActive = isActive.value,
         isBottomSheet = isBottomSheet,
         subscribeTitle = subscribe.title,
         onDeleteClick = onDeleteClick,
@@ -193,7 +183,7 @@ private fun SubscribeItem(
         )
         Image(
             painter = painterResource(img),
-            contentDescription = "알림 설정 변경",
+            contentDescription = if (isActive.value) "활성화된 알림 그림" else "비활성화된 알림 그림",
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .width(68.dp)
@@ -204,6 +194,7 @@ private fun SubscribeItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SubscribeBottomSheet(
+    isActive: Boolean = false,
     isBottomSheet: MutableState<Boolean>,
     subscribeTitle: String = "",
     onDeleteClick: () -> Unit = {},
@@ -228,19 +219,20 @@ private fun SubscribeBottomSheet(
         containerColor = MaterialTheme.colorScheme.background,
         shape = MaterialTheme.shapes.large
     ) {
-        ModalBottomSheetContent(onAlarmClick, isBottomSheet, onUpdateClick, isDialogOpen)
+        ModalBottomSheetContent(isActive, onAlarmClick, isBottomSheet, onUpdateClick, isDialogOpen)
     }
 }
 
 @Composable
 private fun ModalBottomSheetContent(
+    isActive: Boolean = false,
     onAlarmClick: () -> Unit,
     isBottomSheet: MutableState<Boolean>,
     onUpdateClick: () -> Unit,
     isDialogOpen: MutableState<Boolean>
 ) {
     BottomSheetText(
-        text = "알림 설정 변경하기",
+        text = if (isActive) "알림 비활성화하기" else "알림 활성화하기",
         onClick = {
             onAlarmClick()
             isBottomSheet.value = false

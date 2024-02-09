@@ -1,7 +1,7 @@
 package com.jeongg.ppap.domain.repository
 
-import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
-import com.jeongg.ppap.data.dto.SubscribeUpdateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeUpdateRequestDTO
 import io.ktor.client.statement.HttpResponse
 
 interface SubscribeRepository {

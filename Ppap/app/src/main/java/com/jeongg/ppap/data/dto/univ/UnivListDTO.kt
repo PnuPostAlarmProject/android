@@ -1,4 +1,4 @@
-package com.jeongg.ppap.data.dto
+package com.jeongg.ppap.data.dto.univ
 
 import kotlinx.serialization.Serializable
 

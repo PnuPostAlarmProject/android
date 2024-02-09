@@ -1,8 +1,7 @@
 package com.jeongg.ppap
 
 import com.jeongg.ppap.data.api.ScrapApi
-import com.jeongg.ppap.data.dto.NoticeListDTO
-import com.jeongg.ppap.data.dto.ScrapListDTO
+import com.jeongg.ppap.data.dto.scrap.ScrapListDTO
 import com.jeongg.ppap.data.util.ApiUtils
 import com.jeongg.ppap.util.getExceptionHttpClient
 import io.ktor.client.call.body

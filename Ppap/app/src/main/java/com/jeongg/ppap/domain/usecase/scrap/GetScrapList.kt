@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.jeongg.ppap.data._const.PagingConst
-import com.jeongg.ppap.data.dto.ScrapDTO
+import com.jeongg.ppap.data.dto.scrap.ScrapDTO
 import com.jeongg.ppap.data.paging.ScrapPagingSource
 import com.jeongg.ppap.domain.repository.ScrapRepository
 import kotlinx.coroutines.flow.Flow

@@ -3,7 +3,7 @@ package com.jeongg.ppap.domain.usecase.notice
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.jeongg.ppap.data.dto.NoticeDTO
+import com.jeongg.ppap.data.dto.notice.NoticeDTO
 import com.jeongg.ppap.data.paging.NoticePagingSource
 import com.jeongg.ppap.data._const.PagingConst
 import com.jeongg.ppap.domain.repository.NoticeRepository

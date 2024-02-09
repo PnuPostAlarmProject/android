@@ -28,8 +28,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.jeongg.ppap.data.dto.NoticeItemDTO
-import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.notice.NoticeItemDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeGetResponseDTO
 import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.loading.PSwipeRefreshIndicator
 import com.jeongg.ppap.presentation.state.NoticeItemState
@@ -107,11 +107,10 @@ private fun PTabLayerContent(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.Top
             ) { page ->
-                if (page == selectedTabIndex &&
-                    contents.loadState.refresh !is LoadState.Loading
-                ) {
-                    HorizontalPagerContent(contents)
-                }
+                HorizontalPagerContent(
+                    contents = contents,
+                    isSamePage = page == selectedTabIndex
+                )
             }
         }
     }
@@ -119,9 +118,13 @@ private fun PTabLayerContent(
 
 @Composable
 private fun HorizontalPagerContent(
-    contents: LazyPagingItems<NoticeItemDTO>
+    contents: LazyPagingItems<NoticeItemDTO>,
+    isSamePage: Boolean
 ) {
-    if (contents.itemCount == 0) {
+    if (!isSamePage || contents.loadState.refresh is LoadState.Loading){
+        PCircularProgress()
+    }
+    else if (contents.itemCount == 0) {
         PEmptyContent(message = "아직 등록된 게시글이 없어요.")
     }
     else {

@@ -3,7 +3,7 @@ package com.jeongg.ppap.presentation.subscribe_default_add.univ_list
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.dto.UnivListDTO
+import com.jeongg.ppap.data.dto.univ.UnivListDTO
 import com.jeongg.ppap.domain.usecase.subscribe.GetUnivList
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource

@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.dto.SubscribeGetResponseDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeGetResponseDTO
 import com.jeongg.ppap.domain.usecase.subscribe.DeleteSubscribe
 import com.jeongg.ppap.domain.usecase.subscribe.GetSubscribes
 import com.jeongg.ppap.domain.usecase.subscribe.UpdateActive
@@ -64,10 +64,7 @@ class SubscribeViewModel @Inject constructor(
             }
         }
     }
-    fun refreshSubscribe(){
-        getSubscribes(true)
-    }
-    private fun getSubscribes(isRefresh: Boolean = false){
+    private fun getSubscribes(){
         viewModelScope.launch {
             getSubscribesUseCase().collect { response ->
                 when(response){
@@ -75,7 +72,7 @@ class SubscribeViewModel @Inject constructor(
                     is Resource.Success -> _customSubscribes.value = response.data ?: emptyList()
                     is Resource.Error -> _eventFlow.emit(PEvent.MakeToast(response.message))
                 }
-                if (!isRefresh) _isLoading.value = response is Resource.Loading
+                _isLoading.value = response is Resource.Loading
             }
         }
     }

@@ -3,7 +3,7 @@ package com.jeongg.ppap.presentation.subscribe_custom_add
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeCreateRequestDTO
 import com.jeongg.ppap.domain.usecase.subscribe.CreateSubscribe
 import com.jeongg.ppap.presentation.util.PEvent
 import com.jeongg.ppap.util.Resource

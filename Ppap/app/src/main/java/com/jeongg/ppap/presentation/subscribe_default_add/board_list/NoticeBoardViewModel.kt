@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeongg.ppap.data.dto.SubscribeCreateRequestDTO
-import com.jeongg.ppap.data.dto.UnivNoticeBoardDTO
+import com.jeongg.ppap.data.dto.subscribe.SubscribeCreateRequestDTO
+import com.jeongg.ppap.data.dto.univ.UnivNoticeBoardDTO
 import com.jeongg.ppap.domain.usecase.subscribe.CreateSubscribe
 import com.jeongg.ppap.domain.usecase.subscribe.GetUnivSubscribeList
 import com.jeongg.ppap.presentation.util.PEvent

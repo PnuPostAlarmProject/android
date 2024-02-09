@@ -54,13 +54,13 @@ fun PEmptyContent(
     message: String = "",
 ){
     Column(
-        modifier = modifier.fillMaxSize().testTag("empty_content"),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically)
     ){
         Image(
             painter = painterResource(R.drawable.apple_gray),
-            contentDescription = message,
+            contentDescription = "에러 이미지(회색 사과)",
             modifier = Modifier.width(130.dp)
         )
         Text(

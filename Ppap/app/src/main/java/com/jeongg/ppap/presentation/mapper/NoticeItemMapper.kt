@@ -3,9 +3,9 @@ package com.jeongg.ppap.presentation.mapper
 import androidx.compose.runtime.MutableState
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.jeongg.ppap.data.dto.NoticeDTO
-import com.jeongg.ppap.data.dto.NoticeItemDTO
-import com.jeongg.ppap.data.dto.ScrapDTO
+import com.jeongg.ppap.data.dto.notice.NoticeDTO
+import com.jeongg.ppap.data.dto.notice.NoticeItemDTO
+import com.jeongg.ppap.data.dto.scrap.ScrapDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

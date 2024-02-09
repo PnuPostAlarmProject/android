@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jeongg.ppap.R
-import com.jeongg.ppap.data.dto.NoticeItemDTO
+import com.jeongg.ppap.data.dto.notice.NoticeItemDTO
 import com.jeongg.ppap.presentation.component.util.clickAsSingle
 import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.theme.gray3
@@ -82,7 +82,7 @@ private fun NoticeBookmark(
                    else R.drawable.heart_empty
     Image(
         painter = painterResource(favorite),
-        contentDescription = "checked: $isBookmarked",
+        contentDescription = if (isBookmarked) "스크랩 삭제하기" else "스크랩 추가하기",
         modifier = modifier
             .size(25.dp)
             .clickAsSingle(onClick = onClick)

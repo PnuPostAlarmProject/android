@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.jeongg.ppap.data.dto.ScrapDTO
+import com.jeongg.ppap.data.dto.scrap.ScrapDTO
 import com.jeongg.ppap.domain.usecase.scrap.AddScrap
 import com.jeongg.ppap.domain.usecase.scrap.DeleteScrap
 import com.jeongg.ppap.domain.usecase.scrap.GetScrapList
@@ -49,7 +49,7 @@ class ScrapViewModel @Inject constructor(
         )
     }
 
-    private fun scrapEvent(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO ){
+    private fun scrapEvent(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO){
         if (isScraped.value) deleteScrap(isScraped, scrapDTO)
         else addScrap(isScraped, scrapDTO)
     }
@@ -64,7 +64,7 @@ class ScrapViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun addScrap(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO ){
+    private fun addScrap(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO){
         viewModelScope.launch{
             addScrapUseCase(scrapDTO.contentId).collect { response ->
                 when(response){
@@ -79,7 +79,7 @@ class ScrapViewModel @Inject constructor(
         }
     }
 
-    private fun deleteScrap(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO ){
+    private fun deleteScrap(isScraped: MutableState<Boolean>, scrapDTO: ScrapDTO){
         viewModelScope.launch{
             deleteScrapUseCase(scrapDTO.contentId).collect { response ->
                 when(response){
