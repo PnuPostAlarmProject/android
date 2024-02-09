@@ -232,7 +232,7 @@ private fun ModalBottomSheetContent(
     isDialogOpen: MutableState<Boolean>
 ) {
     BottomSheetText(
-        text = if (isActive) "알림 활성화하기" else "알림 비활성화하기",
+        text = if (isActive) "알림 비활성화하기" else "알림 활성화하기",
         onClick = {
             onAlarmClick()
             isBottomSheet.value = false

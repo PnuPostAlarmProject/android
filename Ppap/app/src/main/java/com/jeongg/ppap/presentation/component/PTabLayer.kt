@@ -107,9 +107,10 @@ private fun PTabLayerContent(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.Top
             ) { page ->
-                if (page == selectedTabIndex) {
-                    HorizontalPagerContent(contents)
-                }
+                HorizontalPagerContent(
+                    contents = contents,
+                    isSamePage = page == selectedTabIndex
+                )
             }
         }
     }
@@ -117,9 +118,10 @@ private fun PTabLayerContent(
 
 @Composable
 private fun HorizontalPagerContent(
-    contents: LazyPagingItems<NoticeItemDTO>
+    contents: LazyPagingItems<NoticeItemDTO>,
+    isSamePage: Boolean
 ) {
-    if (contents.loadState.refresh is LoadState.Loading){
+    if (!isSamePage || contents.loadState.refresh is LoadState.Loading){
         PCircularProgress()
     }
     else if (contents.itemCount == 0) {
