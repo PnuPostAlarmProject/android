@@ -1,5 +1,6 @@
 package com.jeongg.ppap.presentation
 
+import android.os.Bundle
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -7,17 +8,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.jeongg.ppap.presentation.navigation.BottomNavigationBar
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.presentation.navigation.ppapGraph
 import com.jeongg.ppap.theme.PpapTheme
 
 @Composable
-fun PpapAppTheme(){
+fun PpapAppTheme(
+    navController: NavHostController
+){
     PpapTheme {
-        val navController = rememberNavController()
         Scaffold(
             bottomBar = { BottomNavigationBar(navController) },
         ) {
