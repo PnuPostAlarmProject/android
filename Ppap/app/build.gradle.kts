@@ -7,6 +7,8 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 }
 android {
     namespace = "com.jeongg.ppap"
@@ -85,12 +87,12 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.2.0-rc01")
+    implementation("androidx.compose.material3:material3:1.2.0")
 
     // navigation
-    implementation("androidx.navigation:navigation-common-ktx:2.7.6")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.navigation:navigation-common-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     // ktor
     implementation("io.ktor:ktor-client-core:2.3.3")
@@ -99,11 +101,9 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-    implementation("com.google.ar:core:1.41.0")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
-    implementation("androidx.paging:paging-compose:3.2.1")
+
     testImplementation("io.ktor:ktor-client-mock:2.3.3")
-    implementation("org.slf4j:slf4j-simple:1.7.32")
     implementation("io.ktor:ktor-client-auth:2.3.3")
     implementation("io.ktor:ktor-client-encoding:2.3.3")
 
@@ -116,11 +116,12 @@ dependencies {
     kaptTest("com.google.dagger:hilt-compiler:2.47")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
-
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-perf")
 
     // data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -130,6 +131,7 @@ dependencies {
     implementation("com.kakao.sdk:v2-user:2.15.0") // 카카오 로그인
 
     // paging
+    implementation("androidx.paging:paging-compose:3.2.1")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
     // refresh
@@ -151,6 +153,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.6")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
 }

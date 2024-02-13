@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
     fun kakaoLogin(context: Context) {
         val fcmToken = dataStore.getData(DataStoreKey.FCM_TOKEN_KEY.name)
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-            if (error != null && token != null) {
+            if (error == null && token != null) {
                 kakaoToServer(token.accessToken, fcmToken)
             }
         }

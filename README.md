@@ -3,6 +3,8 @@
 
 <p align="center"><img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/banner.png" width = "700px" alt = "introduction"></p>
 
+<p align="center"><img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/screen_shots.png" alt = "screen_shots"></p>
+
 ## Introduction of PPAP
 ### 🤔 Why?
 > 부산대학교 학생들은 졸업, 장학, 수업 등 중요한 정보를 얻기 위해 학과 게시판을 주로 이용합니다.
@@ -58,6 +60,13 @@ https://github.com/PnuPostAlarmProject/android/assets/84652886/e9e169a0-a3e1-4aa
 - Bottom Navigation Bar, Scrollable Tab Bar ➡️ 편리한 화면 이동
 - 디바이스 내 알림 설정 바로가기 ➡️ 간편한 알림 설정 변경
 
+## 🔗 링크 바로가기
+- [노션](https://taeho1234.notion.site/PPAP-c1fdfb4bf0a6495dad741554c8a29cb2?pvs=4)
+- [백엔드 Github](https://github.com/PnuPostAlarmProject/api-server)
+- [Figma](https://www.figma.com/file/XlxcZQFNuUaBr5ANEGbbBO/PPAP?type=design&node-id=519%3A2&mode=design&t=Zl3HBpTWioUAaSTl-1)
+- [동작 영상 Youtube](https://youtu.be/MxdS-I7c6Qg?si=tXp0E59gy3j9Q6sf)
+
+
 ## 개발
 ### 📖 Libraries
 - androidx
@@ -84,10 +93,17 @@ https://github.com/PnuPostAlarmProject/android/assets/84652886/e9e169a0-a3e1-4aa
 ├───📁data
 │   ├───📁api
 │   ├───📁dto
+│   │   ├───📁notice
+│   │   ├───📁scrap
+│   │   ├───📁subscribe
+│   │   ├───📁univ
+│   │   └───📁user
 │   ├───📁fcm
 │   ├───📁paging
 │   ├───📁repository
-│   └───📁util
+│   ├───📁smtp
+│   ├───📁util
+│   └───📁_const
 ├───📁di
 ├───📁domain
 │   ├───📁repository
@@ -98,16 +114,23 @@ https://github.com/PnuPostAlarmProject/android/assets/84652886/e9e169a0-a3e1-4aa
 │       └───📁user
 ├───📁presentation
 │   ├───📁component
+│   │   ├───📁loading
+│   │   └───📁util
 │   ├───📁login
 │   ├───📁mapper
 │   ├───📁navigation
 │   ├───📁notice
-│   ├───📁noticeItem
 │   ├───📁scrap
 │   ├───📁setting
+│   ├───📁setting_complain
 │   ├───📁splash
+│   ├───📁state
 │   ├───📁subscribe
-│   ├───📁subscribe_add
+│   ├───📁subscribe_custom_add
+│   ├───📁subscribe_custom_update
+│   ├───📁subscribe_default_add
+│   │   ├───📁board_list
+│   │   └───📁univ_list
 │   └───📁util
 ├───📁theme
 └───📁util
