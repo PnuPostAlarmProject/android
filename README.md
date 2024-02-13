@@ -60,6 +60,13 @@ https://github.com/PnuPostAlarmProject/android/assets/84652886/e9e169a0-a3e1-4aa
 - Bottom Navigation Bar, Scrollable Tab Bar ➡️ 편리한 화면 이동
 - 디바이스 내 알림 설정 바로가기 ➡️ 간편한 알림 설정 변경
 
+## 🔗 링크 바로가기
+- [노션](https://taeho1234.notion.site/PPAP-c1fdfb4bf0a6495dad741554c8a29cb2?pvs=4)
+- [백엔드 Github](https://github.com/PnuPostAlarmProject/api-server)
+- [Figma](https://www.figma.com/file/XlxcZQFNuUaBr5ANEGbbBO/PPAP?type=design&node-id=519%3A2&mode=design&t=Zl3HBpTWioUAaSTl-1)
+- [동작 영상 Youtube](https://youtu.be/MxdS-I7c6Qg?si=tXp0E59gy3j9Q6sf)
+
+
 ## 개발
 ### 📖 Libraries
 - androidx
