@@ -101,11 +101,9 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-    implementation("com.google.ar:core:1.41.0")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
-    implementation("androidx.paging:paging-compose:3.2.1")
+
     testImplementation("io.ktor:ktor-client-mock:2.3.3")
-    implementation("org.slf4j:slf4j-simple:1.7.32")
     implementation("io.ktor:ktor-client-auth:2.3.3")
     implementation("io.ktor:ktor-client-encoding:2.3.3")
 
@@ -117,7 +115,6 @@ dependencies {
     testImplementation("com.google.dagger:hilt-android-testing:2.47")
     kaptTest("com.google.dagger:hilt-compiler:2.47")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-
 
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
@@ -134,6 +131,7 @@ dependencies {
     implementation("com.kakao.sdk:v2-user:2.15.0") // 카카오 로그인
 
     // paging
+    implementation("androidx.paging:paging-compose:3.2.1")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
     // refresh
