@@ -23,4 +23,10 @@ class PDataStore @Inject constructor(@ApplicationContext val context: Context) {
             store.data.map{ it[stringPreferencesKey(key)] ?: "" }.first()
         }
     }
+    fun clear(key: String){
+        runBlocking(Dispatchers.IO) {
+            val prefKey = stringPreferencesKey(key)
+            store.edit{ it.remove(prefKey) }
+        }
+    }
 }
