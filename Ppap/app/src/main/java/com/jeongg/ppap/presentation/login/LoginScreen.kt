@@ -1,5 +1,7 @@
 package com.jeongg.ppap.presentation.login
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,13 +21,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.jeongg.ppap.R
 import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PDivider
+import com.jeongg.ppap.presentation.component.util.RequestNotificationPermissionDialog
 import com.jeongg.ppap.presentation.component.util.noRippleClickable
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.theme.Dimens
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -39,6 +44,7 @@ fun LoginScreen(
             navController.navigate(Screen.NoticeListScreen.route)
         }
     )
+    RequestNotificationPermissionDialog()
     Box(
         modifier = Modifier.padding(Dimens.PaddingNormal)
     ) {

@@ -1,8 +1,5 @@
 package com.jeongg.ppap.presentation.subscribe_custom_add
 
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,7 +26,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,11 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jeongg.ppap.R
-import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.PButton
 import com.jeongg.ppap.presentation.component.PTextFieldCard
+import com.jeongg.ppap.presentation.component.util.LaunchedEffectEvent
 import com.jeongg.ppap.presentation.component.util.addFocusCleaner
-import com.jeongg.ppap.presentation.component.util.checkAndRequestLocationPermissions
 import com.jeongg.ppap.presentation.component.util.negativePadding
 import com.jeongg.ppap.presentation.navigation.Screen
 import com.jeongg.ppap.theme.Dimens
@@ -54,14 +49,6 @@ fun SubscribeCustomAddScreen(
     viewModel: SubscribeCustomAddViewModel = hiltViewModel()
 ){
     val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (!isGranted) {
-            Toast.makeText(context, "알림이 비활성화되어 알림을 받을 수 없어요.", Toast.LENGTH_SHORT).show()
-        }
-    }
     LaunchedEffectEvent(
         eventFlow = viewModel.eventFlow,
         onNavigate = { navController.navigate(Screen.SubscribeScreen.route) }
@@ -87,10 +74,7 @@ fun SubscribeCustomAddScreen(
             ){
                 PButton(
                     text = stringResource(R.string.add_subscribe_button_text),
-                    onClick = {
-                        checkAndRequestLocationPermissions(context, launcher)
-                        viewModel.onEvent(SubscribeCustomAddEvent.SaveSubscribe)
-                    },
+                    onClick = { viewModel.onEvent(SubscribeCustomAddEvent.SaveSubscribe) },
                     modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
                 )
             }
