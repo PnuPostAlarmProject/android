@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.jeongg.ppap.R
 import com.jeongg.ppap.data._const.AppTheme
 import com.jeongg.ppap.data._const.NotionLink
@@ -49,7 +50,15 @@ fun SettingScreen(
     val context = LocalContext.current
     LaunchedEffectEvent(
         eventFlow = viewModel.eventFlow,
-        onNavigate = { navController.navigate(Screen.LoginScreen.route) }
+        onNavigate = {
+            navController.navigate(Screen.LoginScreen.route) {
+                popUpTo(navController.graph.id) {
+                    saveState = false
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
     )
     LazyColumn(
         modifier = Modifier.fillMaxSize(),

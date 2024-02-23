@@ -27,6 +27,7 @@ fun PDialog(
     text: String = "",
     isOpen: MutableState<Boolean>,
     onConfirmClick: () -> Unit = {},
+    onCancelClick: () -> Unit = {},
 ){
     if(isOpen.value.not()) return
     Dialog(
@@ -45,7 +46,7 @@ fun PDialog(
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black
             )
-            DialogButton(isOpen, onConfirmClick)
+            DialogButton(isOpen, onConfirmClick, onCancelClick)
         }
     }
 }
@@ -53,7 +54,8 @@ fun PDialog(
 @Composable
 private fun DialogButton(
     isOpen: MutableState<Boolean> = mutableStateOf(false),
-    onConfirmClick: () -> Unit = {}
+    onConfirmClick: () -> Unit = {},
+    onCancelClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -64,7 +66,10 @@ private fun DialogButton(
         MiniButton(
             modifier = Modifier.weight(1f),
             text = "아니요",
-            onClick = { isOpen.value = false }
+            onClick = {
+                isOpen.value = false
+                onCancelClick()
+            }
         )
         MiniButton(
             modifier = Modifier.weight(1f),

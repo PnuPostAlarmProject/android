@@ -21,8 +21,8 @@ android {
         applicationId = "com.jeongg.ppap"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
 
@@ -74,6 +74,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{NOTICE.md,LICENSE.md}"
         }
     }
 }
@@ -117,11 +118,12 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     // firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-perf")
+    implementation("com.google.firebase:firebase-messaging-directboot")
 
     // data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -138,8 +140,11 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:0.25.1")
 
     // SMTP
-    implementation ("com.sun.mail:android-mail:1.6.0")
-    implementation ("com.sun.mail:android-activation:1.6.0")
+    implementation ("com.sun.mail:android-mail:1.6.6")
+    implementation ("com.sun.mail:android-activation:1.6.6")
+
+    // permission
+    implementation("com.google.accompanist:accompanist-permissions:0.28.0")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")

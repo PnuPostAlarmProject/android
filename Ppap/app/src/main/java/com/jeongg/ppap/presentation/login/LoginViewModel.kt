@@ -28,10 +28,9 @@ class LoginViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     fun kakaoLogin(context: Context) {
-        val fcmToken = dataStore.getData(DataStoreKey.FCM_TOKEN_KEY.name)
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error == null && token != null) {
-                kakaoToServer(token.accessToken, fcmToken)
+                kakaoToServer(token.accessToken)
             }
         }
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
@@ -43,15 +42,20 @@ class LoginViewModel @Inject constructor(
                     UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                 }
                 else if (token != null) {
-                    kakaoToServer(token.accessToken, fcmToken)
+                    kakaoToServer(token.accessToken)
                 }
             }
         }
         else UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
     }
 
-    private fun kakaoToServer(accessToken: String, fcmToken: String){
+    private fun kakaoToServer(accessToken: String) {
+        val fcmToken = dataStore.getData(DataStoreKey.FCM_TOKEN_KEY.name)
         viewModelScope.launch {
+            if (fcmToken.isEmpty()) {
+                _eventFlow.emit(PEvent.MakeToast("잠시 후 다시 시도해주세요."))
+                return@launch
+            }
             kakaoLoginUseCase(accessToken, fcmToken).collect { response ->
                 when(response){
                     is Resource.Loading -> _eventFlow.emit(PEvent.Loading)

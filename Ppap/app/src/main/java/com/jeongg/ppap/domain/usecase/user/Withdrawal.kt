@@ -25,8 +25,8 @@ class Withdrawal @Inject constructor(
             val errorMessage = body.error?.message ?: "회원탈퇴에 실패하였습니다."
 
             if (response.status == HttpStatusCode.OK && body.success) {
-                dataStore.setData(DataStoreKey.ACCESS_TOKEN_KEY.name, "")
-                dataStore.setData(DataStoreKey.REFRESH_TOKEN_KEY.name, "")
+                dataStore.clear(DataStoreKey.ACCESS_TOKEN_KEY.name)
+                dataStore.clear(DataStoreKey.REFRESH_TOKEN_KEY.name)
                 emit(Resource.Success(successMessage))
             }
             else {
