@@ -70,6 +70,11 @@ class SendEmail @Inject constructor(
                     onFinish.invoke()
                     Toast.makeText(context, "메시지 전송에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 }
+            } catch (_: VerifyError){
+                CoroutineScope(Dispatchers.Main).launch {
+                    onFinish.invoke()
+                    Toast.makeText(context, "메시지 전송에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
