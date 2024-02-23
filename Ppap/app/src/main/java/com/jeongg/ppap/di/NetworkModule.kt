@@ -50,6 +50,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+    private val accessKey = DataStoreKey.ACCESS_TOKEN_KEY.name
+    private val refreshKey = DataStoreKey.REFRESH_TOKEN_KEY.name
+
     @Provides
     @Singleton
     fun provideHttpClient(
@@ -68,7 +72,7 @@ class NetworkModule {
                 requestTimeoutMillis = 8000
                 socketTimeoutMillis = 8000
             }
-            install(Auth){
+            install(Auth) {
                 bearer {
                     refreshTokens {
                         getRefreshToken(context)
@@ -87,22 +91,24 @@ class NetworkModule {
                     path(HttpRoutes.BASE_PATH.path)
                 }
 
-                val accessToken = PDataStore(context).getData(DataStoreKey.ACCESS_TOKEN_KEY.name)
-                if (accessToken.isNotEmpty())
+                val accessToken = PDataStore(context).getData(accessKey)
+                if (accessToken.isNotEmpty()) {
                     headers.appendIfNameAbsent(HttpHeaders.Authorization, accessToken)
+                }
             }
         }
     }
 
-    private suspend fun RefreshTokensParams.getRefreshToken(context: Context): BearerTokens {
-        val accessKey = DataStoreKey.ACCESS_TOKEN_KEY.name
-        val refreshKey = DataStoreKey.REFRESH_TOKEN_KEY.name
-        val refreshToken = PDataStore(context).getData(refreshKey)
+    private suspend fun RefreshTokensParams.getRefreshToken(context: Context): BearerTokens? {
+        val refreshToken = PDataStore(context)
+            .getData(refreshKey)
+            .ifEmpty{ return null }
 
-        val apiResult = client.post(HttpRoutes.KAKAO_REISSUE.path) {
-            setBody(RefreshTokenDTO(refreshToken))
-            markAsRefreshTokenRequest()
-        }.body<ApiUtils.ApiResult<KakaoLoginDTO>>()
+        val apiResult = client
+            .post(HttpRoutes.KAKAO_REISSUE.path) {
+                setBody(RefreshTokenDTO(refreshToken))
+                markAsRefreshTokenRequest()
+            }.body<ApiUtils.ApiResult<KakaoLoginDTO>>()
 
         val newAccessToken = apiResult.response?.accessToken ?: ""
         val newRefreshToken = apiResult.response?.refreshToken ?: ""
@@ -112,9 +118,16 @@ class NetworkModule {
             PDataStore(context).setData(refreshKey, newRefreshToken)
         }
         return BearerTokens(
-            accessToken = newAccessToken,
-            refreshToken = newRefreshToken
+            accessToken = newAccessToken.parseToken(),
+            refreshToken = newRefreshToken.parseToken()
         )
+    }
+
+    private fun String.parseToken(): String {
+        if (this.startsWith("Bearer ")) {
+            return this.substring(7)
+        }
+        return this
     }
 
     @Provides
