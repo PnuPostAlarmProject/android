@@ -74,6 +74,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{NOTICE.md,LICENSE.md}"
         }
     }
 }
@@ -139,8 +140,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:0.25.1")
 
     // SMTP
-    implementation ("com.sun.mail:android-mail:1.6.0")
-    implementation ("com.sun.mail:android-activation:1.6.0")
+    implementation ("com.sun.mail:android-mail:1.6.6")
+    implementation ("com.sun.mail:android-activation:1.6.6")
 
     // permission
     implementation("com.google.accompanist:accompanist-permissions:0.28.0")
