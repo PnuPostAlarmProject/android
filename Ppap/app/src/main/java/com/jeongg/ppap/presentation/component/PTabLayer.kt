@@ -34,7 +34,7 @@ import com.jeongg.ppap.presentation.component.loading.PCircularProgress
 import com.jeongg.ppap.presentation.component.loading.PSwipeRefreshIndicator
 import com.jeongg.ppap.presentation.state.NoticeItemState
 import com.jeongg.ppap.presentation.util.NoRippleInteractionSource
-import com.jeongg.ppap.theme.main_yellow
+import com.jeongg.ppap.theme.bright_yellow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -162,7 +162,7 @@ private fun TopSubscribeList(
                 onClick = { onTabClick(index) },
                 text = { TabText(value.title) },
                 interactionSource = NoRippleInteractionSource,
-                selectedContentColor = main_yellow,
+                selectedContentColor = bright_yellow,
                 unselectedContentColor = MaterialTheme.colorScheme.primary
             )
         }
@@ -186,6 +186,6 @@ private fun TabLayerIndicator(
         modifier = Modifier.tabIndicatorOffset(
             currentTabPosition = tabPositionList[selectedTabIndex]
         ),
-        color = main_yellow
+        color = bright_yellow
     )
 }

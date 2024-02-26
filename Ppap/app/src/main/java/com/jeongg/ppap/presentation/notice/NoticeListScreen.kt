@@ -3,7 +3,6 @@ package com.jeongg.ppap.presentation.notice
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -64,11 +63,6 @@ private fun NoticeListTitle() {
             modifier = Modifier
                 .padding(start = 20.dp, end = 7.dp)
                 .width(60.dp)
-        )
-        Image(
-            painter = painterResource(R.drawable.apple),
-            contentDescription = "apple character",
-            modifier = Modifier.fillMaxHeight()
         )
     }
 }
