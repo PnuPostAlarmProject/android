@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.jeongg.ppap.R
 import com.jeongg.ppap.data._const.AppTheme
 import com.jeongg.ppap.data._const.NotionLink
@@ -254,10 +253,11 @@ fun SettingThemeBottomSheet(
         containerColor = MaterialTheme.colorScheme.background,
         shape = MaterialTheme.shapes.large
     ) {
-        AppTheme.values().forEach { theme ->
+        AppTheme.values().forEachIndexed { index, theme ->
             BottomSheetText(
                 text = theme.text,
-                onClick = { onThemeClick(theme) }
+                onClick = { onThemeClick(theme) },
+                index = index
             )
         }
     }
@@ -265,12 +265,17 @@ fun SettingThemeBottomSheet(
 
 @Composable
 private fun BottomSheetText(
+    index: Int,
     text: String = "",
     onClick: () -> Unit = {}
 ) {
+    val modifier = when(index) {
+        AppTheme.values().size-1 -> Modifier.padding(bottom = 30.dp)
+        else -> Modifier
+    }
     Text(
         text = text,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .noRippleClickable(onClick)
             .padding(20.dp),

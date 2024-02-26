@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -246,6 +247,7 @@ private fun ModalBottomSheetContent(
         }
     )
     BottomSheetText(
+        modifier = Modifier.padding(bottom = 30.dp),
         text = "구독 삭제하기",
         onClick = {
             isDialogOpen.value = true
@@ -255,12 +257,13 @@ private fun ModalBottomSheetContent(
 
 @Composable
 private fun BottomSheetText(
+    modifier: Modifier = Modifier,
     text: String = "",
     onClick: () -> Unit = {}
 ) {
     Text(
         text = text,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .noRippleClickable(onClick)
             .padding(20.dp),
