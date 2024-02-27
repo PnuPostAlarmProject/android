@@ -45,11 +45,11 @@
 
 ### ✏️ 화면 구성
 
-| 공지사항 | 스크랩 | 구독 | 설정 |
-|:---:|:--:|:--:|:--:|
-| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/notice.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/scrap.jpg" width = "300px">  | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/subscribe.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting2.jpg" width = "300px"> | 
-| 스플래시 | 로그인 | 구독 추가1 | 구독 추가2 |
-| <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/splash.jpg" width = "300px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/login.jpg" width = "300px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1.jpg" width = "300px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe.jpg" width = "300px"> |
+| (메인화면) <br>  <br> 공지사항, <br> 스크랩, <br> 공지 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/notice.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/scrap.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/subscribe.jpg" width = "200px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/alarm_change.jpg" width = "200px"> |
+|:---:|:---:|:--:|:--:|:--:|
+| 스플래시, <br> 로그인, <br> 알림 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/splash.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/login.jpg" width = "200px">  | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/push_notification.jpg" width = "200px"> |  | 
+| 구독 추가 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1-1.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1-2.jpg" width = "200px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1-3.jpg" width = "200px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe2.jpg" width = "200px"> |
+| 설정 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting_complain.jpg" width = "200px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting_theme.jpg" width = "200px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting_withdrawl.jpg" width = "200px"> |
 
 ### 🎥 시연 영상
 

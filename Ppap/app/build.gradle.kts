@@ -21,8 +21,8 @@ android {
         applicationId = "com.jeongg.ppap"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.4"
+        versionCode = 5
+        versionName = "1.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
 
@@ -109,13 +109,13 @@ dependencies {
     implementation("io.ktor:ktor-client-encoding:2.3.3")
 
     // hilt
-    implementation("com.google.dagger:hilt-android:2.48")
+    implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-compiler:2.47")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.47")
     kaptAndroidTest("com.google.dagger:hilt-compiler:2.47")
     testImplementation("com.google.dagger:hilt-android-testing:2.47")
     kaptTest("com.google.dagger:hilt-compiler:2.47")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))

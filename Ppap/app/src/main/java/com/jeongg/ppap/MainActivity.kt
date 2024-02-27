@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
             if (intent?.extras != null) {
                 val link = intent.extras!!.get("link").toString()
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                intent.extras!!.clear()
                 startActivity(browserIntent)
             }
         } catch(_: Exception){ }
