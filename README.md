@@ -45,11 +45,7 @@
 
 ### ✏️ 화면 구성
 
-| (메인화면) <br>  <br> 공지사항, <br> 스크랩, <br> 공지 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/notice.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/scrap.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/subscribe.jpg" width = "200px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/alarm_change.jpg" width = "200px"> |
-|:---:|:---:|:--:|:--:|:--:|
-| 스플래시, <br> 로그인, <br> 알림 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/splash.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/login.jpg" width = "200px">  | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/push_notification.jpg" width = "200px"> |  | 
-| 구독 추가 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1-1.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1-2.jpg" width = "200px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe1-3.jpg" width = "200px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/add_subscribe2.jpg" width = "200px"> |
-| 설정 | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting.jpg" width = "200px"> | <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting_complain.jpg" width = "200px">   |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting_theme.jpg" width = "200px"> |  <img src="https://github.com/PnuPostAlarmProject/android/blob/main/img/setting_withdrawl.jpg" width = "200px"> |
+![스크린샷](https://github.com/PnuPostAlarmProject/android/blob/main/img/all_screen.png)
 
 ### 🎥 시연 영상
 
@@ -64,6 +60,7 @@ https://github.com/PnuPostAlarmProject/android/assets/84652886/e9e169a0-a3e1-4aa
 - 디바이스 내 알림 설정 바로가기 ➡️ 간편한 알림 설정 변경
 
 ## 🔗 링크 바로가기
+- [구글 플레이스토어](https://play.google.com/store/apps/details?id=com.jeongg.ppap)
 - [노션](https://taeho1234.notion.site/PPAP-c1fdfb4bf0a6495dad741554c8a29cb2?pvs=4)
 - [백엔드 Github](https://github.com/PnuPostAlarmProject/api-server)
 - [Figma](https://www.figma.com/file/XlxcZQFNuUaBr5ANEGbbBO/PPAP?type=design&node-id=519%3A2&mode=design&t=Zl3HBpTWioUAaSTl-1)
